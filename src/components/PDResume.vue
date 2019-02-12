@@ -155,7 +155,7 @@ em {
   text-transform: uppercase;
   font-size: 3rem;
   padding-bottom: 1rem;
-  color: #d71920;
+  color: rgb(236, 89, 95);
 }
 .resume-container {
   text-align: center;
@@ -164,8 +164,9 @@ em {
   margin: 0 auto;
 }
 .resume-title-bar {
-  border-top: 3px solid #d71920;
-  border-bottom: 3px solid #d71920;
+  color: rgb(236, 89, 95);
+  border-top: 3px solid rgb(176, 20, 26);
+  border-bottom: 3px solid rgb(176, 20, 26);
   text-align: center;
   margin: inherit;
   text-transform: uppercase;
