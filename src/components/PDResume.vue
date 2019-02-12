@@ -159,7 +159,7 @@ em {
 }
 .resume-container {
   text-align: center;
-  max-width: 50%;
+  max-width: 725px;
   padding: 0 24px;
   margin: 0 auto;
 }
