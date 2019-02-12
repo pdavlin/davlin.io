@@ -123,12 +123,12 @@
         <li>My favorite recreational events are any that involve distance biking and food.</li>
       </ul>
     </div>
-    <div class="bottom-spacer" />
+    <div class="bottom-spacer"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class PDResume extends Vue {
@@ -147,8 +147,19 @@ h4 {
 h3 {
   font-style: oblique;
 }
-em {
+
+
+@media (max-width: 700px) {
+  em::before {
+    content: "\A";
+    white-space: pre;
+  }
+}
+
+@media (min-width: 701px) {
+  em {
   float: right;
+}
 }
 
 .resume-top-text {
