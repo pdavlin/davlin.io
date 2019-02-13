@@ -1,5 +1,5 @@
 <template>
-  <div class="resume-container">
+  <div id="app" class="resume-container">
     <div class="resume-top-text">Patrick O. Davlin</div>
     <div class="resume-title-bar">
       <h1>About Me</h1>
@@ -127,17 +127,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<script>
 
-@Component
-export default class PDResume extends Vue {
-  @Prop() private msg!: string;
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style scoped>
+body {
+  background-color: #1b1c20;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #b9b4ac;
+}
+
 h2,
 h3,
 h4 {
