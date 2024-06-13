@@ -3,11 +3,12 @@ import "@styles/reset.css";
 import "@styles/theme.css";
 import DocumentHead from "src/components/DocumentHead.astro";
 import Layout from "@components/Layout.astro";
+import PostList from "@components/PostList.astro";
 
 const title = "Patrick Davlin dot io";
 const description = "My web content";
 const permalink = "https://davlin.io";
-const page = "home";
+const page = "blog";
 ---
 
 <html lang="en">
@@ -17,6 +18,8 @@ const page = "home";
         permalink={permalink}
     />
     <body>
-        <Layout page={page}> <h1>Hey, I'm Patrick.</h1></Layout>
+        <Layout page={page}>
+            <PostList />
+        </Layout>
     </body>
 </html>

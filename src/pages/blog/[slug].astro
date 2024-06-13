@@ -1,0 +1,77 @@
+---
+import Layout from "@components/Layout.astro";
+import DocumentHead from "@components/DocumentHead.astro";
+// import TagsList from '@components/TagsList.astro';
+import { getCollection, getEntry } from "astro:content";
+import "@styles/reset.css";
+import "@styles/theme.css";
+import "@styles/code.css";
+
+export async function getStaticPaths() {
+    const notes = await getCollection("notes");
+    return notes.map((note) => ({
+        params: { slug: note.slug },
+        props: { note },
+    }));
+}
+
+export function formatDate(date: string) {
+    return new Date(date.replace(/-/g, "/")).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
+}
+
+const { slug } = Astro.params;
+const { note } = Astro.props;
+
+if (slug === undefined) return;
+
+const { Content } = await note.render();
+
+const {
+    data: { added, excerpt, title, updated },
+} = note;
+
+// random imageId between 1 and 6
+const imageId = Math.floor(Math.random() * 6) + 1;
+
+let description = excerpt;
+let permalink = `https://davlin.io/blog/${slug}/`;
+
+const titleEncoded = encodeURIComponent(`re: ${title}`);
+---
+
+<html lang="en">
+    <DocumentHead
+        title={title}
+        description={description ?? ""}
+        permalink={permalink}
+        canonicalUrl={permalink}
+        imageId={imageId}
+    />
+    <body>
+        <Layout page="post">
+            <article>
+                <h1 class="title">{title}</h1>
+                <div class="meta">
+                    <span class="added-updated"
+                        >Added: {formatDate(added)}{
+                            updated !== added &&
+                                `, Updated: ${formatDate(updated)}`
+                        }</span
+                    >
+
+                    <!-- <TagsList tags={tags.map((t) => ({ name: t }))} /> -->
+                </div>
+                <div class="styled-link-underlines">
+                    <Content />
+                </div>
+            </article>
+            <section class="styled-link-underlines thanks-for-reading">
+                <a href="/blog/">Back to blog index</a>
+            </section>
+        </Layout>
+    </body>
+</html>

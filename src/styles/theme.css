@@ -1,0 +1,60 @@
+@font-face {
+    font-family: "BerkeleyMono";
+    src: url("/fonts/BerkeleyMono-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --base_00: #1b1818;
+    --base_01: #292424;
+    --base_02: #585050;
+    --base_03: #655d5d;
+    --base_04: #7e7777;
+    --base_05: #8a8585;
+    --base_06: #e7dfdf;
+    --base_07: #f4ecec;
+    --base_08: #ca4949;
+    --base_09: #b45a3c;
+    --base_0a: #a06e3b;
+    --base_0b: #4b8b8b;
+    --base_0c: #5485b6;
+    --base_0d: #7272ca;
+    --base_0e: #8464c4;
+    --base_0f: #bd5187;
+    --space_3xs: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem);
+    --space_2xs: clamp(0.5rem, 0.4783rem + 0.1087vw, 0.5625rem);
+    --space_xs: clamp(0.75rem, 0.7065rem + 0.2174vw, 0.875rem);
+    --space_s: clamp(1rem, 0.9565rem + 0.2174vw, 1.125rem);
+    --space_m: clamp(1.5rem, 1.4348rem + 0.3261vw, 1.6875rem);
+    --space_l: clamp(2rem, 1.913rem + 0.4348vw, 2.25rem);
+    --space_xl: clamp(3rem, 2.8696rem + 0.6522vw, 3.375rem);
+    --space_2xl: clamp(4rem, 3.8261rem + 0.8696vw, 4.5rem);
+    --space_3xl: clamp(5rem, 4.7826rem + 1.087vw, 5.625rem);
+    --page_gutters: clamp(var(--space_m), 3vw, var(--space_xl));
+    --page-max: 44rem;
+}
+
+:root {
+    --color-bg: var(--base_06);
+    --color-text: var(--base_01);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-appearance]) {
+        --color-bg: var(--base_01);
+        --color-text: var(--base_06);
+    }
+}
+
+[data-appearance="dark"] {
+    --color-bg: var(--base_01);
+    --color-text: var(--base_06);
+}
+
+body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: "BerkeleyMono";
+}

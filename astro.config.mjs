@@ -1,4 +1,28 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [sitemap()],
+  site: "https://davlin.io",
+  trailingSlash: "always",
+  markdown: {
+    shikiConfig: {
+      theme: "material-theme-lighter",
+      langs: [],
+      // Enable word wrap to prevent horizontal scrolling
+      wrap: true,
+    },
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        {
+          properties: {
+            className: ["external"],
+          },
+          rel: [],
+        },
+      ],
+    ],
+  },
+});
