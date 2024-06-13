@@ -14,7 +14,7 @@ const notesWithContent = await Promise.all(
 
     html += `
       <hr />
-      <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/${note.slug}">original post</a> is available at my website.</p>
+      <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/blog/${note.slug}">original post</a> is available at my website.</p>
       `;
 
     return {
@@ -47,6 +47,6 @@ export function GET(context) {
         customData: categoryTags,
       };
     }),
-    // stylesheet: "/rss-styles.xsl",
+    stylesheet: "/rss-styles.xsl",
   });
 }
