@@ -65,7 +65,7 @@ const titleEncoded = encodeURIComponent(`re: ${title}`);
 
                     <!-- <TagsList tags={tags.map((t) => ({ name: t }))} /> -->
                 </div>
-                <div class="styled-link-underlines">
+                <div class="prose flow styled-link-underlines">
                     <Content />
                 </div>
             </article>
@@ -73,5 +73,25 @@ const titleEncoded = encodeURIComponent(`re: ${title}`);
                 <a href="/blog/">Back to blog index</a>
             </section>
         </Layout>
+        <style>
+            .prose img {
+                width: 100%;
+                height: auto;
+                border-radius: var(--radius-l);
+            }
+
+            .prose * + :is(h2, h3, h4) {
+                --flow-space: var(--space-xl);
+            }
+
+            .prose pre[class*="language-"],
+            .prose figure {
+                margin-block: var(--space-l) var(--space-s);
+                grid-column: popout;
+            }
+            .thanks-for-reading {
+                margin-bottom: 12rem;
+            }
+        </style>
     </body>
 </html>

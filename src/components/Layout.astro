@@ -35,6 +35,9 @@ console.log(page);
     :where(.breakout) > * {
         grid-column: content-start/content-end;
     }
+    .flow > * + * {
+        margin-block-start: var(--flow-space, 1em);
+    }
     .cluster {
         align-items: var(--align, center);
         display: flex;
