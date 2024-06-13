@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/pdav
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://davlin.io
+  * I am pdav (https://keybase.io/pdav) on keybase.
+  * I have a public key ASAI5rKKGdtwrEDNW3ZRy42pJkzbQeLqB-5Lj7RcknBaYQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012008e6b28a19db70ac40cd5b7651cb8da9264cdb41e2ea07ee4b8fb45c92705a610a",
+      "host": "keybase.io",
+      "kid": "012008e6b28a19db70ac40cd5b7651cb8da9264cdb41e2ea07ee4b8fb45c92705a610a",
+      "uid": "dbaee91c0a7e00c07b2112ae6278b319",
+      "username": "pdav"
+    },
+    "merkle_root": {
+      "ctime": 1583956639,
+      "hash": "8ea25bde0da16fe6583f75601f672a1c40b16bad5b5a4f9fa731f7ac404418466cf564b819d95691b4231db3fd3f11cedecd265686da4144271869d080eb4034",
+      "hash_meta": "1dbd80701091af9de17ec4ef7b3b8f1656d621ab415be506511fcae444e03899",
+      "seqno": 15290499
+    },
+    "service": {
+      "entropy": "kkiR7JKCariD3Ab51jJ293Th",
+      "hostname": "davlin.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.3.0"
+  },
+  "ctime": 1583956646,
+  "expire_in": 504576000,
+  "prev": "9adc5c73b42dde4cdfa0ce652468741706352e613363d0a4835bd77117b50558",
+  "seqno": 50,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgCOayihnbcKxAzVt2UcuNqSZM20Hi6gfuS4+0XJJwWmEKp3BheWxvYWTESpcCMsQgmtxcc7Qt3kzfoM5lJGh0FwY1LmEzY9Ckg1vXcRe1BVjEIKR7XLlhxCUWEe7KF3QBpFgODiTHYwT3TzVK6qaLH2BuAgHCo3NpZ8RAFx8IOufi/9TuYcJipx607TVqX7t6sCXIVVU5LrVTT24kaHvXmnua2NksR87K36MFNb7wBbCwa6fuKaln3k8WDahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIBmj/bp+FOZIzUZnw4om2SEokfiHiioGbVO3YH9Guw0so3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/pdav
+
+==================================================================
