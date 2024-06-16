@@ -77,64 +77,41 @@ This file is in BETA. Please test and contribute to the discussion:
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <style>
           @font-face {
-          font-display: swap;
-          font-family: 'BerkeleyMono';
-          font-style: normal;
-          font-weight: 400;
-          src: url("/fonts/BerkeleyMono-Regular.woff") format("woff");
+            font-display: swap;
+            font-family: 'BerkeleyMono';
+            font-style: normal;
+            font-weight: 400;
+            src: url("/fonts/BerkeleyMono-Regular.woff") format("woff");
           }
 
           :root {
-          --sidebar-width: 260px;
-          --font-mono: BerkeleyMono, Consolas, Monaco, Liberation Mono, Lucida Console,
-          monospace;
-          --font-body: BerkeleyMono, sans-serif;
-          --background-color: #f2f0e9;
-          --text-color: #0b1733;
-          --second-text-color: #3f434d;
-          --red: #e31104;
-          --orange: #ef5f1f;
-          --pink: #c80e84;
-          --green: #48a71e;
-          --light-blue: #1b81b4;
-          --purple: #5741ac;
-          --blue: #393f85;
-          --accent-color: var(--purple);
-          --gradient-color: linear-gradient(
-          45deg,
-          hsl(3deg 97% 45%) 0%,
-          hsl(348deg 100% 45%) 7%,
-          hsl(341deg 100% 45%) 14%,
-          hsl(334deg 100% 44%) 21%,
-          hsl(326deg 100% 41%) 29%,
-          hsl(328deg 97% 42%) 36%,
-          hsl(357deg 71% 53%) 43%,
-          hsl(29deg 100% 39%) 50%,
-          hsl(50deg 100% 31%) 57%,
-          hsl(82deg 100% 31%) 64%,
-          hsl(150deg 100% 32%) 71%,
-          hsl(180deg 100% 30%) 79%,
-          hsl(200deg 100% 39%) 86%,
-          hsl(210deg 100% 41%) 93%,
-          hsl(252deg 45% 46%) 100%
-          );
+            --sidebar-width: 260px;
+            --font-mono: BerkeleyMono, Consolas, Monaco, Liberation Mono, Lucida Console,
+            monospace;
+            --font-body: BerkeleyMono, sans-serif;
+            --background-color: #f4ecec;
+            --text-color: #292424;
+            --second-text-color: #3f434d;
+            --red: #bd5187;
+            --orange: #b45a3c;
+            --pink: #c80e84;
+            --green: #4b8b8b;
+            --light-blue: #7272ca;
+            --purple: #8464c4;
+            --blue: #1b81b4;
+            --accent-color: var(--green);
 
-          --size-step-0: 1rem;
-          --size-step-1: 1.25rem;
-          --size-step-2: 1.56rem;
-          --size-step-3: 1.95rem;
-          --size-step-4: 2.43rem;
+            --size-step-0: 1rem;
+            --size-step-1: 1.25rem;
+            --size-step-2: 1.56rem;
+            --size-step-3: 1.95rem;
+            --size-step-4: 2.43rem;
           }
 
           .dark-mode {
-          --background-color: #181b3a;
-          --text-color: #f2f0e9;
-          --second-text-color: #c9c6d1;
-          --accent-color: var(--pink);
-          --red: #db5c55;
-          --pink: #c76399;
-          --blue: #548ab7;
-          --purple: #867cc0;
+            --background-color: #1b1818;
+            --text-color: #f4ecec;
+            --second-text-color: #c9c6d1;
           }
 
           h1,
@@ -142,40 +119,32 @@ This file is in BETA. Please test and contribute to the discussion:
           h3,
           h4,
           strong {
-          font-weight: 700;
+            font-weight: 700;
           }
 
           body {
-          font-family: sans-serif;
-          font-size: 1.2rem;
-          line-height: 1.5;
-          font-family: var(--font-body), sans-serif;
-          background: var(--background-color);
-          color: var(--text-color);
-          /* letter-spacing: 0.05ch; */
-          }
-
-          .lori {
-          width: 200px;
-          position: absolute;
-          top: 0;
-          left: -80px;
-          transform: rotate(20deg);
+            font-family: sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-family: var(--font-body), sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            /* letter-spacing: 0.05ch; */
           }
 
           .nav {
-          max-width: 660px;
-          padding: 1em;
-          border-left: 2px solid red;
+            max-width: 660px;
+            padding: 0 1em;
+            border-left: 2px solid var(--accent-color);
           }
 
           .container {
-          max-width: 800px;
-          padding: 0.5em;
+            max-width: 800px;
+            padding: 0.5em;
           }
 
           .item {
-          margin-bottom: 0.2em;
+            margin-bottom: 0.2em;
           }
         </style>
       </head>

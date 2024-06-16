@@ -37,20 +37,20 @@
 }
 
 :root {
-    --color-bg: var(--base_06);
+    --color-bg: var(--base_07);
     --color-text: var(--base_01);
 }
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-appearance]) {
         --color-bg: var(--base_01);
-        --color-text: var(--base_06);
+        --color-text: var(--base_07);
     }
 }
 
 [data-appearance="dark"] {
     --color-bg: var(--base_01);
-    --color-text: var(--base_06);
+    --color-text: var(--base_07);
 }
 
 body {
