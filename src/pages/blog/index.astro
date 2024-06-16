@@ -1,6 +1,5 @@
 ---
-import "@styles/reset.css";
-import "@styles/theme.css";
+import "@styles/global.css";
 import DocumentHead from "src/components/DocumentHead.astro";
 import Layout from "@components/Layout.astro";
 import PostList from "@components/PostList.astro";
@@ -19,6 +18,7 @@ const page = "blog";
     />
     <body>
         <Layout page={page}>
+            <h1 class="title">posts</h1>
             <PostList />
         </Layout>
     </body>

@@ -3,9 +3,7 @@ import Layout from "@components/Layout.astro";
 import DocumentHead from "@components/DocumentHead.astro";
 // import TagsList from '@components/TagsList.astro';
 import { getCollection } from "astro:content";
-import "@styles/reset.css";
-import "@styles/theme.css";
-import "@styles/code.css";
+import "@styles/global.css";
 
 export async function getStaticPaths() {
     const notes = await getCollection("notes");
@@ -81,16 +79,15 @@ const titleEncoded = encodeURIComponent(`re: ${title}`);
             }
 
             .prose * + :is(h2, h3, h4) {
-                --flow-space: var(--space-xl);
+                --flow-space: var(--space_xl);
             }
 
             .prose pre[class*="language-"],
             .prose figure {
-                margin-block: var(--space-l) var(--space-s);
+                margin-block: var(--space_l) var(--space_s);
                 grid-column: popout;
             }
             .thanks-for-reading {
-                margin-bottom: 12rem;
             }
         </style>
     </body>

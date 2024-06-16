@@ -5,6 +5,7 @@ type Props = {
 };
 
 import Header from "./Header.astro";
+import Footer from "./Footer.astro";
 
 const { page } = Astro.props;
 console.log(page);
@@ -14,36 +15,4 @@ console.log(page);
 <main class={`breakout flow ${page === "post" ? "prose" : ""}`}>
     <slot />
 </main>
-
-<style is:global>
-    .breakout {
-        --gutter-max: calc(1rem + 10vw);
-        --gap: var(--space_m);
-        --content: min(var(--page-max), 100% - var(--gap) * 2);
-        --gutter: minmax(var(--gap), var(--gutter-max));
-        --popout: minmax(0px, 1rem);
-        grid-template-columns:
-            [full-start]0px [gutter-start]var(--gutter) [popout-start]var(
-                --popout
-            )
-            [content-start]var(--content) [content-end]var(--popout) [popout-end]var(
-                --gutter
-            )
-            [gutter-end]1fr [full-end];
-        display: grid;
-    }
-    :where(.breakout) > * {
-        grid-column: content-start/content-end;
-    }
-    .flow > * + * {
-        margin-block-start: var(--flow-space, 1em);
-    }
-    .cluster {
-        align-items: var(--align, center);
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--row-gap, var(--gap, var(--space_m)))
-            var(--column-gap, var(--gap, var(--space_m)));
-        justify-content: var(--justify, flex-start);
-    }
-</style>
+<Footer />
