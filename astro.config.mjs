@@ -3,6 +3,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  output: "server",
   integrations: [sitemap()],
   site: "https://davlin.io",
   markdown: {
