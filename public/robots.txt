@@ -1,7 +1,0 @@
-User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
-Disallow: /
-
-Sitemap: https://davlin.io/sitemap.xml

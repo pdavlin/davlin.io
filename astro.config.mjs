@@ -5,7 +5,6 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   integrations: [sitemap()],
   site: "https://davlin.io",
-  trailingSlash: "always",
   markdown: {
     shikiConfig: {
       themes: {
