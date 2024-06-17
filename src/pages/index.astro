@@ -7,6 +7,7 @@ const title = "Patrick Davlin dot io";
 const description = "My web content";
 const permalink = "https://davlin.io";
 const page = "home";
+const apiTest: string = import.meta.env.PUBLIC_NETLIFY_API_TEST;
 ---
 
 <html lang="en">
@@ -19,7 +20,7 @@ const page = "home";
         <Layout page={page}>
             <h1 class="title" style="text-transform: none;">davlin (dot) io</h1>
             <p>
-                Hey, I'm Patrick. You're at yet another web blog that might get
+                Hey, I'm {apiTest || "Patrick"}. You're at yet another web blog that might get
                 updates sometimes.
             </p>
             <h2>About Me</h2>
