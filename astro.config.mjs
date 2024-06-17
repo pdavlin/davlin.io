@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
+import netlify from "@astrojs/netlify";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
@@ -10,11 +12,12 @@ export default defineConfig({
     shikiConfig: {
       themes: {
         dark: "github-light",
-        light: "github-dark",
+        light: "github-dark"
       },
       langs: [],
       // Enable word wrap to prevent horizontal scrolling
-      wrap: true,
-    },
+      wrap: true
+    }
   },
+  adapter: netlify()
 });
