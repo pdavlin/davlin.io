@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import NoteListItem from './NoteListItem.astro';
+import { parsePostDate, getMonthNameFromString, compareDatesDescending } from '../utils/date-utils';
 
 interface Year {
   date: string;
@@ -20,22 +21,9 @@ type Note = CollectionEntry<'notes'> & {
 
 const notes = await getCollection('notes');
 const years: Year[] = [];
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+
 for (const note of notes) {
-  const [yearDate, monthDate, dayDate] = note.data.added.split(' ')[0].split('-');
+  const [yearDate, monthDate, dayDate] = parsePostDate(note.data.added);
 
   let year: Year | undefined = years.find((year) => year.date === yearDate);
   if (!year) {
@@ -48,8 +36,7 @@ for (const note of notes) {
 
   let month = year.months.find((month) => month.date === monthDate);
   if (!month) {
-    const monthIndex = parseInt(monthDate) - 1;
-    const monthName = monthNames[monthIndex];
+    const monthName = getMonthNameFromString(monthDate);
     month = {
       date: monthDate,
       name: monthName,
@@ -64,9 +51,9 @@ for (const note of notes) {
   });
 }
 
-for (const year of years.sort((a, b) => parseInt(b.date) - parseInt(a.date))) {
-  for (const month of year.months.sort((a, b) => parseInt(b.date) - parseInt(a.date))) {
-    month.notes.sort((a, b) => parseInt(b.date) - parseInt(a.date));
+for (const year of years.sort((a, b) => compareDatesDescending(a.date, b.date))) {
+  for (const month of year.months.sort((a, b) => compareDatesDescending(a.date, b.date))) {
+    month.notes.sort((a, b) => compareDatesDescending(a.date, b.date));
   }
 }
 ---

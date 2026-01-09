@@ -5,6 +5,8 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@styles/*": ["src/styles/*"]
-    }
-  }
+    },
+    "types": ["vitest/globals"]
+  },
+  "include": ["src/**/*", "tests/**/*", "*.config.ts", "*.config.mjs", "eslint.config.js"]
 }

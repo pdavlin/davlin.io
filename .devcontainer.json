@@ -1,1 +1,4 @@
-{ "image": "mcr.microsoft.com/devcontainers/javascript-node" }
+{
+  "image": "mcr.microsoft.com/devcontainers/javascript-node",
+  "postCreateCommand": "pnpm install && pnpm exec playwright install --with-deps chromium"
+}
