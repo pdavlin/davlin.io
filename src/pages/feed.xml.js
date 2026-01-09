@@ -8,8 +8,6 @@ const notesWithContent = await Promise.all(
   notes.map(async (note) => {
     let rawContent = note.body;
 
-    const titleEncoded = encodeURIComponent(`re: ${note.data.title}`);
-
     let html = marked.parse(rawContent);
 
     html += `
