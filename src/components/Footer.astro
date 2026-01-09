@@ -3,42 +3,42 @@ const buildDate = new Date();
 ---
 
 <footer class="site-footer breakout">
-    <p>Built on {buildDate.toISOString().slice(0, 10)}.</p>
-    <ul class="cluster" role="list" style="padding-left: 0;">
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/blog/">Blog</a>
-        </li>
-        <!-- <li>
+  <p>Built on {buildDate.toISOString().slice(0, 10)}.</p>
+  <ul class="cluster" role="list" style="padding-left: 0;">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/blog/">Blog</a>
+    </li>
+    <!-- <li>
             <a href="/blogroll/">Blogroll</a>
         </li> -->
-        <li>
-            <a rel="me" href="https://social.lol/@pdav">Mastodon</a>
-        </li>
-        <li>
-          <a rel="me" href="https://github.com/pdavlin" >GitHub</a>
-        </li>
-    </ul>
+    <li>
+      <a rel="me" href="https://social.lol/@pdav">Mastodon</a>
+    </li>
+    <li>
+      <a rel="me" href="https://github.com/pdavlin">GitHub</a>
+    </li>
+  </ul>
 </footer>
 
 <style>
-    .site-footer {
-        position: sticky;
-        padding-block: var(--space_2xl);
-        margin-block: var(--page_gutters) var(--space_xl);
+  .site-footer {
+    position: sticky;
+    padding-block: var(--space_2xl);
+    margin-block: var(--page_gutters) var(--space_xl);
 
-        a {
-            display: grid;
-            place-items: center;
-            place-content: center;
-            color: currentcolor;
-            text-decoration: none;
-        }
+    a {
+      display: grid;
+      place-items: center;
+      place-content: center;
+      color: currentcolor;
+      text-decoration: none;
     }
+  }
 
-    ul > li {
-        list-style: none;
-    }
+  ul > li {
+    list-style: none;
+  }
 </style>

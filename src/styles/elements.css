@@ -13,9 +13,7 @@
   --popout: minmax(0px, 1rem);
   grid-template-columns:
     [full-start]0px [gutter-start]var(--gutter) [popout-start]var(--popout)
-    [content-start]var(--content) [content-end]var(--popout) [popout-end]var(
-      --gutter
-    )
+    [content-start]var(--content) [content-end]var(--popout) [popout-end]var(--gutter)
     [gutter-end]1fr [full-end];
   display: grid;
 }
@@ -29,8 +27,7 @@
   align-items: var(--align, center);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--row-gap, var(--gap, var(--space_m)))
-    var(--column-gap, var(--gap, var(--space_m)));
+  gap: var(--row-gap, var(--gap, var(--space_m))) var(--column-gap, var(--gap, var(--space_m)));
   justify-content: var(--justify, flex-start);
 }
 
@@ -38,8 +35,8 @@ blockquote {
   grid-column: popout;
   display: grid;
   grid-template-areas:
-    "mark quote"
-    "line quote";
+    'mark quote'
+    'line quote';
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   column-gap: 0.2em;
@@ -64,7 +61,7 @@ blockquote code {
 blockquote::before {
   grid-area: mark;
   place-self: start;
-  content: "“";
+  content: '“';
   font-family: Georgia, serif;
   font-size: 3.4em;
   line-height: 1;
@@ -76,7 +73,7 @@ blockquote::before {
 blockquote::after {
   grid-area: line;
   place-self: stretch center;
-  content: "";
+  content: '';
   width: 0.2em;
   height: 100%;
   border-radius: 360px;

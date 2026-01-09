@@ -1,15 +1,15 @@
-import { defineConfig } from "astro/config";
-import sitemap from "@astrojs/sitemap";
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [sitemap()],
-  site: "https://davlin.io",
+  site: 'https://davlin.io',
   markdown: {
     shikiConfig: {
       themes: {
-        dark: "github-light",
-        light: "github-dark",
+        dark: 'github-light',
+        light: 'github-dark',
       },
       langs: [],
       // Enable word wrap to prevent horizontal scrolling

@@ -1,24 +1,24 @@
 ---
-import Layout from "@components/Layout.astro";
-import DocumentHead from "@components/DocumentHead.astro";
+import Layout from '@components/Layout.astro';
+import DocumentHead from '@components/DocumentHead.astro';
 // import TagsList from '@components/TagsList.astro';
-import { getCollection } from "astro:content";
-import "@styles/global.css";
+import { getCollection } from 'astro:content';
+import '@styles/global.css';
 
 export async function getStaticPaths() {
-    const notes = await getCollection("notes");
-    return notes.map((note) => ({
-        params: { slug: note.slug },
-        props: { note },
-    }));
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.slug },
+    props: { note },
+  }));
 }
 
 export function formatDate(date: string) {
-    return new Date(date.replace(/-/g, "/")).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
+  return new Date(date.replace(/-/g, '/')).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 const { slug } = Astro.params;
@@ -29,7 +29,7 @@ if (slug === undefined) return;
 const { Content } = await note.render();
 
 const {
-    data: { added, excerpt, title, updated },
+  data: { added, excerpt, title, updated },
 } = note;
 
 // random imageId between 1 and 6
@@ -40,53 +40,52 @@ let permalink = `https://davlin.io/blog/${slug}/`;
 ---
 
 <html lang="en">
-    <DocumentHead
-        title={title}
-        description={description ?? ""}
-        permalink={permalink}
-        canonicalUrl={permalink}
-        imageId={imageId}
-    />
-    <body>
-        <Layout page="post">
-            <article>
-                <h1 class="title">{title}</h1>
-                <div class="meta">
-                    <span class="added-updated"
-                        >Added: {formatDate(added)}{
-                            updated !== added &&
-                                `, Updated: ${formatDate(updated)}`
-                        }</span
-                    >
+  <DocumentHead
+    title={title}
+    description={description ?? ''}
+    permalink={permalink}
+    canonicalUrl={permalink}
+    imageId={imageId}
+  />
+  <body>
+    <Layout page="post">
+      <article>
+        <h1 class="title">{title}</h1>
+        <div class="meta">
+          <span class="added-updated"
+            >Added: {formatDate(added)}{
+              updated !== added && `, Updated: ${formatDate(updated)}`
+            }</span
+          >
 
-                    <!-- <TagsList tags={tags.map((t) => ({ name: t }))} /> -->
-                </div>
-                <div class="prose flow styled-link-underlines">
-                    <Content />
-                </div>
-            </article>
-            <section class="styled-link-underlines thanks-for-reading">
-                <a href="/blog/">Back to blog index</a>
-            </section>
-        </Layout>
-        <style>
-            .prose img {
-                width: 100%;
-                height: auto;
-                border-radius: var(--radius-l);
-            }
+          <!-- <TagsList tags={tags.map((t) => ({ name: t }))} /> -->
+        </div>
+        <div class="prose flow styled-link-underlines">
+          <Content />
+        </div>
+      </article>
+      <section class="styled-link-underlines thanks-for-reading">
+        <a href="/blog/">Back to blog index</a>
+      </section>
+    </Layout>
+    <style>
+      .prose img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-l);
+      }
 
-            .prose * + :is(h2, h3, h4) {
-                --flow-space: var(--space_xl);
-            }
+      .prose * + :is(h2, h3, h4) {
+        --flow-space: var(--space_xl);
+      }
 
-            .prose pre[class*="language-"],
-            .prose figure {
-                margin-block: var(--space_l) var(--space_s);
-                grid-column: popout;
-            }
-            .thanks-for-reading {
-            }
-        </style>
-    </body>
+      .prose pre[class*='language-'],
+      .prose figure {
+        margin-block: var(--space_l) var(--space_s);
+        grid-column: popout;
+      }
+      .thanks-for-reading {
+      }
+    </style>
+  </body>
 </html>

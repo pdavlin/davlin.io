@@ -1,25 +1,21 @@
 ---
-import "@styles/global.css";
-import DocumentHead from "src/components/DocumentHead.astro";
-import Layout from "@components/Layout.astro";
-import PostList from "@components/PostList.astro";
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
+import PostList from '@components/PostList.astro';
 
-const title = "Patrick Davlin dot io";
-const description = "My web content";
-const permalink = "https://davlin.io";
-const page = "blog";
+const title = 'Patrick Davlin dot io';
+const description = 'My web content';
+const permalink = 'https://davlin.io';
+const page = 'blog';
 ---
 
 <html lang="en">
-    <DocumentHead
-        title={title}
-        description={description}
-        permalink={permalink}
-    />
-    <body>
-        <Layout page={page}>
-            <h1 class="title">posts</h1>
-            <PostList />
-        </Layout>
-    </body>
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <h1 class="title">posts</h1>
+      <PostList />
+    </Layout>
+  </body>
 </html>

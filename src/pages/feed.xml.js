@@ -1,8 +1,8 @@
-import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
-import * as marked from "marked";
+import rss from '@astrojs/rss';
+import { getCollection } from 'astro:content';
+import * as marked from 'marked';
 
-const notes = await getCollection("notes");
+const notes = await getCollection('notes');
 
 const notesWithContent = await Promise.all(
   notes.map(async (note) => {
@@ -19,7 +19,7 @@ const notesWithContent = await Promise.all(
       ...note,
       htmlContent: html,
     };
-  }),
+  })
 );
 
 notesWithContent.sort((a, b) => {
@@ -30,13 +30,13 @@ const notesToRender = notesWithContent.slice(0, 20);
 
 export function GET(context) {
   return rss({
-    title: "Patrick Davlin dot IO",
-    description: "Sometimes, I write stuff",
+    title: 'Patrick Davlin dot IO',
+    description: 'Sometimes, I write stuff',
     site: context.site,
     items: notesToRender.map((note) => {
       const categoryTags = note.data.tags
         .map((tag) => `<category><![CDATA[${tag}]]></category>`)
-        .join("");
+        .join('');
       return {
         link: `/${note.slug}`,
         title: note.data.title,
@@ -45,6 +45,6 @@ export function GET(context) {
         customData: categoryTags,
       };
     }),
-    stylesheet: "/rss-styles.xsl",
+    stylesheet: '/rss-styles.xsl',
   });
 }

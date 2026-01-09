@@ -1,0 +1,12 @@
+dist/
+node_modules/
+.astro/
+coverage/
+playwright-report/
+test-results/
+pnpm-lock.yaml
+package-lock.json
+
+# Documentation with embedded code examples
+docs/
+PRPs/

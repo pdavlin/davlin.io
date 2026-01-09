@@ -1,61 +1,58 @@
 ---
 interface Props {
-    title: string;
-    description: string;
-    permalink: string;
-    imageId?: number;
-    canonicalUrl?: string;
+  title: string;
+  description: string;
+  permalink: string;
+  imageId?: number;
+  canonicalUrl?: string;
 }
 
 let { title, description, permalink, canonicalUrl } = Astro.props;
 ---
 
 <head>
-    <!-- Global Metadata -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /> -->
-    <!-- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /> -->
-    <!-- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /> -->
-    <!-- <link rel="manifest" href="/site.webmanifest" /> -->
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-    <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="theme-color" content="#ffffff" />
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="Davlin Dot IO RSS Feed"
-        href="https://davlin.io/feed.xml"
-    />
+  <!-- Global Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {/* <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /> */}
+  {/* <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /> */}
+  {/* <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /> */}
+  {/* <link rel="manifest" href="/site.webmanifest" /> */}
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="theme-color" content="#ffffff" />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="Davlin Dot IO RSS Feed"
+    href="https://davlin.io/feed.xml"
+  />
 
-    <link
-        rel="webmention"
-        href="https://webmention.io/davlin.io/webmention"
-    />
+  <link rel="webmention" href="https://webmention.io/davlin.io/webmention" />
 
-    <link rel="me" href="proven.lol/81c36c" />
+  <link rel="me" href="proven.lol/81c36c" />
 
-    <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    {
-        canonicalUrl && (
-            <>
-                <link rel="canonical" href={canonicalUrl} />
-                <meta name="twitter:card" content="summary" />
-                <meta name="twitter:site" content="@patrickdavlin" />
-                <meta name="twitter:creator" content="@patrickdavlin" />
-                <meta property="og:type" content="article" />
-                <meta property="og:title" content={title} />
-                <meta property="og:description" content={description} />
-                <meta property="og:url" content={permalink} />
-                <meta property="og:site_name" content="Patrick Davlin dot IO" />
-                <!-- <meta property="og:image" content={metaImage} /> -->
-                <meta name="author" content="Patrick Davlin" />
-                <meta name="twitter:label1" content="Written by" />
-                <meta name="twitter:data1" content="Patrick Davlin" />
-            </>
-        )
-    }
+  <!-- Primary Meta Tags -->
+  <title>{title}</title>
+  <meta name="title" content={title} />
+  <meta name="description" content={description} />
+  {
+    canonicalUrl && (
+      <>
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@patrickdavlin" />
+        <meta name="twitter:creator" content="@patrickdavlin" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={permalink} />
+        <meta property="og:site_name" content="Patrick Davlin dot IO" />
+        {/* <meta property="og:image" content={metaImage} /> */}
+        <meta name="author" content="Patrick Davlin" />
+        <meta name="twitter:label1" content="Written by" />
+        <meta name="twitter:data1" content="Patrick Davlin" />
+      </>
+    )
+  }
 </head>

@@ -1,29 +1,24 @@
 ---
-import "@styles/global.css";
-import DocumentHead from "src/components/DocumentHead.astro";
-import Layout from "@components/Layout.astro";
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
 
-const title = "Patrick Davlin dot io";
-const description = "My web content";
-const permalink = "https://davlin.io";
-const page = "home";
+const title = 'Patrick Davlin dot io';
+const description = 'My web content';
+const permalink = 'https://davlin.io';
+const page = 'home';
 ---
 
 <html lang="en">
-    <DocumentHead
-        title={title}
-        description={description}
-        permalink={permalink}
-    />
-    <body>
-        <Layout page={page}>
-            <h1 class="title">HTTP 404</h1>
-            <p>
-                Looks like you're after a page that doesn't exist. Let's get you
-                back to <a href="/blog/">the list of posts</a> or the <a
-                    href="/">home page</a
-                >.
-            </p>
-        </Layout>
-    </body>
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <h1 class="title">HTTP 404</h1>
+      <p>
+        Looks like you're after a page that doesn't exist. Let's get you back to <a href="/blog/"
+          >the list of posts</a
+        > or the <a href="/">home page</a>.
+      </p>
+    </Layout>
+  </body>
 </html>

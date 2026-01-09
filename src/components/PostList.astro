@@ -1,133 +1,126 @@
 ---
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import NoteListItem from "./NoteListItem.astro";
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import NoteListItem from './NoteListItem.astro';
 
-type Year = {
-    date: string;
-    months: Month[];
+interface Year {
+  date: string;
+  months: Month[];
+}
+
+interface Month {
+  date: string;
+  name: string;
+  notes: Note[];
+}
+
+type Note = CollectionEntry<'notes'> & {
+  date: string;
 };
 
-type Month = {
-    date: string;
-    name: string;
-    notes: Note[];
-};
-
-type Note = CollectionEntry<"notes"> & {
-    date: string;
-};
-
-const notes = await getCollection("notes");
+const notes = await getCollection('notes');
 const years: Year[] = [];
 const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
-notes.forEach((note) => {
-    const [yearDate, monthDate, dayDate] = note.data.added
-        .split(" ")[0]
-        .split("-");
+for (const note of notes) {
+  const [yearDate, monthDate, dayDate] = note.data.added.split(' ')[0].split('-');
 
-    let year: Year | undefined = years.find((year) => year.date === yearDate);
-    if (!year) {
-        year = {
-            date: yearDate,
-            months: [],
-        };
-        years.push(year);
-    }
+  let year: Year | undefined = years.find((year) => year.date === yearDate);
+  if (!year) {
+    year = {
+      date: yearDate,
+      months: [],
+    };
+    years.push(year);
+  }
 
-    let month = year.months.find((month) => month.date === monthDate);
-    if (!month) {
-        const monthIndex = parseInt(monthDate) - 1;
-        const monthName = monthNames[monthIndex];
-        month = {
-            date: monthDate,
-            name: monthName,
-            notes: [],
-        };
-        year.months.push(month);
-    }
+  let month = year.months.find((month) => month.date === monthDate);
+  if (!month) {
+    const monthIndex = parseInt(monthDate) - 1;
+    const monthName = monthNames[monthIndex];
+    month = {
+      date: monthDate,
+      name: monthName,
+      notes: [],
+    };
+    year.months.push(month);
+  }
 
-    month.notes.push({
-        ...note,
-        date: dayDate,
-    });
-});
+  month.notes.push({
+    ...note,
+    date: dayDate,
+  });
+}
 
-years
-    .sort((a, b) => parseInt(b.date) - parseInt(a.date))
-    .forEach((year) => {
-        year.months
-            .sort((a, b) => parseInt(b.date) - parseInt(a.date))
-            .forEach((month) => {
-                month.notes.sort((a, b) => parseInt(b.date) - parseInt(a.date));
-            });
-    });
+for (const year of years.sort((a, b) => parseInt(b.date) - parseInt(a.date))) {
+  for (const month of year.months.sort((a, b) => parseInt(b.date) - parseInt(a.date))) {
+    month.notes.sort((a, b) => parseInt(b.date) - parseInt(a.date));
+  }
+}
 ---
 
 <style>
-    .list {
-        list-style: none;
-        padding: 0;
-    }
+  .list {
+    list-style: none;
+    padding: 0;
+  }
 
-    .list li {
-        font-size: 1.25rem;
-        margin: 0.5em 0;
-    }
+  .list li {
+    font-size: 1.25rem;
+    margin: 0.5em 0;
+  }
 
-    .month {
-        display: flex;
-        justify-content: space-between;
-        font-weight: bold;
-        font-size: 1em;
-        margin: 0;
-    }
+  .month {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1em;
+    margin: 0;
+  }
 
-    .month span {
-        padding-right: 1em;
-    }
+  .month span {
+    padding-right: 1em;
+  }
 </style>
 
 <div class="">
-    <ul class="list">
-        {
-            years.map((year) => (
-                <>
-                    {year.months.map((month, i) => (
-                        <>
-                            <li>
-                                <h2 class="month">
-                                    <span>{month.name}</span>{" "}
-                                    <span>{i === 0 && year.date}</span>
-                                </h2>
-                            </li>
-                            {month.notes.map((note) => (
-                                <NoteListItem
-                                    slug={note.slug}
-                                    title={note.data.title}
-                                    added={note.data.added}
-                                    tags={note.data.tags}
-                                    type={note.data.type}
-                                    excerpt={note.data.excerpt}
-                                />
-                            ))}
-                        </>
-                    ))}
-                </>
-            ))
-        }
-    </ul>
+  <ul class="list">
+    {
+      years.map((year) => (
+        <>
+          {year.months.map((month, i) => (
+            <>
+              <li>
+                <h2 class="month">
+                  <span>{month.name}</span> <span>{i === 0 && year.date}</span>
+                </h2>
+              </li>
+              {month.notes.map((note) => (
+                <NoteListItem
+                  slug={note.slug}
+                  title={note.data.title}
+                  added={note.data.added}
+                  tags={note.data.tags}
+                  type={note.data.type}
+                  excerpt={note.data.excerpt}
+                />
+              ))}
+            </>
+          ))}
+        </>
+      ))
+    }
+  </ul>
 </div>

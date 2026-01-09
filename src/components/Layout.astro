@@ -1,16 +1,16 @@
 ---
-type Props = {
-    page: string;
-};
+interface Props {
+  page: string;
+}
 
-import Header from "./Header.astro";
-import Footer from "./Footer.astro";
+import Header from './Header.astro';
+import Footer from './Footer.astro';
 
 const { page } = Astro.props;
 ---
 
 <Header />
-<main class={`breakout flow ${page === "post" ? "prose" : ""}`}>
-    <slot />
+<main class={`breakout flow ${page === 'post' ? 'prose' : ''}`}>
+  <slot />
 </main>
 <Footer />
