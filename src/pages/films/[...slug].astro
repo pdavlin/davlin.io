@@ -22,7 +22,18 @@ if (slug === undefined) return;
 const { Content } = await note.render();
 
 const {
-  data: { added, excerpt, title, updated, filmYear, rating, letterboxdUrl, isRewatch },
+  data: {
+    added,
+    excerpt,
+    title,
+    updated,
+    filmYear,
+    rating,
+    letterboxdUrl,
+    isRewatch,
+    watchedDate,
+    tags,
+  },
 } = note;
 
 // Extract poster URL from raw markdown body (first image)
@@ -70,12 +81,37 @@ const permalink = `https://davlin.io/films/${slug}/`;
                         <span class="rating-text">{rating}/5</span>
                       </span>
                     )}
-                    {isRewatch && <span class="badge">Rewatch</span>}
                   </div>
-                  <span class="added-updated desktop-only">
-                    Added: {formatDate(added)}
-                    {updated !== added && `, Updated: ${formatDate(updated)}`}
-                  </span>
+                  <dl class="meta-list desktop-only">
+                    {watchedDate && (
+                      <>
+                        <dt>watched</dt>
+                        <dd>{formatDate(watchedDate)}</dd>
+                      </>
+                    )}
+                    <>
+                      <dt>written</dt>
+                      <dd>{formatDate(added)}</dd>
+                    </>
+                    {isRewatch && (
+                      <>
+                        <dt>rewatch</dt>
+                        <dd>yes</dd>
+                      </>
+                    )}
+                    {updated !== added && (
+                      <>
+                        <dt>updated</dt>
+                        <dd>{formatDate(updated)}</dd>
+                      </>
+                    )}
+                    {tags && tags.length > 0 && tags[0] !== 'film' && (
+                      <>
+                        <dt>tags</dt>
+                        <dd class="tags">{tags.filter((t) => t !== 'film').join(', ')}</dd>
+                      </>
+                    )}
+                  </dl>
                 </div>
               </div>
             ) : (
@@ -89,16 +125,48 @@ const permalink = `https://davlin.io/films/${slug}/`;
                       <span class="rating-text">{rating}/5</span>
                     </span>
                   )}
-                  {isRewatch && <span class="badge">Rewatch</span>}
                 </div>
               </>
             )
           }
-          <span class="added-updated mobile-only"
-            >Added: {formatDate(added)}{
-              updated !== added && `, Updated: ${formatDate(updated)}`
-            }</span
-          >
+          <dl class="meta-list mobile-only">
+            {
+              watchedDate && (
+                <>
+                  <dt>watched</dt>
+                  <dd>{formatDate(watchedDate)}</dd>
+                </>
+              )
+            }
+            <>
+              <dt>written</dt>
+              <dd>{formatDate(added)}</dd>
+            </>
+            {
+              isRewatch && (
+                <>
+                  <dt>rewatch</dt>
+                  <dd>yes</dd>
+                </>
+              )
+            }
+            {
+              updated !== added && (
+                <>
+                  <dt>updated</dt>
+                  <dd>{formatDate(updated)}</dd>
+                </>
+              )
+            }
+            {
+              tags && tags.length > 0 && tags[0] !== 'film' && (
+                <>
+                  <dt>tags</dt>
+                  <dd class="tags">{tags.filter((t) => t !== 'film').join(', ')}</dd>
+                </>
+              )
+            }
+          </dl>
         </fieldset>
         <div class="prose flow styled-link-underlines">
           <Content />
@@ -169,11 +237,11 @@ const permalink = `https://davlin.io/films/${slug}/`;
         margin: 0;
       }
 
-      .desktop-only {
-        display: block;
+      .meta-list.desktop-only {
+        display: grid;
       }
 
-      .mobile-only {
+      .meta-list.mobile-only {
         display: none;
       }
 
@@ -186,12 +254,12 @@ const permalink = `https://davlin.io/films/${slug}/`;
           max-width: 180px;
         }
 
-        .desktop-only {
+        .meta-list.desktop-only {
           display: none;
         }
 
-        .mobile-only {
-          display: block;
+        .meta-list.mobile-only {
+          display: grid;
         }
       }
 
@@ -238,11 +306,20 @@ const permalink = `https://davlin.io/films/${slug}/`;
         font-size: 0.9em;
       }
 
-      .film-meta .badge {
-        background: var(--surface, #333);
-        padding: 0.15em 0.5em;
-        border-radius: 4px;
+      .meta-list {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.25em 0.75em;
+        margin: 0;
         font-size: 0.85em;
+      }
+
+      .meta-list dt {
+        color: var(--base_03);
+      }
+
+      .meta-list dd {
+        margin: 0;
       }
 
       hr {

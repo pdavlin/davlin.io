@@ -22,7 +22,7 @@ if (slug === undefined) return;
 const { Content } = await note.render();
 
 const {
-  data: { added, excerpt, title, updated },
+  data: { added, excerpt, title, updated, tags },
 } = note;
 
 // random imageId between 1 and 6
@@ -46,11 +46,26 @@ const permalink = `https://davlin.io/blog/${slug}/`;
         <fieldset class="meta">
           <legend>metadata</legend>
           <h1 class="title">{title}</h1>
-          <span class="added-updated"
-            >Added: {formatDate(added)}{
-              updated !== added && `, Updated: ${formatDate(updated)}`
-            }</span
-          >
+          <dl class="meta-list">
+            <dt>added</dt>
+            <dd>{formatDate(added)}</dd>
+            {
+              updated !== added && (
+                <>
+                  <dt>updated</dt>
+                  <dd>{formatDate(updated)}</dd>
+                </>
+              )
+            }
+            {
+              tags && tags.length > 0 && (
+                <>
+                  <dt>tags</dt>
+                  <dd class="tags">{tags.join(', ')}</dd>
+                </>
+              )
+            }
+          </dl>
         </fieldset>
         <div class="prose flow styled-link-underlines">
           <Content />
@@ -75,6 +90,22 @@ const permalink = `https://davlin.io/blog/${slug}/`;
         a {
           text-decoration-color: var(--accent-color);
         }
+      }
+
+      .meta-list {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.25em 0.75em;
+        margin: 0;
+        font-size: 0.85em;
+      }
+
+      .meta-list dt {
+        color: var(--base_03);
+      }
+
+      .meta-list dd {
+        margin: 0;
       }
 
       .prose img {

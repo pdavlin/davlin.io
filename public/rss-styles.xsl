@@ -85,102 +85,163 @@ This file is in BETA. Please test and contribute to the discussion:
           }
 
           :root {
-            --sidebar-width: 260px;
-            --font-mono: BerkeleyMono, Consolas, Monaco, Liberation Mono, Lucida Console,
-            monospace;
+            --font-mono: BerkeleyMono, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
             --font-body: BerkeleyMono, sans-serif;
-            --background-color: #f4ecec;
-            --text-color: #292424;
-            --second-text-color: #3f434d;
-            --red: #bd5187;
-            --orange: #b45a3c;
-            --pink: #c80e84;
-            --green: #4b8b8b;
-            --light-blue: #7272ca;
-            --purple: #8464c4;
-            --blue: #1b81b4;
-            --accent-color: var(--green);
-
-            --size-step-0: 1rem;
-            --size-step-1: 1.25rem;
-            --size-step-2: 1.56rem;
-            --size-step-3: 1.95rem;
-            --size-step-4: 2.43rem;
+            --base_00: #1b1818;
+            --base_01: #292424;
+            --base_02: #585050;
+            --base_03: #655d5d;
+            --base_04: #7e7777;
+            --base_07: #f4ecec;
+            --base_08: #ca4949;
+            --base_09: #b45a3c;
+            --base_0a: #a06e3b;
+            --base_0b: #4b8b8b;
+            --base_0c: #5485b6;
+            --base_0d: #7272ca;
+            --base_0e: #8464c4;
+            --base_0f: #bd5187;
+            --background-color: var(--base_07);
+            --text-color: var(--base_01);
+            --accent-color: var(--base_0b);
           }
 
-          .dark-mode {
-            --background-color: #1b1818;
-            --text-color: #f4ecec;
-            --second-text-color: #c9c6d1;
+          @media (prefers-color-scheme: dark) {
+            :root {
+              --background-color: var(--base_01);
+              --text-color: var(--base_07);
+            }
           }
 
-          h1,
-          h2,
-          h3,
-          h4,
-          strong {
+          h1, h2, h3, h4, strong {
             font-weight: 700;
           }
 
           body {
-            font-family: sans-serif;
             font-size: 1.2rem;
             line-height: 1.5;
             font-family: var(--font-body), sans-serif;
             background: var(--background-color);
             color: var(--text-color);
-            /* letter-spacing: 0.05ch; */
+            padding: 1rem;
           }
 
-          .nav {
-            max-width: 660px;
-            padding: 0 1em;
-            border-left: 2px solid var(--accent-color);
+          a {
+            color: currentcolor;
+            text-decoration-color: var(--text-color);
+          }
+
+          a:hover {
+            text-decoration-color: var(--accent-color);
+          }
+
+          :focus-visible {
+            outline: none;
+            box-shadow:
+              0 0 0 2px var(--accent-color),
+              0 0 0 4px var(--background-color),
+              0 0 0 6px var(--text-color);
+          }
+
+          fieldset {
+            border: 1px solid var(--base_03);
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            max-width: 800px;
+          }
+
+          fieldset:first-of-type {
+            padding: 0.25rem 0.75rem;
+          }
+
+          fieldset:first-of-type p {
+            margin: 0.5em 0;
+          }
+
+          fieldset:hover,
+          fieldset:focus-within {
+            border-color: var(--accent-color);
+          }
+
+          fieldset legend {
+            padding: 0 0.5em;
+            color: var(--base_02);
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: lowercase;
+          }
+
+          fieldset:hover legend,
+          fieldset:focus-within legend {
+            color: var(--accent-color);
           }
 
           .container {
             max-width: 800px;
-            padding: 0.5em;
           }
 
           .item {
-            margin-bottom: 0.2em;
+            margin-bottom: 0.5em;
+          }
+
+          .item a {
+            text-decoration: none;
+          }
+
+          .item a:hover {
+            text-decoration: underline;
+          }
+
+          .text-gray {
+            color: var(--base_02);
+          }
+
+          @media (prefers-color-scheme: dark) {
+            .text-gray {
+              color: var(--base_04);
+            }
           }
         </style>
+        <script>
+          (function () {
+            if (typeof Temporal === 'undefined') return;
+            var days = ['8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+            var day = Temporal.Now.plainDateISO().day;
+            var hex = days[day % 8];
+            document.documentElement.style.setProperty('--accent-color', 'var(--base_0' + hex + ')');
+          })();
+        </script>
       </head>
       <body>
-        <nav class="nav">
+        <fieldset>
+          <legend>about this feed</legend>
+          <p>Wow, check out this RSS feed. Pretty neat!</p>
+          <p>You can <strong>subscribe</strong> to my stuff by copying the URL from the address bar into your newsreader.</p>
+          <p class="text-gray">Visit <a href="https://aboutfeeds.com">About Feeds</a> to get started with newsreaders and subscribing. It's free.</p>
           <p>
-            Wow, check out this RSS feed. Pretty neat! </p>
-          <p> You can <strong>subscribe</strong> to my stuff by copying the URL from the address bar
-            into your newsreader. </p>
-          <p class="text-gray"> Visit <a href="https://aboutfeeds.com">About Feeds</a> to get
-            started with newsreaders and subscribing. It’s free. </p>
-        </nav>
-        <div class="container">
-          <header>
             <a>
               <xsl:attribute name="href">
                 <xsl:value-of select="/rss/channel/link" />
-              </xsl:attribute> Visit
-              Website &#x2192; </a>
-          </header>
-          <h2>Recent Items</h2>
+              </xsl:attribute>
+              Visit Website &#x2192;
+            </a>
+          </p>
+        </fieldset>
+        <fieldset class="container">
+          <legend>recent items</legend>
           <xsl:for-each select="/rss/channel/item">
-            <div>
-              <h3 class="item">
-                <a target="_blank">
-                  <xsl:attribute name="href">
-                    <xsl:value-of select="link" />
-                  </xsl:attribute>
-                  <xsl:value-of select="title" />
-                </a>
-              </h3>
-              <small class="text-gray"> Published: <xsl:value-of select="pubDate" />
-              </small>
+            <div class="item">
+              <a target="_blank">
+                <xsl:attribute name="href">
+                  <xsl:value-of select="link" />
+                </xsl:attribute>
+                <xsl:value-of select="title" />
+              </a>
+              <br />
+              <small class="text-gray">Published: <xsl:value-of select="pubDate" /></small>
             </div>
           </xsl:for-each>
-        </div>
+        </fieldset>
       </body>
     </html>
   </xsl:template>
