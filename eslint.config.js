@@ -156,6 +156,8 @@ export default [
       'coverage/',
       'playwright-report/',
       'test-results/',
+      'scripts/',
+      'test-output/',
     ],
   },
 ];

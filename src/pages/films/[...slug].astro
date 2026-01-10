@@ -1,0 +1,226 @@
+---
+import Layout from '@components/Layout.astro';
+import DocumentHead from '@components/DocumentHead.astro';
+import { getCollection } from 'astro:content';
+import '@styles/global.css';
+import { formatDate } from '../../utils/date-utils';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  const films = notes.filter((note) => note.data.type === 'film');
+  return films.map((note) => ({
+    params: { slug: note.slug.replace(/^films\//, '') },
+    props: { note },
+  }));
+}
+
+const { slug } = Astro.params;
+const { note } = Astro.props;
+
+if (slug === undefined) return;
+
+const { Content } = await note.render();
+
+const {
+  data: { added, excerpt, title, updated, filmYear, rating, letterboxdUrl, isRewatch },
+} = note;
+
+// Extract poster URL from raw markdown body (first image)
+const posterMatch = note.body?.match(/!\[.*?\]\((https:\/\/[^)]+)\)/);
+const posterUrl = posterMatch ? posterMatch[1] : null;
+
+function formatStars(rating: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalf = rating % 1 >= 0.5;
+  return '★'.repeat(fullStars) + (hasHalf ? '½' : '');
+}
+
+// random imageId between 1 and 6
+const imageId = Math.floor(Math.random() * 6) + 1;
+
+const description = excerpt;
+const permalink = `https://davlin.io/films/${slug}/`;
+---
+
+<html lang="en">
+  <DocumentHead
+    title={title}
+    description={description ?? ''}
+    permalink={permalink}
+    canonicalUrl={permalink}
+    imageId={imageId}
+  />
+  <body>
+    <Layout page="post">
+      <article>
+        {
+          posterUrl ? (
+            <div class="film-hero">
+              <img src={posterUrl} alt={`${title} poster`} class="poster" loading="lazy" />
+              <div class="info">
+                <h1 class="title">{title}</h1>
+                <div class="film-meta">
+                  {filmYear && <span class="year">({filmYear})</span>}
+                  {rating && (
+                    <span class="rating-display">
+                      <span class="stars">{formatStars(rating)}</span>
+                      <span class="rating-text">{rating}/5</span>
+                    </span>
+                  )}
+                  {isRewatch && <span class="badge">Rewatch</span>}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h1 class="title">{title}</h1>
+              <div class="film-meta">
+                {filmYear && <span class="year">({filmYear})</span>}
+                {rating && (
+                  <span class="rating-display">
+                    <span class="stars">{formatStars(rating)}</span>
+                    <span class="rating-text">{rating}/5</span>
+                  </span>
+                )}
+                {isRewatch && <span class="badge">Rewatch</span>}
+              </div>
+            </>
+          )
+        }
+
+        <div class="meta">
+          <span class="added-updated"
+            >Added: {formatDate(added)}{
+              updated !== added && `, Updated: ${formatDate(updated)}`
+            }</span
+          >
+        </div>
+        <div class="prose flow styled-link-underlines">
+          <Content />
+        </div>
+
+        {
+          letterboxdUrl && (
+            <>
+              <hr />
+              <aside class="letterboxd-cta">
+                <p>
+                  Like or comment on this review on{' '}
+                  <a href={letterboxdUrl} target="_blank" rel="noopener">
+                    Letterboxd
+                  </a>
+                </p>
+              </aside>
+            </>
+          )
+        }
+      </article>
+      <section class="styled-link-underlines thanks-for-reading">
+        <a href="/films/">Back to films</a>
+      </section>
+    </Layout>
+    <style>
+      /* Hide poster in prose since it's now in hero - needs :global for unscoped content */
+      :global(.prose > p:first-child img) {
+        display: none;
+      }
+
+      .film-hero {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: var(--space_m);
+        margin-block-end: var(--space_l);
+        align-items: start;
+      }
+
+      .film-hero .poster {
+        width: 100%;
+        height: auto;
+      }
+
+      .film-hero .info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space_xs);
+      }
+
+      .film-hero .info .title {
+        margin: 0;
+      }
+
+      @media (max-width: 600px) {
+        .film-hero {
+          grid-template-columns: 1fr;
+        }
+
+        .film-hero .poster {
+          max-width: 180px;
+        }
+      }
+
+      .prose img {
+        width: 100%;
+        height: auto;
+      }
+
+      .prose * + :is(h2, h3, h4) {
+        --flow-space: var(--space_xl);
+      }
+
+      .prose pre[class*='language-'],
+      .prose figure {
+        margin-block: var(--space_l) var(--space_s);
+        grid-column: popout;
+      }
+
+      .film-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75em;
+        align-items: center;
+        margin-block-end: 0.5em;
+        font-size: 0.95em;
+      }
+
+      .film-meta .year {
+        color: var(--text-muted, #888);
+      }
+
+      .film-meta .rating-display {
+        display: flex;
+        gap: 0.25em;
+        align-items: center;
+      }
+
+      .film-meta .stars {
+        color: var(--orange);
+      }
+
+      .film-meta .rating-text {
+        color: var(--text-muted, #888);
+        font-size: 0.9em;
+      }
+
+      .film-meta .badge {
+        background: var(--surface, #333);
+        padding: 0.15em 0.5em;
+        border-radius: 4px;
+        font-size: 0.85em;
+      }
+
+      hr {
+        margin-block: var(--space_l);
+      }
+
+      .letterboxd-cta p {
+        margin: 0;
+      }
+
+      .letterboxd-cta a {
+        color: inherit;
+        text-decoration: underline;
+      }
+    </style>
+  </body>
+</html>

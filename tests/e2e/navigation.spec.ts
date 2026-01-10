@@ -25,7 +25,7 @@ test.describe('Navigation Flow', () => {
     await firstPost.click();
     await expect(page).toHaveURL(/\/blog\/.+/);
 
-    const backLink = page.getByRole('link', { name: /back to blog/i });
+    const backLink = page.getByRole('link', { name: /back to posts/i });
     await expect(backLink).toBeVisible();
     await backLink.click();
 
@@ -38,7 +38,7 @@ test.describe('Navigation Flow', () => {
     await page.click('a[href="/blog/"]');
     await expect(page).toHaveURL(/\/blog\//);
 
-    const header = page.locator('header');
+    const header = page.getByRole('banner');
     await expect(header).toBeVisible();
 
     await page.click('a[href="/"]');

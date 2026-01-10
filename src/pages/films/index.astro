@@ -1,0 +1,21 @@
+---
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
+import FilmList from '@components/FilmList.astro';
+
+const title = 'Films | Patrick Davlin dot io';
+const description = 'Film reviews and notes';
+const permalink = 'https://davlin.io/films/';
+const page = 'films';
+---
+
+<html lang="en">
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <h1 class="title">films</h1>
+      <FilmList />
+    </Layout>
+  </body>
+</html>

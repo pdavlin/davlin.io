@@ -20,11 +20,12 @@ type Note = CollectionEntry<'notes'> & {
 };
 
 const allNotes = await getCollection('notes');
-const notes = allNotes.filter((note) => note.data.type !== 'film');
+const notes = allNotes.filter((note) => note.data.type === 'film');
 const years: Year[] = [];
 
 for (const note of notes) {
-  const [yearDate, monthDate, dayDate] = parsePostDate(note.data.added);
+  const dateToUse = note.data.watchedDate ?? note.data.added;
+  const [yearDate, monthDate, dayDate] = parsePostDate(dateToUse);
 
   let year: Year | undefined = years.find((year) => year.date === yearDate);
   if (!year) {
@@ -97,13 +98,14 @@ for (const year of years.sort((a, b) => compareDatesDescending(a.date, b.date)))
               </li>
               {month.notes.map((note) => (
                 <NoteListItem
-                  slug={note.slug}
+                  slug={note.slug.replace(/^films\//, '')}
                   title={note.data.title}
-                  added={note.data.added}
+                  added={note.data.watchedDate ?? note.data.added}
                   tags={note.data.tags}
                   type={note.data.type}
                   excerpt={note.data.excerpt}
                   rating={note.data.rating}
+                  basePath="/films"
                 />
               ))}
             </>

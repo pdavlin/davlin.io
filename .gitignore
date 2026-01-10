@@ -26,6 +26,9 @@ pnpm-debug.log*
 # test coverage
 coverage/
 
+# test output
+test-output/
+
 # dev docs
 docs/
 PRPs/

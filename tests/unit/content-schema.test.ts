@@ -13,7 +13,7 @@ const dateStringSchema = z.union([
 ]);
 
 const noteSchema = z.object({
-  type: z.enum(['note', 'book']).optional(),
+  type: z.enum(['note', 'book', 'film']).optional(),
   title: z.string(),
   tags: z.array(z.string()),
   added: dateStringSchema,
@@ -111,6 +111,20 @@ describe('noteSchema', () => {
     };
 
     const result = noteSchema.safeParse(noteWithNulls);
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts film type', () => {
+    const filmNote = {
+      type: 'film' as const,
+      title: 'Test Film',
+      tags: ['film'],
+      added: '2026-01-08 00:00',
+      updated: '2026-01-08 00:00',
+      rating: 4,
+    };
+
+    const result = noteSchema.safeParse(filmNote);
     expect(result.success).toBe(true);
   });
 });

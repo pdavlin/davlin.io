@@ -11,7 +11,7 @@ const dateStringSchema = z.union([
 ]);
 
 const note = z.object({
-  type: z.enum(['note', 'book']).optional(),
+  type: z.enum(['note', 'book', 'film']).optional(),
   title: z.string(),
   tags: z.array(z.string()),
   added: dateStringSchema,
@@ -20,6 +20,14 @@ const note = z.object({
   rating: z.number().optional().nullable(),
   noComments: z.boolean().optional().nullable(),
   includeYTResources: z.boolean().optional().nullable(),
+  // Film-specific fields
+  filmYear: z.number().optional().nullable(),
+  letterboxdUrl: z.string().url().optional().nullable(),
+  watchedDate: dateStringSchema.optional().nullable(),
+  isRewatch: z.boolean().optional().nullable(),
+  tmdbId: z.string().optional().nullable(),
+  letterboxdGuid: z.string().optional().nullable(),
+  source: z.enum(['letterboxd', 'manual']).optional(),
 });
 
 const notesCollection = defineCollection({

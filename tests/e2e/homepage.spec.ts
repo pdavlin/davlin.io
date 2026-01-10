@@ -14,11 +14,15 @@ test.describe('Homepage', () => {
   test('should have navigation links', async ({ page }) => {
     await page.goto('/');
 
-    const homeLink = page.getByRole('link', { name: /home/i });
+    const header = page.getByRole('banner');
+    const homeLink = header.getByRole('link', { name: /home/i });
     await expect(homeLink).toBeVisible();
 
-    const blogLink = page.getByRole('link', { name: /blog/i });
+    const blogLink = header.getByRole('link', { name: /blog/i });
     await expect(blogLink).toBeVisible();
+
+    const filmsLink = header.getByRole('link', { name: /films/i });
+    await expect(filmsLink).toBeVisible();
   });
 
   test('should navigate to blog from homepage', async ({ page }) => {

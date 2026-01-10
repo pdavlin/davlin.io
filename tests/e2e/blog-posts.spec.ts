@@ -28,7 +28,7 @@ test.describe('Blog Posts', () => {
       expect(is404).toBe(0);
 
       await expect(page.locator('article h1')).toBeVisible();
-      await expect(page.locator('.prose')).toBeVisible();
+      await expect(page.locator('article .prose')).toBeVisible();
     }
   });
 
@@ -40,7 +40,7 @@ test.describe('Blog Posts', () => {
 
     await expect(page.locator('.added-updated')).toContainText('Added:');
 
-    await expect(page.getByRole('link', { name: /back to blog/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /back to posts/i })).toBeVisible();
   });
 
   test('blog posts should have no console errors', async ({ page }) => {
@@ -59,5 +59,13 @@ test.describe('Blog Posts', () => {
     await page.waitForLoadState('networkidle');
 
     expect(errors).toEqual([]);
+  });
+
+  test('blog list should not contain film entries', async ({ page }) => {
+    await page.goto('/blog/');
+
+    const filmLinks = page.locator('li.note a.film');
+    const filmCount = await filmLinks.count();
+    expect(filmCount).toBe(0);
   });
 });

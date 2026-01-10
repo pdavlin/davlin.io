@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "import:letterboxd": "node scripts/import-letterboxd.js",
     "build": "pnpm check && astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -26,7 +27,9 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.1",
+    "@js-temporal/polyfill": "^0.5.1",
     "astro": "^5.16.7",
+    "fast-xml-parser": "^5.3.3",
     "marked": "^17.0.1",
     "typescript": "^5.9.3"
   },

@@ -1,14 +1,14 @@
 ---
 import Layout from '@components/Layout.astro';
 import DocumentHead from '@components/DocumentHead.astro';
-// import TagsList from '@components/TagsList.astro';
 import { getCollection } from 'astro:content';
 import '@styles/global.css';
 import { formatDate } from '../../utils/date-utils';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
-  return notes.map((note) => ({
+  const posts = notes.filter((note) => note.data.type !== 'film');
+  return posts.map((note) => ({
     params: { slug: note.slug },
     props: { note },
   }));
@@ -28,8 +28,8 @@ const {
 // random imageId between 1 and 6
 const imageId = Math.floor(Math.random() * 6) + 1;
 
-let description = excerpt;
-let permalink = `https://davlin.io/blog/${slug}/`;
+const description = excerpt;
+const permalink = `https://davlin.io/blog/${slug}/`;
 ---
 
 <html lang="en">
@@ -44,21 +44,20 @@ let permalink = `https://davlin.io/blog/${slug}/`;
     <Layout page="post">
       <article>
         <h1 class="title">{title}</h1>
+
         <div class="meta">
           <span class="added-updated"
             >Added: {formatDate(added)}{
               updated !== added && `, Updated: ${formatDate(updated)}`
             }</span
           >
-
-          <!-- <TagsList tags={tags.map((t) => ({ name: t }))} /> -->
         </div>
         <div class="prose flow styled-link-underlines">
           <Content />
         </div>
       </article>
       <section class="styled-link-underlines thanks-for-reading">
-        <a href="/blog/">Back to blog index</a>
+        <a href="/blog/">Back to posts</a>
       </section>
     </Layout>
     <style>
@@ -76,8 +75,6 @@ let permalink = `https://davlin.io/blog/${slug}/`;
       .prose figure {
         margin-block: var(--space_l) var(--space_s);
         grid-column: popout;
-      }
-      .thanks-for-reading {
       }
     </style>
   </body>
