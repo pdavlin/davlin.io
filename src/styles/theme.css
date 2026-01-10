@@ -94,3 +94,27 @@ a:hover {
     box-shadow: none;
   }
 }
+
+fieldset {
+  border: 1px solid var(--base_03);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+fieldset:hover,
+fieldset:focus-within {
+  border-color: var(--accent-color);
+}
+
+fieldset legend {
+  padding: 0 0.5em;
+  color: var(--base_02);
+  font-weight: bold;
+  font-size: 0.75rem;
+  text-transform: lowercase;
+}
+
+fieldset:hover legend,
+fieldset:focus-within legend {
+  color: var(--accent-color);
+}

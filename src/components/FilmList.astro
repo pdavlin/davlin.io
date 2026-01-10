@@ -62,26 +62,11 @@ for (const year of years.sort((a, b) => compareDatesDescending(a.date, b.date)))
 
 <style>
   .month-group {
-    border: 1px solid var(--base_03);
-    padding: 0.75rem 1rem;
     margin: 1.5rem 0;
   }
 
-  .month-group:hover,
-  .month-group:focus-within {
-    border-color: var(--accent-color);
-  }
-
   .month-group legend {
-    padding: 0 0.5em;
-    color: var(--base_02);
-    font-weight: bold;
     font-size: 1rem;
-  }
-
-  .month-group:hover legend,
-  .month-group:focus-within legend {
-    color: var(--accent-color);
   }
 
   .list {

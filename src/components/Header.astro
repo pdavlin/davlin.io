@@ -3,22 +3,25 @@
 ---
 
 <header class="site-header">
-  <nav class="cluster">
-    <ul class="cluster" role="list">
-      <li>
-        <a href="/">Home</a>
-      </li>
-      <li>
-        <a href="/blog/">Blog</a>
-      </li>
-      <li>
-        <a href="/films/">Films</a>
-      </li>
-      <li>
-        <a href="/feed.xml/">RSS</a>
-      </li>
-    </ul>
-  </nav>
+  <fieldset>
+    <legend>header</legend>
+    <nav class="cluster">
+      <ul class="cluster" role="list">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/blog/">Blog</a>
+        </li>
+        <li>
+          <a href="/films/">Films</a>
+        </li>
+        <li>
+          <a href="/feed.xml/">RSS</a>
+        </li>
+      </ul>
+    </nav>
+  </fieldset>
 </header>
 
 <style>
@@ -36,6 +39,11 @@
       place-content: center;
       color: currentcolor;
       text-decoration: none;
+    }
+
+    fieldset {
+      margin: 0;
+      padding: 0.25rem 0.75rem 0.25rem 0.5rem;
     }
   }
 

@@ -3,27 +3,30 @@ const buildDate = new Date();
 ---
 
 <footer class="site-footer breakout">
-  <p>Built on {buildDate.toISOString().slice(0, 10)}.</p>
-  <ul class="cluster" role="list" style="padding-left: 0;">
-    <li>
-      <a href="/">Home</a>
-    </li>
-    <li>
-      <a href="/blog/">Blog</a>
-    </li>
-    <li>
-      <a href="/films/">Films</a>
-    </li>
-    <!-- <li>
-            <a href="/blogroll/">Blogroll</a>
-        </li> -->
-    <li>
-      <a rel="me" href="https://social.lol/@pdav">Mastodon</a>
-    </li>
-    <li>
-      <a rel="me" href="https://github.com/pdavlin">GitHub</a>
-    </li>
-  </ul>
+  <fieldset>
+    <legend>footer</legend>
+    <p>Built on {buildDate.toISOString().slice(0, 10)}.</p>
+    <ul class="cluster" role="list" style="padding-left: 0;">
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
+        <a href="/blog/">Blog</a>
+      </li>
+      <li>
+        <a href="/films/">Films</a>
+      </li>
+      <!-- <li>
+              <a href="/blogroll/">Blogroll</a>
+          </li> -->
+      <li>
+        <a rel="me" href="https://social.lol/@pdav">Mastodon</a>
+      </li>
+      <li>
+        <a rel="me" href="https://github.com/pdavlin">GitHub</a>
+      </li>
+    </ul>
+  </fieldset>
 </footer>
 
 <style>
@@ -31,6 +34,11 @@ const buildDate = new Date();
     position: sticky;
     padding-block: var(--space_2xl);
     margin-block: var(--page_gutters) var(--space_xl);
+
+    fieldset {
+      margin: 0;
+      padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+    }
 
     a {
       display: grid;
