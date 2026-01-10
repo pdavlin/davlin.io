@@ -28,6 +28,10 @@ coverage/
 
 # test output
 test-output/
+test-results/
+
+# playwright snapshots
+*-snapshots/
 
 # dev docs
 docs/
