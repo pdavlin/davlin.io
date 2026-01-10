@@ -99,6 +99,7 @@ fieldset {
   border: 1px solid var(--base_03);
   padding: 0.75rem 1rem;
   margin: 1rem 0;
+  transition: border-color 0.15s ease-out;
 }
 
 fieldset:hover,
@@ -112,9 +113,20 @@ fieldset legend {
   font-weight: bold;
   font-size: 0.75rem;
   text-transform: lowercase;
+  transition: color 0.15s ease-out;
 }
 
 fieldset:hover legend,
 fieldset:focus-within legend {
   color: var(--accent-color);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  fieldset:active {
+    border-color: var(--accent-color);
+  }
+
+  fieldset:active legend {
+    color: var(--accent-color);
+  }
 }
