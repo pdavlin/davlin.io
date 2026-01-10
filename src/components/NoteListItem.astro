@@ -45,11 +45,6 @@ const stars = type === 'film' && rating ? formatStars(rating) : '';
     text-decoration: none;
   }
 
-  :global(li a.film::before) {
-    content: '🎬 ';
-    text-decoration: none;
-  }
-
   .rating {
     color: var(--accent-color);
     font-size: 0.85em;

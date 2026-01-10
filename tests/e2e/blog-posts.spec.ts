@@ -4,12 +4,12 @@ test.describe('Blog Posts', () => {
   test('blog list should show posts grouped by month', async ({ page }) => {
     await page.goto('/blog/');
 
-    const monthHeaders = page.locator('h2.month');
-    const count = await monthHeaders.count();
+    const monthGroups = page.locator('fieldset.month-group');
+    const count = await monthGroups.count();
     expect(count).toBeGreaterThan(0);
 
-    const firstMonth = monthHeaders.first();
-    const monthText = await firstMonth.textContent();
+    const firstLegend = monthGroups.first().locator('legend');
+    const monthText = await firstLegend.textContent();
     expect(monthText).toBeTruthy();
   });
 

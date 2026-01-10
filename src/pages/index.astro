@@ -9,30 +9,69 @@ const permalink = 'https://davlin.io';
 const page = 'home';
 ---
 
+<style>
+  .about-group {
+    border: 1px solid var(--base_03);
+    padding: 0.75rem 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .about-group:hover,
+  .about-group:focus-within {
+    border-color: var(--accent-color);
+  }
+
+  .about-group legend {
+    padding: 0 0.5em;
+    color: var(--base_02);
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .about-group:hover legend,
+  .about-group:focus-within legend {
+    color: var(--accent-color);
+  }
+
+  .about-group p {
+    margin: 0.75rem 0;
+  }
+
+  .about-group p:first-of-type {
+    margin-top: 0;
+  }
+
+  .about-group p:last-of-type {
+    margin-bottom: 0;
+  }
+</style>
+
 <html lang="en">
   <DocumentHead title={title} description={description} permalink={permalink} />
   <body>
     <Layout page={page}>
       <h1 class="title" style="text-transform: none;">davlin (dot) io</h1>
       <p>Hey, I'm Patrick. You're at yet another web blog that might get updates sometimes.</p>
-      <h2>About Me</h2>
-      <p>
-        I'm a Nebraska-based frontend developer. I love to build interesting experiences on the web.
-        In my work I've been lucky to build large, sport-focused applications supporting millions of
-        active users. I also love to build for home; I run a little stack of applications on a
-        server in my office using a custom Docker and Traefik stack, which I'll eventually write
-        about on this site.
-      </p>
-      <p>
-        I'm on a journey to learn more about web development without leaning so much on complex
-        frameworks. That's why I built this little place on the web as a static-generated website
-        instead of a single-page application. You can learn a bit more about what I'm into right now
-        when I finish building my "now" page :)
-      </p>
-      <p>
-        I'm not super active on social media but I love to follow interesting accounts. Feel free to
-        reach out to me on Mastodon!
-      </p>
+      <fieldset class="about-group">
+        <legend>About Me</legend>
+        <p>
+          I'm a Nebraska-based frontend developer. I love to build interesting experiences on the
+          web. In my work I've been lucky to build large, sport-focused applications supporting
+          millions of active users. I also love to build for home; I run a little stack of
+          applications on a server in my office using a custom Docker and Traefik stack, which I'll
+          eventually write about on this site.
+        </p>
+        <p>
+          I'm on a journey to learn more about web development without leaning so much on complex
+          frameworks. That's why I built this little place on the web as a static-generated website
+          instead of a single-page application. You can learn a bit more about what I'm into right
+          now when I finish building my "now" page :)
+        </p>
+        <p>
+          I'm not super active on social media but I love to follow interesting accounts. Feel free
+          to reach out to me on Mastodon!
+        </p>
+      </fieldset>
     </Layout>
   </body>
 </html>
