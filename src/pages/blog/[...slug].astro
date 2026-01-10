@@ -43,15 +43,15 @@ const permalink = `https://davlin.io/blog/${slug}/`;
   <body>
     <Layout page="post">
       <article>
-        <h1 class="title">{title}</h1>
-
-        <div class="meta">
+        <fieldset class="meta">
+          <legend>metadata</legend>
+          <h1 class="title">{title}</h1>
           <span class="added-updated"
             >Added: {formatDate(added)}{
               updated !== added && `, Updated: ${formatDate(updated)}`
             }</span
           >
-        </div>
+        </fieldset>
         <div class="prose flow styled-link-underlines">
           <Content />
         </div>
@@ -61,6 +61,22 @@ const permalink = `https://davlin.io/blog/${slug}/`;
       </section>
     </Layout>
     <style>
+      /* Desktop: white underline, accent on hover */
+      a {
+        text-decoration-color: var(--color-text);
+      }
+
+      a:hover {
+        text-decoration-color: var(--accent-color);
+      }
+
+      /* Mobile: always accent color underline (no hover) */
+      @media (max-width: 600px) {
+        a {
+          text-decoration-color: var(--accent-color);
+        }
+      }
+
       .prose img {
         width: 100%;
         height: auto;

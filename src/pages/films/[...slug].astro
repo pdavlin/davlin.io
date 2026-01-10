@@ -54,11 +54,32 @@ const permalink = `https://davlin.io/films/${slug}/`;
   <body>
     <Layout page="post">
       <article>
-        {
-          posterUrl ? (
-            <div class="film-hero">
-              <img src={posterUrl} alt={`${title} poster`} class="poster" loading="lazy" />
-              <div class="info">
+        <fieldset class="meta">
+          <legend>metadata</legend>
+          {
+            posterUrl ? (
+              <div class="film-hero">
+                <img src={posterUrl} alt={`${title} poster`} class="poster" loading="lazy" />
+                <div class="info">
+                  <h1 class="title">{title}</h1>
+                  <div class="film-meta">
+                    {filmYear && <span class="year">({filmYear})</span>}
+                    {rating && (
+                      <span class="rating-display">
+                        <span class="stars">{formatStars(rating)}</span>
+                        <span class="rating-text">{rating}/5</span>
+                      </span>
+                    )}
+                    {isRewatch && <span class="badge">Rewatch</span>}
+                  </div>
+                  <span class="added-updated desktop-only">
+                    Added: {formatDate(added)}
+                    {updated !== added && `, Updated: ${formatDate(updated)}`}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <>
                 <h1 class="title">{title}</h1>
                 <div class="film-meta">
                   {filmYear && <span class="year">({filmYear})</span>}
@@ -70,32 +91,15 @@ const permalink = `https://davlin.io/films/${slug}/`;
                   )}
                   {isRewatch && <span class="badge">Rewatch</span>}
                 </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              <h1 class="title">{title}</h1>
-              <div class="film-meta">
-                {filmYear && <span class="year">({filmYear})</span>}
-                {rating && (
-                  <span class="rating-display">
-                    <span class="stars">{formatStars(rating)}</span>
-                    <span class="rating-text">{rating}/5</span>
-                  </span>
-                )}
-                {isRewatch && <span class="badge">Rewatch</span>}
-              </div>
-            </>
-          )
-        }
-
-        <div class="meta">
-          <span class="added-updated"
+              </>
+            )
+          }
+          <span class="added-updated mobile-only"
             >Added: {formatDate(added)}{
               updated !== added && `, Updated: ${formatDate(updated)}`
             }</span
           >
-        </div>
+        </fieldset>
         <div class="prose flow styled-link-underlines">
           <Content />
         </div>
@@ -104,7 +108,7 @@ const permalink = `https://davlin.io/films/${slug}/`;
           letterboxdUrl && (
             <>
               <hr />
-              <aside class="letterboxd-cta">
+              <aside class="letterboxd-cta styled-link-underlines">
                 <p>
                   Like or comment on this review on{' '}
                   <a href={letterboxdUrl} target="_blank" rel="noopener">
@@ -121,6 +125,22 @@ const permalink = `https://davlin.io/films/${slug}/`;
       </section>
     </Layout>
     <style>
+      /* Desktop: white underline, accent on hover */
+      a {
+        text-decoration-color: var(--color-text);
+      }
+
+      a:hover {
+        text-decoration-color: var(--accent-color);
+      }
+
+      /* Mobile: always accent color underline (no hover) */
+      @media (max-width: 600px) {
+        a {
+          text-decoration-color: var(--accent-color);
+        }
+      }
+
       /* Hide poster in prose since it's now in hero - needs :global for unscoped content */
       :global(.prose > p:first-child img) {
         display: none;
@@ -149,6 +169,14 @@ const permalink = `https://davlin.io/films/${slug}/`;
         margin: 0;
       }
 
+      .desktop-only {
+        display: block;
+      }
+
+      .mobile-only {
+        display: none;
+      }
+
       @media (max-width: 600px) {
         .film-hero {
           grid-template-columns: 1fr;
@@ -156,6 +184,14 @@ const permalink = `https://davlin.io/films/${slug}/`;
 
         .film-hero .poster {
           max-width: 180px;
+        }
+
+        .desktop-only {
+          display: none;
+        }
+
+        .mobile-only {
+          display: block;
         }
       }
 
@@ -215,11 +251,6 @@ const permalink = `https://davlin.io/films/${slug}/`;
 
       .letterboxd-cta p {
         margin: 0;
-      }
-
-      .letterboxd-cta a {
-        color: inherit;
-        text-decoration: underline;
       }
     </style>
   </body>
