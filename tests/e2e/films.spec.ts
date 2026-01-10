@@ -39,7 +39,7 @@ test.describe('Films', () => {
     await firstFilmLink.click();
 
     await expect(page.locator('.film-meta')).toBeVisible();
-    await expect(page.locator('.added-updated')).toContainText('Added:');
+    await expect(page.locator('.meta-list').first()).toContainText('written');
     await expect(page.getByRole('link', { name: /back to films/i })).toBeVisible();
   });
 

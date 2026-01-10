@@ -38,7 +38,7 @@ test.describe('Blog Posts', () => {
     const firstPostLink = page.locator('li.note a').first();
     await firstPostLink.click();
 
-    await expect(page.locator('.added-updated')).toContainText('Added:');
+    await expect(page.locator('.meta-list')).toContainText('added');
 
     await expect(page.getByRole('link', { name: /back to posts/i })).toBeVisible();
   });
