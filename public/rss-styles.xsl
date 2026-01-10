@@ -204,9 +204,10 @@ This file is in BETA. Please test and contribute to the discussion:
         </style>
         <script>
           (function () {
-            if (typeof Temporal === 'undefined') return;
             var days = ['8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
-            var day = Temporal.Now.plainDateISO().day;
+            var day = typeof Temporal !== 'undefined'
+              ? Temporal.Now.plainDateISO().day
+              : new Date().getDate();
             var hex = days[day % 8];
             document.documentElement.style.setProperty('--accent-color', 'var(--base_0' + hex + ')');
           })();

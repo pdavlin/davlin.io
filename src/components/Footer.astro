@@ -56,4 +56,12 @@ const buildDate = new Date();
   ul > li {
     list-style: none;
   }
+
+  @media (max-width: 480px) {
+    ul.cluster {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
 </style>
