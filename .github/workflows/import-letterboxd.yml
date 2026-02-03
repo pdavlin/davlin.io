@@ -1,12 +1,12 @@
-name: Import Letterboxd Reviews
+name: Sync Content
 
 on:
   schedule:
-    - cron: '0 6 * * *' # Daily at 6am UTC
+    - cron: '0 6 * * *' # Daily at 6am UTC (midnight CST)
   workflow_dispatch: # Allow manual trigger
 
 jobs:
-  import:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,16 +26,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run import script
+      # Letterboxd import
+      - name: Import Letterboxd reviews
         run: pnpm import:letterboxd
 
-      - name: Format imported files
+      - name: Format imported films
         run: pnpm exec prettier --write "src/content/notes/films/*.md"
 
+      # Coffee data import
+      - name: Fetch coffee data from Airtable
+        run: node scripts/fetch-coffee-data.js
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+
+      - name: Format coffee data
+        run: pnpm exec prettier --write "src/data/coffee.json"
+
+      # Check for any changes
       - name: Check for changes
         id: changes
         run: |
-          if [[ -n $(git status --porcelain src/content/notes/films/) ]]; then
+          if [[ -n $(git status --porcelain src/content/notes/films/ src/data/) ]]; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -46,8 +58,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/notes/films/
-          git commit -m "chore: sync Letterboxd reviews"
+          git add src/content/notes/films/ src/data/
+          git commit -m "chore: sync content (films + coffee)"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

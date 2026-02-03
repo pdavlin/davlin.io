@@ -3,7 +3,7 @@ import '@styles/global.css';
 import DocumentHead from 'src/components/DocumentHead.astro';
 import Layout from '@components/Layout.astro';
 import CoffeeChart from '@components/CoffeeChart.astro';
-import { fetchRecords } from '../../api/airtable';
+import coffeeData from '../../data/coffee.json';
 
 type AirtableRecord = Record<string, unknown>;
 
@@ -29,14 +29,7 @@ const timeZone = isDST ? 'CDT' : 'CST';
 
 const buildTime = `${year}-${month}-${day} ${hour12}:${minute} ${ampm} ${timeZone}`;
 
-let records: AirtableRecord[] = [];
-let errorMessage = '';
-
-try {
-  records = await fetchRecords('Shots');
-} catch (e) {
-  errorMessage = e instanceof Error ? e.message : 'Unknown error';
-}
+const records: AirtableRecord[] = coffeeData as AirtableRecord[];
 
 function filterRecords(recs: AirtableRecord[]): AirtableRecord[] {
   if (recs.length === 0) return recs;
@@ -324,15 +317,6 @@ const { topThree } = getTopMonths(labels, data);
       <h1 class="title">coffee</h1>
       <p class="build-time">Last updated: {buildTime}</p>
 
-      {
-        errorMessage && (
-          <div class="error-message">
-            <h2>Configuration Error</h2>
-            <p>{errorMessage}</p>
-          </div>
-        )
-      }
-
       <fieldset class="chart-fieldset">
         <legend>monthly shots</legend>
         {
@@ -422,23 +406,6 @@ const { topThree } = getTopMonths(labels, data);
 
       .chart-fieldset legend {
         font-size: 1rem;
-      }
-
-      .error-message {
-        background-color: color-mix(in oklab, var(--base_08) 20%, var(--base_07));
-        color: var(--base_01);
-        border-left: 4px solid var(--base_08);
-        padding: var(--space_s);
-        margin-bottom: var(--space_l);
-      }
-
-      .error-message h2 {
-        color: var(--base_01);
-        margin: 0 0 0.5rem 0;
-      }
-
-      .error-message p {
-        margin: 0;
       }
 
       .no-data {

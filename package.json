@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "import:letterboxd": "node scripts/import-letterboxd.js",
+    "import:coffee": "node scripts/fetch-coffee-data.js",
     "build": "pnpm check && astro build",
     "preview": "astro preview",
     "astro": "astro",
