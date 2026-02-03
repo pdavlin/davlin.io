@@ -10,10 +10,11 @@ export async function GET(context: APIContext) {
     notes.map(async (note) => {
       const rawContent = note.body;
       const html = await marked.parse(rawContent);
+      const basePath = note.data.type === 'film' ? 'films' : 'blog';
 
       const fullHtml = `${html}
         <hr />
-        <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/blog/${note.slug}">original post</a> is available at my website.</p>
+        <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/${basePath}/${note.slug}">original post</a> is available at my website.</p>
       `;
 
       return {
@@ -39,8 +40,9 @@ export async function GET(context: APIContext) {
       const categoryTags = note.data.tags
         .map((tag: string) => `<category><![CDATA[${tag}]]></category>`)
         .join('');
+      const basePath = note.data.type === 'film' ? '/films' : '/blog';
       return {
-        link: `/${note.slug}`,
+        link: `${basePath}/${note.slug}`,
         title: note.data.title,
         pubDate: note.data.added,
         description: note.htmlContent,
