@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod';
+import { z, type ZodType } from 'zod';
 
 // Recreate the schema for testing (can't import Astro runtime in unit tests)
-const dateStringSchema = z.union([
+const dateStringSchema: ZodType<string> = z.union([
   z.string(),
-  z.date().transform((date) => {
+  z.date().transform((date: Date): string => {
     const year = String(date.getFullYear());
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -12,7 +12,19 @@ const dateStringSchema = z.union([
   }),
 ]);
 
-const noteSchema = z.object({
+interface NoteData {
+  type?: 'note' | 'book' | 'film';
+  title: string;
+  tags: string[];
+  added: string;
+  updated: string;
+  excerpt?: string | null;
+  rating?: number | null;
+  noComments?: boolean | null;
+  includeYTResources?: boolean | null;
+}
+
+const noteSchema: ZodType<NoteData> = z.object({
   type: z.enum(['note', 'book', 'film']).optional(),
   title: z.string(),
   tags: z.array(z.string()),

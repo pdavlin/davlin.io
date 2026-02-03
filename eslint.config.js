@@ -113,6 +113,8 @@ export default [
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
+      // CollectionEntry types may not be fully inferred without astro sync
+      '@typescript-eslint/no-redundant-type-constituents': 'off',
     },
   },
 
