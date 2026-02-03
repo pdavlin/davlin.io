@@ -24,12 +24,12 @@ const projects = [
 ];
 
 // Group by year
-const projectsByYear = projects.reduce((acc, project) => {
+const projectsByYear: Record<string, typeof projects> = {};
+for (const project of projects) {
   const year = project.date.split('-')[0];
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(project);
-  return acc;
-}, {} as Record<string, typeof projects>);
+  projectsByYear[year] = projectsByYear[year] ?? [];
+  projectsByYear[year].push(project);
+}
 
 // Sort years descending
 const sortedYears = Object.keys(projectsByYear).sort((a, b) => Number(b) - Number(a));
