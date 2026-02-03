@@ -1,0 +1,298 @@
+---
+export interface Props {
+  id: string;
+  title: string;
+  data: number[] | { regular: number[]; decaf: number[] };
+  labels: string[];
+  fullLabels?: string[];
+  chartType?: 'line' | 'bar' | 'pie';
+  xAxisLabel?: string;
+}
+
+const { id, title, data, labels, fullLabels, chartType = 'bar', xAxisLabel } = Astro.props;
+const isStackedBar = id === 'daily-shots-chart';
+---
+
+<div class="chart-container">
+  <h2>{title}</h2>
+  <canvas id={id}></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script
+  is:inline
+  define:vars={{
+    id,
+    title,
+    data,
+    labels,
+    fullLabels,
+    chartType,
+    isStackedBar,
+    xAxisLabel,
+  }}
+>
+  function hexToRgba(hex, alpha = 1) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return hex;
+
+    const r = parseInt(result[1], 16);
+    const g = parseInt(result[2], 16);
+    const b = parseInt(result[3], 16);
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  function getAccentColors() {
+    const allColors = [
+      '#ca4949',
+      '#b45a3c',
+      '#a06e3b',
+      '#4b8b8b',
+      '#5485b6',
+      '#7272ca',
+      '#8464c4',
+      '#bd5187',
+    ];
+
+    const date = new Date().getDate() % 8;
+    const primaryIndex = date;
+    const primary = allColors[primaryIndex];
+    const secondary = allColors[(primaryIndex + 4) % 8];
+
+    return { primary, secondary };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const ctx = document.getElementById(id);
+
+      if (!ctx) {
+        console.error(`Canvas element with id ${id} not found!`);
+        return;
+      }
+
+      const setupChart = () => {
+        try {
+          const isDark =
+            document.documentElement.getAttribute('data-appearance') === 'dark' ||
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          const fontFamily = "'BerkeleyMono', 'Courier New', Courier, monospace";
+          const accentColors = getAccentColors();
+
+          const primaryColor = accentColors.primary;
+          const primaryColorAlpha = hexToRgba(primaryColor, 0.8);
+          const secondaryColor = accentColors.secondary;
+          const secondaryColorAlpha = hexToRgba(secondaryColor, 0.8);
+          const textColor = isDark ? '#f4ecec' : '#292424';
+          const backgroundColor = isDark ? 'rgba(41, 36, 36, 0.9)' : 'rgba(244, 236, 236, 0.9)';
+
+          if (window[`chart_${id}`]) {
+            window[`chart_${id}`].destroy();
+          }
+
+          let datasets;
+          if (isStackedBar && data && typeof data === 'object' && !Array.isArray(data)) {
+            const hasRegularData = data.regular && Array.isArray(data.regular);
+            const hasDecafData = data.decaf && Array.isArray(data.decaf);
+
+            datasets = [];
+
+            if (hasRegularData) {
+              datasets.push({
+                label: 'Regular Coffee',
+                data: data.regular,
+                backgroundColor: primaryColorAlpha,
+                borderColor: primaryColor,
+                borderWidth: 1,
+              });
+            }
+
+            if (hasDecafData) {
+              datasets.push({
+                label: 'Decaf Coffee',
+                data: data.decaf,
+                backgroundColor: secondaryColorAlpha,
+                borderColor: secondaryColor,
+                borderWidth: 1,
+              });
+            }
+
+            if (datasets.length === 0) {
+              datasets = [
+                {
+                  label: 'Total Shots',
+                  data: Array(labels.length).fill(0),
+                  backgroundColor: primaryColorAlpha,
+                  borderColor: primaryColor,
+                  borderWidth: 1,
+                },
+              ];
+            }
+          } else {
+            const dataArray = Array.isArray(data) ? data : Array(labels.length).fill(0);
+
+            datasets = [
+              {
+                label: 'Total Shots',
+                data: dataArray,
+                backgroundColor: primaryColorAlpha,
+                borderColor: primaryColor,
+                borderWidth: 1,
+                tension: 0.3,
+              },
+            ];
+          }
+
+          window[`chart_${id}`] = new Chart(ctx, {
+            type: chartType,
+            data: {
+              labels: labels,
+              datasets: datasets,
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  bottom: 25,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  stacked: isStackedBar,
+                  title: {
+                    display: true,
+                    text: 'Number of Shots',
+                    color: textColor,
+                    font: {
+                      family: fontFamily,
+                    },
+                  },
+                  ticks: {
+                    precision: 0,
+                    color: textColor,
+                    font: {
+                      family: fontFamily,
+                    },
+                  },
+                  grid: {
+                    display: false,
+                  },
+                },
+                x: {
+                  stacked: isStackedBar,
+                  title: {
+                    display: true,
+                    text:
+                      xAxisLabel ||
+                      (chartType === 'line'
+                        ? 'Date'
+                        : id === 'daily-shots-chart'
+                          ? 'Date'
+                          : 'Month'),
+                    color: textColor,
+                    font: {
+                      family: fontFamily,
+                    },
+                    padding: {
+                      top: 10,
+                    },
+                  },
+                  ticks: {
+                    color: textColor,
+                    font: {
+                      family: fontFamily,
+                    },
+                  },
+                  grid: {
+                    display: false,
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: textColor,
+                    font: {
+                      family: fontFamily,
+                    },
+                    padding: 10,
+                  },
+                  position: 'top',
+                  display: true,
+                },
+                tooltip: {
+                  backgroundColor: backgroundColor,
+                  titleColor: textColor,
+                  bodyColor: textColor,
+                  borderWidth: 1,
+                  titleFont: {
+                    family: fontFamily,
+                  },
+                  bodyFont: {
+                    family: fontFamily,
+                  },
+                  callbacks: {
+                    title: function (tooltipItems) {
+                      if (fullLabels && fullLabels.length > 0) {
+                        return fullLabels[tooltipItems[0].dataIndex];
+                      }
+                      return tooltipItems[0].label;
+                    },
+                    label: function (context) {
+                      return `${context.dataset.label}: ${context.parsed.y} shots`;
+                    },
+                  },
+                },
+              },
+            },
+          });
+        } catch (error) {
+          console.error('Error creating chart:', error);
+        }
+      };
+
+      setupChart();
+
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'data-appearance' || mutation.attributeName === 'style') {
+            setupChart();
+          }
+        });
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-appearance', 'style'],
+      });
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setupChart);
+    }, 100);
+  });
+</script>
+
+<style>
+  .chart-container {
+    width: 100%;
+    max-width: 800px;
+    height: 475px;
+    margin: 0 auto;
+    padding: var(--space_s) 0;
+    background-color: transparent;
+    font-family: 'BerkeleyMono', monospace;
+    color: var(--color-text);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: var(--space_s);
+    color: var(--color-text);
+    font-family: 'BerkeleyMono', monospace;
+    font-size: 1rem;
+  }
+</style>

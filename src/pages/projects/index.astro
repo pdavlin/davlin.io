@@ -1,0 +1,114 @@
+---
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
+
+const title = 'Projects | davlin.io';
+const description = 'Side projects and experiments';
+const permalink = 'https://davlin.io/projects/';
+const page = 'projects';
+
+const projects = [
+  {
+    title: 'Emily for Elkhorn',
+    date: '2026-01-31',
+    url: 'https://emilyforelkhorn.com',
+    external: true,
+  },
+  {
+    title: 'Coffee Tracking',
+    date: '2025-03-20',
+    url: '/coffee',
+    external: false,
+  },
+];
+
+// Group by year
+const projectsByYear = projects.reduce((acc, project) => {
+  const year = project.date.split('-')[0];
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(project);
+  return acc;
+}, {} as Record<string, typeof projects>);
+
+// Sort years descending
+const sortedYears = Object.keys(projectsByYear).sort((a, b) => Number(b) - Number(a));
+
+function formatDate(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-');
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[Number(month) - 1]} ${Number(day)}`;
+}
+---
+
+<html lang="en">
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <h1 class="title">projects</h1>
+      {sortedYears.map((year) => (
+        <fieldset class="year-group">
+          <legend>{year}</legend>
+          <ul class="list">
+            {projectsByYear[year].map((project) => (
+              <li>
+                <span class="date">{formatDate(project.date)}</span>
+                <a href={project.url} target={project.external ? '_blank' : undefined} rel={project.external ? 'noopener noreferrer' : undefined}>
+                  {project.title}{project.external && <span class="external">↗</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      ))}
+    </Layout>
+  </body>
+</html>
+
+<style>
+  .year-group {
+    margin: 1.5rem 0;
+  }
+
+  .year-group legend {
+    font-size: 1rem;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list li {
+    margin: 0.5em 0;
+    display: flex;
+  }
+
+  .date {
+    margin-right: 0.75em;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.92em;
+    line-height: 1.6em;
+    color: var(--color-text);
+    text-shadow: 2px 2px 0 var(--color-date-shadow);
+    min-width: 4.5em;
+  }
+
+  .list a {
+    text-decoration: none;
+    line-height: 1.36;
+    color: currentColor;
+  }
+
+  .list a:hover {
+    text-decoration: underline;
+  }
+
+  .external {
+    font-size: 0.75em;
+    margin-left: 0.25em;
+    opacity: 0.6;
+  }
+</style>

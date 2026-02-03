@@ -1,0 +1,504 @@
+---
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
+import CoffeeChart from '@components/CoffeeChart.astro';
+import { fetchRecords } from '../../api/airtable';
+
+type AirtableRecord = Record<string, unknown>;
+
+const title = 'Coffee | davlin.io';
+const description = 'Tracking my espresso shots with data visualizations';
+const permalink = 'https://davlin.io/coffee';
+const page = 'coffee';
+
+const now = new Date();
+const chicagoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+const year = chicagoTime.getFullYear();
+const month = String(chicagoTime.getMonth() + 1).padStart(2, '0');
+const day = String(chicagoTime.getDate()).padStart(2, '0');
+const hour = chicagoTime.getHours();
+const minute = String(chicagoTime.getMinutes()).padStart(2, '0');
+const ampm = hour >= 12 ? 'PM' : 'AM';
+const hour12 = hour % 12 || 12;
+
+const jan = new Date(chicagoTime.getFullYear(), 0, 1).getTimezoneOffset();
+const jul = new Date(chicagoTime.getFullYear(), 6, 1).getTimezoneOffset();
+const isDST = Math.max(jan, jul) !== chicagoTime.getTimezoneOffset();
+const timeZone = isDST ? 'CDT' : 'CST';
+
+const buildTime = `${year}-${month}-${day} ${hour12}:${minute} ${ampm} ${timeZone}`;
+
+let records: AirtableRecord[] = [];
+let errorMessage = '';
+
+try {
+  records = await fetchRecords('Shots');
+} catch (e) {
+  errorMessage = e instanceof Error ? e.message : 'Unknown error';
+}
+
+function filterRecords(recs: AirtableRecord[]): AirtableRecord[] {
+  if (recs.length === 0) return recs;
+
+  return recs.filter((record) => {
+    const barista = (record.Barista ?? record.barista ?? '') as string;
+    const baristaStr = barista.toLowerCase();
+    const shouldExclude = baristaStr.includes('matt mccrary') || baristaStr.includes('mccrary');
+    return !shouldExclude;
+  });
+}
+
+function processMonthlyData(recs: AirtableRecord[]) {
+  const filtered = filterRecords(recs);
+
+  if (filtered.length === 0) {
+    return { labels: [] as string[], data: [] as number[] };
+  }
+
+  let dateField = 'Start time';
+  const firstRecord = filtered[0];
+  if (!firstRecord[dateField]) {
+    const possibleFields = Object.keys(firstRecord).filter(
+      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
+    );
+
+    if (possibleFields.length > 0) {
+      dateField = possibleFields[0];
+    } else {
+      return { labels: [] as string[], data: [] as number[] };
+    }
+  }
+
+  const monthlyCounts: Record<string, number> = {};
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  for (const record of filtered) {
+    const dateValue = record[dateField];
+    if (!dateValue || typeof dateValue !== 'string') continue;
+
+    try {
+      const dateStr = dateValue;
+      const parts = dateStr.split(/[-T\s]/);
+      if (parts.length >= 2) {
+        const yearPart = parts[0];
+        const monthPart = parseInt(parts[1]);
+        const monthYear = `${monthNames[monthPart - 1]} ${yearPart}`;
+        monthlyCounts[monthYear] = (monthlyCounts[monthYear] ?? 0) + 1;
+      }
+    } catch {
+      // Skip invalid dates
+    }
+  }
+
+  const sortedMonths = Object.keys(monthlyCounts).sort((a, b) => {
+    const [monthA, yearA] = a.split(' ');
+    const [monthB, yearB] = b.split(' ');
+
+    if (yearA !== yearB) {
+      return parseInt(yearA) - parseInt(yearB);
+    }
+
+    return monthNames.indexOf(monthA) - monthNames.indexOf(monthB);
+  });
+
+  return {
+    labels: sortedMonths,
+    data: sortedMonths.map((m) => monthlyCounts[m]),
+  };
+}
+
+function processDailyData(recs: AirtableRecord[]) {
+  const filtered = filterRecords(recs);
+
+  if (filtered.length === 0) {
+    return { labels: [] as string[], data: { regular: [] as number[], decaf: [] as number[] } };
+  }
+
+  let dateField = 'Start time';
+  const firstRecord = filtered[0];
+  if (!firstRecord[dateField]) {
+    const possibleFields = Object.keys(firstRecord).filter(
+      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
+    );
+
+    if (possibleFields.length > 0) {
+      dateField = possibleFields[0];
+    } else {
+      return { labels: [] as string[], data: { regular: [] as number[], decaf: [] as number[] } };
+    }
+  }
+
+  const regularCounts: Record<string, number> = {};
+  const decafCounts: Record<string, number> = {};
+
+  const allDates: string[] = [];
+  const today = new Date();
+  let currentYear = today.getFullYear();
+  let currentMonth = today.getMonth() + 1;
+  let currentDay = today.getDate();
+
+  for (let i = 0; i < 60; i++) {
+    const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
+    allDates.unshift(dateStr);
+    regularCounts[dateStr] = 0;
+    decafCounts[dateStr] = 0;
+
+    currentDay--;
+    if (currentDay === 0) {
+      currentMonth--;
+      if (currentMonth === 0) {
+        currentMonth = 12;
+        currentYear--;
+      }
+      if (currentMonth === 2) {
+        const isLeapYear =
+          (currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0;
+        currentDay = isLeapYear ? 29 : 28;
+      } else if ([4, 6, 9, 11].includes(currentMonth)) {
+        currentDay = 30;
+      } else {
+        currentDay = 31;
+      }
+    }
+  }
+
+  for (const record of filtered) {
+    const dateValue = record[dateField];
+    if (!dateValue || typeof dateValue !== 'string') continue;
+
+    try {
+      const rawDateStr = dateValue;
+      const dateParts = rawDateStr.split(/[-T\s]/);
+      if (dateParts.length < 3) continue;
+
+      const dateStr = `${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`;
+
+      if (!allDates.includes(dateStr)) continue;
+
+      const coffeeBagField =
+        record['Coffee Bag'] ?? record['Coffee Type'] ?? record.Bean ?? record.Beans;
+      let coffeeBagValue = '';
+
+      if (typeof coffeeBagField === 'string') {
+        coffeeBagValue = coffeeBagField;
+      } else if (Array.isArray(coffeeBagField)) {
+        coffeeBagValue = coffeeBagField.join(' ');
+      }
+
+      coffeeBagValue = coffeeBagValue.toLowerCase();
+
+      const isDecaf =
+        coffeeBagValue.includes('decaf') ||
+        coffeeBagValue.includes('de-caf') ||
+        coffeeBagValue.includes('de caf');
+
+      if (isDecaf) {
+        decafCounts[dateStr] = (decafCounts[dateStr] ?? 0) + 1;
+      } else {
+        regularCounts[dateStr] = (regularCounts[dateStr] ?? 0) + 1;
+      }
+    } catch {
+      // Skip invalid records
+    }
+  }
+
+  const formattedDates = allDates.map((date) => {
+    const [, m, d] = date.split('-');
+    return `${m}/${d}`;
+  });
+
+  return {
+    labels: formattedDates,
+    data: {
+      regular: allDates.map((date) => regularCounts[date]),
+      decaf: allDates.map((date) => decafCounts[date]),
+    },
+  };
+}
+
+function processTimeOfDayData(recs: AirtableRecord[]) {
+  const filtered = filterRecords(recs);
+
+  if (filtered.length === 0) {
+    return { labels: [] as string[], fullLabels: [] as string[], data: [] as number[] };
+  }
+
+  let dateField = 'Start time';
+  const firstRecord = filtered[0];
+  if (!firstRecord[dateField]) {
+    const possibleFields = Object.keys(firstRecord).filter(
+      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
+    );
+
+    if (possibleFields.length > 0) {
+      dateField = possibleFields[0];
+    } else {
+      return { labels: [] as string[], fullLabels: [] as string[], data: [] as number[] };
+    }
+  }
+
+  const hourlyBuckets = new Array<number>(24).fill(0);
+
+  for (const record of filtered) {
+    const dateValue = record[dateField];
+    if (!dateValue || typeof dateValue !== 'string') continue;
+
+    try {
+      const dateStr = dateValue;
+      const date = new Date(dateStr);
+      const centralTimeHour = (date.getUTCHours() - 6 + 24) % 24;
+
+      if (centralTimeHour >= 0 && centralTimeHour < 24) {
+        hourlyBuckets[centralTimeHour]++;
+      }
+    } catch {
+      // Skip invalid records
+    }
+  }
+
+  const labels: string[] = [];
+  const fullLabels: string[] = [];
+  const data: number[] = [];
+
+  for (let h = 0; h < 24; h++) {
+    const startHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    const endHour = h + 1 === 12 ? 12 : h + 1 > 12 ? h + 1 - 12 : h + 1 === 0 ? 12 : h + 1;
+    const startPeriod = h < 12 ? 'am' : 'pm';
+    const endPeriod = h + 1 < 12 || h + 1 === 24 ? 'am' : 'pm';
+
+    labels.push(`${startHour}${startPeriod}`);
+    fullLabels.push(`${startHour}${startPeriod}-${endHour}${endPeriod}`);
+    data.push(hourlyBuckets[h]);
+  }
+
+  return { labels, fullLabels, data };
+}
+
+function getTopMonths(monthLabels: string[], monthData: number[]) {
+  if (monthLabels.length === 0 || monthData.length === 0) {
+    return { topThree: [] as { month: string; count: number }[] };
+  }
+
+  const monthList = monthLabels.map((label, index) => ({
+    month: label,
+    count: monthData[index],
+  }));
+
+  const sortedByCount = [...monthList].sort((a, b) => b.count - a.count);
+  const topThree = sortedByCount.slice(0, 3);
+
+  return { topThree };
+}
+
+const { labels, data } = processMonthlyData(records);
+const { labels: dailyLabels, data: dailyData } = processDailyData(records);
+const {
+  labels: timeLabels,
+  fullLabels: timeFullLabels,
+  data: timeData,
+} = processTimeOfDayData(records);
+const hasData = labels.length > 0;
+const hasDailyData = dailyLabels.length > 0;
+const hasTimeData = timeLabels.length > 0;
+const { topThree } = getTopMonths(labels, data);
+---
+
+<html lang="en">
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <h1 class="title">coffee</h1>
+      <p class="build-time">Last updated: {buildTime}</p>
+
+      {
+        errorMessage && (
+          <div class="error-message">
+            <h2>Configuration Error</h2>
+            <p>{errorMessage}</p>
+          </div>
+        )
+      }
+
+      <fieldset class="chart-fieldset">
+        <legend>monthly shots</legend>
+        {
+          hasData ? (
+            <>
+              <CoffeeChart
+                id="monthly-shots-chart"
+                title="Monthly Espresso Shots"
+                data={data}
+                labels={labels}
+                chartType="bar"
+              />
+              <div class="month-rankings">
+                <div class="ranking-section">
+                  <h3>Top 3 Months</h3>
+                  <ul>
+                    {topThree.map((item, index) => (
+                      <li>
+                        <span class="rank">#{index + 1}</span>
+                        <span class="month">{item.month}</span>
+                        <span class="count">{item.count} shots</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div class="no-data">
+              <p>No monthly shot data available</p>
+            </div>
+          )
+        }
+      </fieldset>
+
+      <fieldset class="chart-fieldset">
+        <legend>time of day</legend>
+        {
+          hasTimeData ? (
+            <CoffeeChart
+              id="time-of-day-chart"
+              title="Espresso Shots by Time of Day"
+              data={timeData}
+              labels={timeLabels}
+              fullLabels={timeFullLabels}
+              chartType="bar"
+              xAxisLabel="Time of Day"
+            />
+          ) : (
+            <div class="no-data">
+              <p>No time of day data available</p>
+            </div>
+          )
+        }
+      </fieldset>
+
+      <fieldset class="chart-fieldset">
+        <legend>daily shots (last 60 days)</legend>
+        {
+          hasDailyData ? (
+            <CoffeeChart
+              id="daily-shots-chart"
+              title="Daily Espresso Shots by Type"
+              data={dailyData}
+              labels={dailyLabels}
+              chartType="bar"
+            />
+          ) : (
+            <div class="no-data">
+              <p>No daily shot data available</p>
+            </div>
+          )
+        }
+      </fieldset>
+    </Layout>
+    <style>
+      .build-time {
+        text-align: left;
+        margin-bottom: var(--space_l);
+        font-size: 0.85rem;
+        color: var(--base_04);
+      }
+
+      .chart-fieldset {
+        margin: 1.5rem 0;
+      }
+
+      .chart-fieldset legend {
+        font-size: 1rem;
+      }
+
+      .error-message {
+        background-color: color-mix(in oklab, var(--base_08) 20%, var(--base_07));
+        color: var(--base_01);
+        border-left: 4px solid var(--base_08);
+        padding: var(--space_s);
+        margin-bottom: var(--space_l);
+      }
+
+      .error-message h2 {
+        color: var(--base_01);
+        margin: 0 0 0.5rem 0;
+      }
+
+      .error-message p {
+        margin: 0;
+      }
+
+      .no-data {
+        padding: var(--space_l);
+        text-align: center;
+        color: var(--base_04);
+      }
+
+      .month-rankings {
+        display: flex;
+        justify-content: center;
+        margin-top: var(--space_l);
+      }
+
+      .ranking-section {
+        min-width: 250px;
+      }
+
+      .ranking-section h3 {
+        text-align: center;
+        margin-bottom: var(--space_s);
+        color: var(--color-text);
+        font-size: 1rem;
+      }
+
+      .ranking-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .ranking-section li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space_xs) var(--space_s);
+        margin-bottom: var(--space_2xs);
+        background-color: var(--color-bg);
+        border: 1px solid var(--base_03);
+        border-left: 4px solid var(--accent-color);
+      }
+
+      .rank {
+        font-weight: bold;
+        color: var(--accent-color);
+        min-width: 2rem;
+      }
+
+      .month {
+        flex: 1;
+        text-align: center;
+        font-weight: 500;
+        color: var(--color-text);
+      }
+
+      .count {
+        font-weight: bold;
+        color: var(--base_04);
+        font-size: 0.9rem;
+      }
+    </style>
+  </body>
+</html>
