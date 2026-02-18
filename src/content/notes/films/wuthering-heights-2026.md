@@ -2,7 +2,7 @@
 type: film
 title: 'Wuthering Heights'
 filmYear: 2026
-rating: 2
+rating: 2.5
 added: 2026-02-17 21:56
 updated: 2026-02-17 21:56
 watchedDate: 2026-02-17 00:00
