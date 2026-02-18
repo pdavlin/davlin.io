@@ -44,7 +44,7 @@ export async function GET(context: APIContext) {
       return {
         link: `${basePath}/${note.slug}`,
         title: note.data.title,
-        pubDate: note.data.added,
+        pubDate: new Date(note.data.added),
         description: note.htmlContent,
         customData: categoryTags,
       };
