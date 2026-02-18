@@ -56,8 +56,9 @@ const isStackedBar = id === 'daily-shots-chart';
       '#bd5187',
     ];
 
-    const date = new Date().getDate() % 8;
-    const primaryIndex = date;
+    const day =
+      typeof Temporal !== 'undefined' ? Temporal.Now.plainDateISO().day : new Date().getDate();
+    const primaryIndex = day % 8;
     const primary = allColors[primaryIndex];
     const secondary = allColors[(primaryIndex + 4) % 8];
 

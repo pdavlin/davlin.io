@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill';
+
 const MONTH_NAMES = [
   'January',
   'February',
@@ -48,7 +50,9 @@ export function getMonthNameFromString(monthString: string): string {
  * Output: "January 8, 2026"
  */
 export function formatDate(date: string): string {
-  return new Date(date.replace(/-/g, '/')).toLocaleDateString('en-US', {
+  const datePart = date.split(' ')[0];
+  const plainDate = Temporal.PlainDate.from(datePart);
+  return plainDate.toLocaleString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',

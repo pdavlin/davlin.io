@@ -4,6 +4,7 @@ import DocumentHead from 'src/components/DocumentHead.astro';
 import Layout from '@components/Layout.astro';
 import CoffeeChart from '@components/CoffeeChart.astro';
 import coffeeData from '../../data/coffee.json';
+import { Temporal } from '@js-temporal/polyfill';
 
 type AirtableRecord = Record<string, unknown>;
 
@@ -12,20 +13,15 @@ const description = 'Tracking my espresso shots with data visualizations';
 const permalink = 'https://davlin.io/coffee';
 const page = 'coffee';
 
-const now = new Date();
-const chicagoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
-const year = chicagoTime.getFullYear();
-const month = String(chicagoTime.getMonth() + 1).padStart(2, '0');
-const day = String(chicagoTime.getDate()).padStart(2, '0');
-const hour = chicagoTime.getHours();
-const minute = String(chicagoTime.getMinutes()).padStart(2, '0');
+const now = Temporal.Now.zonedDateTimeISO('America/Chicago');
+const year = String(now.year);
+const month = String(now.month).padStart(2, '0');
+const day = String(now.day).padStart(2, '0');
+const hour = now.hour;
+const minute = String(now.minute).padStart(2, '0');
 const ampm = hour >= 12 ? 'PM' : 'AM';
 const hour12 = hour % 12 || 12;
-
-const jan = new Date(chicagoTime.getFullYear(), 0, 1).getTimezoneOffset();
-const jul = new Date(chicagoTime.getFullYear(), 6, 1).getTimezoneOffset();
-const isDST = Math.max(jan, jul) !== chicagoTime.getTimezoneOffset();
-const timeZone = isDST ? 'CDT' : 'CST';
+const timeZone = now.offset === '-06:00' ? 'CST' : 'CDT';
 
 const buildTime = `${year}-${month}-${day} ${hour12}:${minute} ${ampm} ${timeZone}`;
 
@@ -139,34 +135,13 @@ function processDailyData(recs: AirtableRecord[]) {
   const decafCounts: Record<string, number> = {};
 
   const allDates: string[] = [];
-  const today = new Date();
-  let currentYear = today.getFullYear();
-  let currentMonth = today.getMonth() + 1;
-  let currentDay = today.getDate();
-
-  for (let i = 0; i < 60; i++) {
-    const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
-    allDates.unshift(dateStr);
+  const today = Temporal.Now.plainDateISO();
+  for (let i = 59; i >= 0; i--) {
+    const date = today.subtract({ days: i });
+    const dateStr = date.toString();
+    allDates.push(dateStr);
     regularCounts[dateStr] = 0;
     decafCounts[dateStr] = 0;
-
-    currentDay--;
-    if (currentDay === 0) {
-      currentMonth--;
-      if (currentMonth === 0) {
-        currentMonth = 12;
-        currentYear--;
-      }
-      if (currentMonth === 2) {
-        const isLeapYear =
-          (currentYear % 4 === 0 && currentYear % 100 !== 0) || currentYear % 400 === 0;
-        currentDay = isLeapYear ? 29 : 28;
-      } else if ([4, 6, 9, 11].includes(currentMonth)) {
-        currentDay = 30;
-      } else {
-        currentDay = 31;
-      }
-    }
   }
 
   for (const record of filtered) {
@@ -252,8 +227,9 @@ function processTimeOfDayData(recs: AirtableRecord[]) {
 
     try {
       const dateStr = dateValue;
-      const date = new Date(dateStr);
-      const centralTimeHour = (date.getUTCHours() - 6 + 24) % 24;
+      const instant = Temporal.Instant.from(dateStr.endsWith('Z') ? dateStr : dateStr + 'Z');
+      const chicagoTime = instant.toZonedDateTimeISO('America/Chicago');
+      const centralTimeHour = chicagoTime.hour;
 
       if (centralTimeHour >= 0 && centralTimeHour < 24) {
         hourlyBuckets[centralTimeHour]++;

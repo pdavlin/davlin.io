@@ -1,11 +1,14 @@
 import { z, defineCollection } from 'astro:content';
+import { Temporal } from '@js-temporal/polyfill';
 
 const dateStringSchema = z.union([
   z.string(),
   z.date().transform((date) => {
-    const year = String(date.getFullYear());
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const instant = Temporal.Instant.fromEpochMilliseconds(date.getTime());
+    const utcDate = instant.toZonedDateTimeISO('UTC');
+    const year = String(utcDate.year);
+    const month = String(utcDate.month).padStart(2, '0');
+    const day = String(utcDate.day).padStart(2, '0');
     return `${year}-${month}-${day} 00:00`;
   }),
 ]);

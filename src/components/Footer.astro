@@ -1,11 +1,12 @@
 ---
-const buildDate = new Date();
+import { Temporal } from '@js-temporal/polyfill';
+const buildDate = Temporal.Now.plainDateISO();
 ---
 
 <footer class="site-footer breakout">
   <fieldset>
     <legend>footer</legend>
-    <p>Built on {buildDate.toISOString().slice(0, 10)}.</p>
+    <p>Built on {buildDate.toString()}.</p>
     <ul class="cluster" role="list" style="padding-left: 0;">
       <li>
         <a href="/">Home</a>

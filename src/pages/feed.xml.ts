@@ -2,6 +2,7 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import * as marked from 'marked';
+import { Temporal } from '@js-temporal/polyfill';
 
 export async function GET(context: APIContext) {
   const notes = await getCollection('notes');
@@ -25,9 +26,9 @@ export async function GET(context: APIContext) {
   );
 
   notesWithContent.sort((a, b) => {
-    const dateA = new Date(a.data.added);
-    const dateB = new Date(b.data.added);
-    return dateB.getTime() - dateA.getTime();
+    const dateA = Temporal.PlainDateTime.from(a.data.added.replace(' ', 'T'));
+    const dateB = Temporal.PlainDateTime.from(b.data.added.replace(' ', 'T'));
+    return Temporal.PlainDateTime.compare(dateB, dateA);
   });
 
   const notesToRender = notesWithContent.slice(0, 20);
