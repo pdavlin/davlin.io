@@ -36,7 +36,20 @@ const sortedYears = Object.keys(projectsByYear).sort((a, b) => Number(b) - Numbe
 
 function formatDate(dateStr: string): string {
   const [year, month, day] = dateStr.split('-');
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   return `${months[Number(month) - 1]} ${Number(day)}`;
 }
 ---
@@ -46,21 +59,28 @@ function formatDate(dateStr: string): string {
   <body>
     <Layout page={page}>
       <h1 class="title">projects</h1>
-      {sortedYears.map((year) => (
-        <fieldset class="year-group">
-          <legend>{year}</legend>
-          <ul class="list">
-            {projectsByYear[year].map((project) => (
-              <li>
-                <span class="date">{formatDate(project.date)}</span>
-                <a href={project.url} target={project.external ? '_blank' : undefined} rel={project.external ? 'noopener noreferrer' : undefined}>
-                  {project.title}{project.external && <span class="external">↗</span>}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </fieldset>
-      ))}
+      {
+        sortedYears.map((year) => (
+          <fieldset class="year-group">
+            <legend>{year}</legend>
+            <ul class="list">
+              {projectsByYear[year].map((project) => (
+                <li>
+                  <span class="date">{formatDate(project.date)}</span>
+                  <a
+                    href={project.url}
+                    target={project.external ? '_blank' : undefined}
+                    rel={project.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {project.title}
+                    {project.external && <span class="external">↗</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </fieldset>
+        ))
+      }
     </Layout>
   </body>
 </html>

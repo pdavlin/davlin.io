@@ -15,10 +15,10 @@ async function fetchCoffeeData() {
   }
 
   const base = new Airtable({ apiKey }).base(baseId);
-  
+
   try {
     const records = await base('Shots').select().all();
-    
+
     const data = records.map((record) => ({
       id: record.id,
       ...record.fields,
@@ -26,7 +26,7 @@ async function fetchCoffeeData() {
 
     const outputPath = join(__dirname, '..', 'src', 'data', 'coffee.json');
     writeFileSync(outputPath, JSON.stringify(data, null, 2));
-    
+
     console.log(`Fetched ${data.length} coffee records`);
   } catch (error) {
     console.error('Error fetching coffee data:', error.message);
