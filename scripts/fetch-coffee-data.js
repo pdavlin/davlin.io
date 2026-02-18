@@ -10,8 +10,10 @@ async function fetchCoffeeData() {
   const baseId = process.env.AIRTABLE_BASE_ID;
 
   if (!apiKey || !baseId) {
-    console.error('Missing AIRTABLE_API_KEY or AIRTABLE_BASE_ID');
-    process.exit(1);
+    console.warn('Missing AIRTABLE_API_KEY or AIRTABLE_BASE_ID - writing empty coffee data');
+    const outputPath = join(__dirname, '..', 'src', 'data', 'coffee.json');
+    writeFileSync(outputPath, '[]');
+    process.exit(0);
   }
 
   const base = new Airtable({ apiKey }).base(baseId);

@@ -31,6 +31,9 @@ jobs:
       - name: Generate Astro types
         run: pnpm astro sync
 
+      - name: Fetch coffee data (empty fallback)
+        run: node scripts/fetch-coffee-data.js
+
       - name: Run linting
         run: pnpm lint
 
