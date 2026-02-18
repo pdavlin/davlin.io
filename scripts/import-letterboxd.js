@@ -138,9 +138,10 @@ function formatDate(dateInput, dateOnly = false) {
     return `${plainDate.year}-${String(plainDate.month).padStart(2, '0')}-${String(plainDate.day).padStart(2, '0')} 00:00`;
   }
 
-  // For full timestamps (like pubDate), parse as Instant and convert to local time
+  // For full timestamps (like pubDate), parse as Instant and convert to US Central time
+  // Hardcoded to avoid depending on runtime timezone (GitHub Actions uses UTC)
   const instant = Temporal.Instant.from(new Date(dateInput).toISOString());
-  const localDateTime = instant.toZonedDateTimeISO(Temporal.Now.timeZoneId());
+  const localDateTime = instant.toZonedDateTimeISO('America/Chicago');
   const year = localDateTime.year;
   const month = String(localDateTime.month).padStart(2, '0');
   const day = String(localDateTime.day).padStart(2, '0');

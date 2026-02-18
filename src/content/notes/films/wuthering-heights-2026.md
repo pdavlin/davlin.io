@@ -3,8 +3,8 @@ type: film
 title: 'Wuthering Heights'
 filmYear: 2026
 rating: 2
-added: 2026-02-18 03:56
-updated: 2026-02-18 03:56
+added: 2026-02-17 21:56
+updated: 2026-02-17 21:56
 watchedDate: 2026-02-17 00:00
 tags: [film]
 excerpt: 'Perhaps best viewed as a retelling of Wuthering Heights instead of an adaptation. In a lot of ways this feels like it adopts the language and ratio...'

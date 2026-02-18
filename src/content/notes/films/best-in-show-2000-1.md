@@ -3,8 +3,8 @@ type: film
 title: 'Best in Show'
 filmYear: 2000
 rating: 5
-added: 2026-01-31 02:10
-updated: 2026-01-31 02:10
+added: 2026-01-30 20:10
+updated: 2026-01-30 20:10
 watchedDate: 2026-01-30 00:00
 tags: [film]
 excerpt: 'RIP Catherine'
