@@ -22,7 +22,8 @@
     "test:e2e:debug": "pnpm build && playwright test --debug",
     "test:e2e:ui": "pnpm build && playwright test --ui",
     "test:a11y": "pnpm build && playwright test accessibility",
-    "test:all": "pnpm test:coverage && pnpm test:e2e"
+    "test:all": "pnpm test:coverage && pnpm test:e2e",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -47,10 +48,15 @@
     "eslint-plugin-astro": "^1.5.0",
     "eslint-plugin-unicorn": "^62.0.0",
     "happy-dom": "^20.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "typescript-eslint": "^8.52.0",
     "vitest": "^4.0.16",
     "zod": "^3.25.76"
+  },
+  "lint-staged": {
+    "*.{js,ts,astro,css,md,json}": "prettier --write"
   }
 }
