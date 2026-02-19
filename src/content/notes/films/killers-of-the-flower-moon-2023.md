@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Killers of the Flower Moon"
+title: 'Killers of the Flower Moon'
 filmYear: 2023
 rating: 4.5
 added: 2023-12-08 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/killers-of-the-flower-moon/
 letterboxdGuid: https://boxd.it/5hHKqN
 source: letterboxd
 isRewatch: false
-tmdbId: "466420"
+tmdbId: '466420'
 ---
 
 ![Killers of the Flower Moon poster](https://a.ltrbxd.com/resized/film-poster/3/9/8/0/0/9/398009-killers-of-the-flower-moon-0-600-0-900-crop.jpg?v=49b577149d)

@@ -1,18 +1,18 @@
 ---
 type: film
-title: "28 Weeks Later"
+title: '28 Weeks Later'
 filmYear: 2007
 rating: 2
 added: 2025-07-21 00:00
 updated: 2025-07-21 00:00
 watchedDate: 2025-07-20 00:00
 tags: [film]
-excerpt: "Much more by-the-numbers as zombie movies go. I don’t think the world building approach is bad—obviously a lot of attention was paid to the hard sc..."
+excerpt: 'Much more by-the-numbers as zombie movies go. I don’t think the world building approach is bad—obviously a lot of attention was paid to the hard sc...'
 letterboxdUrl: https://letterboxd.com/pdav/film/28-weeks-later/
 letterboxdGuid: https://boxd.it/apNZxt
 source: letterboxd
 isRewatch: false
-tmdbId: "1562"
+tmdbId: '1562'
 ---
 
 ![28 Weeks Later poster](https://a.ltrbxd.com/resized/film-poster/5/0/9/7/2/50972-28-weeks-later-0-600-0-900-crop.jpg?v=811010e540)

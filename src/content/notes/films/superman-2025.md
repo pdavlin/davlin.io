@@ -25,4 +25,4 @@ Has a lot in common with the way Grant Morrison writes Superman. Understands tha
 
 My nits are few and minuscule: I don’t care for the music in the film. I’m not wild about superhero fight scene music drops. Frankly the continuous loop of the reheated John Williams 1978 theme gets to the point where it feels cynical. And boy howdy the screenwriter that learns to write journalists should win awards. 
 
-I dislike *most* superhero films and I’ve hated *all* Gunn’s other superhero movies without exception so I’m stunned that I loved this movie as much as I did. I almost can’t believe the cynical freaks who greenlit putting Michael Keaton back in the Batman costume for *The Flash* were capable of producing this. I’m cautiously excited about what they produce next.
+I dislike _most_ superhero films and I’ve hated _all_ Gunn’s other superhero movies without exception so I’m stunned that I loved this movie as much as I did. I almost can’t believe the cynical freaks who greenlit putting Michael Keaton back in the Batman costume for *The Flash* were capable of producing this. I’m cautiously excited about what they produce next.

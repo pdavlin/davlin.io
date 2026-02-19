@@ -1,6 +1,6 @@
 ---
 type: film
-title: "High Life"
+title: 'High Life'
 filmYear: 2018
 rating: 3
 added: 2019-12-28 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/high-life-2018/
 letterboxdGuid: https://boxd.it/UQUf5
 source: letterboxd
 isRewatch: false
-tmdbId: "376865"
+tmdbId: '376865'
 ---
 
 ![High Life poster](https://a.ltrbxd.com/resized/sm/upload/d7/uh/1s/rj/wElOvH7H6sLElsTOLu1MY6oWRUx-0-600-0-900-crop.jpg?v=ef2950865e)

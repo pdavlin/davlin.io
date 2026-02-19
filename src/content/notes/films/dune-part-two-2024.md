@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Dune: Part Two"
+title: 'Dune: Part Two'
 filmYear: 2024
 rating: 5
 added: 2024-03-05 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/dune-part-two/
 letterboxdGuid: https://boxd.it/5YBgLB
 source: letterboxd
 isRewatch: false
-tmdbId: "693134"
+tmdbId: '693134'
 ---
 
 ![Dune: Part Two poster](https://a.ltrbxd.com/resized/film-poster/6/1/7/4/4/3/617443-dune-part-two-0-600-0-900-crop.jpg?v=cc533700f8)

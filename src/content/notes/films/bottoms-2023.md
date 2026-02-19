@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Bottoms"
+title: 'Bottoms'
 filmYear: 2023
 rating: 4
 added: 2023-09-06 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/bottoms/
 letterboxdGuid: https://boxd.it/4Oa3Wz
 source: letterboxd
 isRewatch: false
-tmdbId: "814776"
+tmdbId: '814776'
 ---
 
 ![Bottoms poster](https://a.ltrbxd.com/resized/film-poster/7/3/1/2/2/2/731222-bottoms-0-600-0-900-crop.jpg?v=11b87368c8)

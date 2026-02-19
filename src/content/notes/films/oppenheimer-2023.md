@@ -1,18 +1,18 @@
 ---
 type: film
-title: "Oppenheimer"
+title: 'Oppenheimer'
 filmYear: 2023
 rating: 3.5
 added: 2023-08-06 00:00
 updated: 2023-08-06 00:00
 watchedDate: 2023-08-05 00:00
 tags: [film]
-excerpt: "A visual spectacle in IMAX and a well-deserved, long-overdue feature film role for Cillian. Tense and unnerving all the way through, and I feel it’..."
+excerpt: 'A visual spectacle in IMAX and a well-deserved, long-overdue feature film role for Cillian. Tense and unnerving all the way through, and I feel it’...'
 letterboxdUrl: https://letterboxd.com/pdav/film/oppenheimer-2023/
 letterboxdGuid: https://boxd.it/4EqHhX
 source: letterboxd
 isRewatch: false
-tmdbId: "872585"
+tmdbId: '872585'
 ---
 
 ![Oppenheimer poster](https://a.ltrbxd.com/resized/film-poster/7/8/4/3/2/8/784328-oppenheimer-0-600-0-900-crop.jpg?v=e3c6e7a32c)

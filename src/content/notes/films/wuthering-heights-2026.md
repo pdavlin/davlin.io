@@ -1,18 +1,18 @@
 ---
 type: film
-title: "Wuthering Heights"
+title: 'Wuthering Heights'
 filmYear: 2026
 rating: 2.5
 added: 2026-02-17 21:56
 updated: 2026-02-17 21:56
 watchedDate: 2026-02-17 00:00
 tags: [film]
-excerpt: "Perhaps best viewed as a retelling of Wuthering Heights instead of an adaptation. In a lot of ways this feels like it adopts the language and ratio..."
+excerpt: 'Perhaps best viewed as a retelling of Wuthering Heights instead of an adaptation. In a lot of ways this feels like it adopts the language and ratio...'
 letterboxdUrl: https://letterboxd.com/pdav/film/wuthering-heights-2026/
 letterboxdGuid: letterboxd-review-1208314339
 source: letterboxd
 isRewatch: false
-tmdbId: "1316092"
+tmdbId: '1316092'
 ---
 
 ![Wuthering Heights poster](https://a.ltrbxd.com/resized/film-poster/1/1/9/6/9/1/1/1196911-wuthering-heights-2026-0-600-0-900-crop.jpg?v=7d02cf3bdc)

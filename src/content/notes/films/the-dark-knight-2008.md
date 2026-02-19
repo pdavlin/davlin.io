@@ -1,18 +1,18 @@
 ---
 type: film
-title: "The Dark Knight"
+title: 'The Dark Knight'
 filmYear: 2008
 rating: 3.5
 added: 2022-03-10 00:00
 updated: 2022-03-10 00:00
 watchedDate: 2022-03-09 00:00
 tags: [film]
-excerpt: "I wanted to re-watch this after seeing The Batman mostly because I needed something in the background while I worked today but also because I wante..."
+excerpt: 'I wanted to re-watch this after seeing The Batman mostly because I needed something in the background while I worked today but also because I wante...'
 letterboxdUrl: https://letterboxd.com/pdav/film/the-dark-knight/
 letterboxdGuid: https://boxd.it/2EfsLZ
 source: letterboxd
 isRewatch: true
-tmdbId: "155"
+tmdbId: '155'
 ---
 
 ![The Dark Knight poster](https://a.ltrbxd.com/resized/sm/upload/78/y5/zg/ej/oefdD26aey8GPdx7Rm45PNncJdU-0-600-0-900-crop.jpg?v=2d0ce4be25)

@@ -23,7 +23,7 @@ this is going to be my wife's equivalent of me seeing Dune 2 three times
 
 This is my first viewing of Wicked and the first time I've heard most of the songs. The movie is good! Despite the runtime I'm told it's a faithful adaption, which you aren't always going to get with a big budget musical anymore. I didn't really feel the runtime and with one exception couldn't really tell where the padding was added.
 
-Cynthia Erivo is excellent and I think consistently outshines Ariana despite what feels like a very Ariana-heavy setlist. Someone needs to let Jeff Goldblum take a nap. 
+Cynthia Erivo is excellent and I think consistently outshines Ariana despite what feels like a very Ariana-heavy setlist. Someone needs to let Jeff Goldblum take a nap.
 
 Stylistically, the movie in general feels like a response to Cats. Lots of the worldbuilding components feel very grounded. That feels a little safe--I think in the spirit of the Technicolor magic of The Wizard of Oz they could have really gone for it here, but I understand why a studio would be hesitant to do that for a $100M+ movie.
 

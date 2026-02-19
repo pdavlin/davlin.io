@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Babygirl"
+title: 'Babygirl'
 filmYear: 2024
 rating: 2.5
 added: 2024-12-26 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/babygirl-2024/
 letterboxdGuid: https://boxd.it/8apc4j
 source: letterboxd
 isRewatch: false
-tmdbId: "1097549"
+tmdbId: '1097549'
 ---
 
 ![Babygirl poster](https://a.ltrbxd.com/resized/film-poster/9/8/9/1/2/5/989125-babygirl-2024-0-600-0-900-crop.jpg?v=b175884970)

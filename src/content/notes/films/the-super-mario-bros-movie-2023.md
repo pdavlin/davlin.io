@@ -1,6 +1,6 @@
 ---
 type: film
-title: "The Super Mario Bros. Movie"
+title: 'The Super Mario Bros. Movie'
 filmYear: 2023
 rating: 2
 added: 2023-10-05 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/the-super-mario-bros-movie/
 letterboxdGuid: https://boxd.it/4WG2fF
 source: letterboxd
 isRewatch: false
-tmdbId: "502356"
+tmdbId: '502356'
 ---
 
 ![The Super Mario Bros. Movie poster](https://a.ltrbxd.com/resized/film-poster/4/3/2/3/0/2/432302-the-super-mario-bros-movie-0-600-0-900-crop.jpg?v=d7dd92386e)

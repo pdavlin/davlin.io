@@ -1,18 +1,18 @@
 ---
 type: film
-title: "The Brutalist"
+title: 'The Brutalist'
 filmYear: 2024
 rating: 4
 added: 2025-01-25 00:00
 updated: 2025-01-25 00:00
 watchedDate: 2025-01-24 00:00
 tags: [film]
-excerpt: "Excellent cinematography and score. Obsessive about its own design and direction, sometimes to the point of excess. But I was, constantly, in awe o..."
+excerpt: 'Excellent cinematography and score. Obsessive about its own design and direction, sometimes to the point of excess. But I was, constantly, in awe o...'
 letterboxdUrl: https://letterboxd.com/pdav/film/the-brutalist/
 letterboxdGuid: https://boxd.it/8B1AL7
 source: letterboxd
 isRewatch: false
-tmdbId: "549509"
+tmdbId: '549509'
 ---
 
 ![The Brutalist poster](https://a.ltrbxd.com/resized/film-poster/4/7/8/4/2/8/478428-the-brutalist-0-600-0-900-crop.jpg?v=2f8cae2ea5)

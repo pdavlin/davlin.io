@@ -1,18 +1,18 @@
 ---
 type: film
-title: "The Batman"
+title: 'The Batman'
 filmYear: 2022
 rating: 3.5
 added: 2022-03-06 00:00
 updated: 2022-03-06 00:00
 watchedDate: 2022-03-05 00:00
 tags: [film]
-excerpt: "I’ve been publicly dumping on this movie for months, mostly because the grimdark DC aesthetic is tiresome and trying. This movie is mostly no excep..."
+excerpt: 'I’ve been publicly dumping on this movie for months, mostly because the grimdark DC aesthetic is tiresome and trying. This movie is mostly no excep...'
 letterboxdUrl: https://letterboxd.com/pdav/film/the-batman/
 letterboxdGuid: https://boxd.it/2DtThB
 source: letterboxd
 isRewatch: false
-tmdbId: "414906"
+tmdbId: '414906'
 ---
 
 ![The Batman poster](https://a.ltrbxd.com/resized/film-poster/3/4/8/9/1/4/348914-the-batman-0-600-0-900-crop.jpg?v=ec12a8b7ce)

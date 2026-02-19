@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Eternals"
+title: 'Eternals'
 filmYear: 2021
 rating: 2.5
 added: 2022-01-19 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/eternals/
 letterboxdGuid: https://boxd.it/2uQ2DT
 source: letterboxd
 isRewatch: false
-tmdbId: "524434"
+tmdbId: '524434'
 ---
 
 ![Eternals poster](https://a.ltrbxd.com/resized/film-poster/4/5/4/0/1/6/454016-eternals-0-600-0-900-crop.jpg?v=2578d04fd8)

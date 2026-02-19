@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Moulin Rouge!"
+title: 'Moulin Rouge!'
 filmYear: 2001
 rating: 3.5
 added: 2023-01-03 00:00
@@ -12,9 +12,9 @@ letterboxdUrl: https://letterboxd.com/pdav/film/moulin-rouge-2001/
 letterboxdGuid: https://boxd.it/3DiIHT
 source: letterboxd
 isRewatch: false
-tmdbId: "824"
+tmdbId: '824'
 ---
 
 ![Moulin Rouge! poster](https://a.ltrbxd.com/resized/film-poster/5/1/3/2/8/51328-moulin-rouge--0-600-0-900-crop.jpg?v=26abae7095)
 
-Ewan McGregor's character *sucks*! He just stands around whining while Nicole Kidman does all the emotional and physical labor in their relationship. Maddening!
+Ewan McGregor's character _sucks_! He just stands around whining while Nicole Kidman does all the emotional and physical labor in their relationship. Maddening!

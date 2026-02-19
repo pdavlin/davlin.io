@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Top Gun: Maverick"
+title: 'Top Gun: Maverick'
 filmYear: 2022
 rating: 2.5
 added: 2023-10-24 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/top-gun-maverick/
 letterboxdGuid: https://boxd.it/52O9xr
 source: letterboxd
 isRewatch: false
-tmdbId: "361743"
+tmdbId: '361743'
 ---
 
 ![Top Gun: Maverick poster](https://a.ltrbxd.com/resized/film-poster/2/9/3/4/6/5/293465-top-gun-maverick-0-600-0-900-crop.jpg?v=9f8af0f61b)

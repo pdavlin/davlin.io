@@ -1,23 +1,23 @@
 ---
 type: film
-title: "Ryuichi Sakamoto: Opus"
+title: 'Ryuichi Sakamoto: Opus'
 filmYear: 2023
 rating: 5
 added: 2024-04-07 00:00
 updated: 2024-04-07 00:00
 watchedDate: 2024-04-06 00:00
 tags: [film]
-excerpt: "One of the fantastic things about Ryuichi Sakamoto’s discography is that he wasn’t afraid to re-record his own work. I love to listen to the 2009 (..."
+excerpt: 'One of the fantastic things about Ryuichi Sakamoto’s discography is that he wasn’t afraid to re-record his own work. I love to listen to the 2009 (...'
 letterboxdUrl: https://letterboxd.com/pdav/film/ryuichi-sakamoto-opus/
 letterboxdGuid: https://boxd.it/6e9bZ7
 source: letterboxd
 isRewatch: false
-tmdbId: "1156189"
+tmdbId: '1156189'
 ---
 
 ![Ryuichi Sakamoto: Opus poster](https://a.ltrbxd.com/resized/film-poster/1/0/4/2/3/4/0/1042340-ryuichi-sakamoto-opus-0-600-0-900-crop.jpg?v=6a8eb32121)
 
-One of the fantastic things about Ryuichi Sakamoto’s discography is that he wasn’t afraid to re-record his own work. I love to listen to the 2009 (*Playing the Piano*) and 2020 (*Playing the Piano 12122020*) recordings of Sakamoto playing “Merry Christmas Mr. Lawrence” back to back, and try to figure out how Sakamoto’s battle with cancer informed his reinterpretation of the piece. So of course I loved this film. 
+One of the fantastic things about Ryuichi Sakamoto’s discography is that he wasn’t afraid to re-record his own work. I love to listen to the 2009 (_Playing the Piano_) and 2020 (_Playing the Piano 12122020_) recordings of Sakamoto playing “Merry Christmas Mr. Lawrence” back to back, and try to figure out how Sakamoto’s battle with cancer informed his reinterpretation of the piece. So of course I loved this film. 
 
 Sakamoto’s body of work was never about technical mastery, or complicated flourishes. The film doesn’t hide from that. As a pianist, Sakamoto makes us hang on every note, letting us twist in the chasms between phrases. In its simplicity, the performance is elegant and unique; it’s hard to imagine too many modern composers performing their last concert quite like this. 
 

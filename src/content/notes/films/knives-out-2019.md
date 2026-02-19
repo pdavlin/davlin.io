@@ -1,6 +1,6 @@
 ---
 type: film
-title: "Knives Out"
+title: 'Knives Out'
 filmYear: 2019
 rating: 5
 added: 2020-02-24 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/knives-out-2019/
 letterboxdGuid: https://boxd.it/10fZrP
 source: letterboxd
 isRewatch: false
-tmdbId: "546554"
+tmdbId: '546554'
 ---
 
 ![Knives Out poster](https://a.ltrbxd.com/resized/film-poster/4/7/5/3/7/0/475370-knives-out-0-600-0-900-crop.jpg?v=7da76d742c)

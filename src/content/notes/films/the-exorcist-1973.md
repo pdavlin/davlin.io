@@ -1,6 +1,6 @@
 ---
 type: film
-title: "The Exorcist"
+title: 'The Exorcist'
 filmYear: 1973
 rating: 4
 added: 2025-04-04 00:00
@@ -12,7 +12,7 @@ letterboxdUrl: https://letterboxd.com/pdav/film/the-exorcist/
 letterboxdGuid: https://boxd.it/9ji2pL
 source: letterboxd
 isRewatch: false
-tmdbId: "9552"
+tmdbId: '9552'
 ---
 
 ![The Exorcist poster](https://a.ltrbxd.com/resized/film-poster/4/7/0/4/8/47048-the-exorcist-0-600-0-900-crop.jpg?v=897c9aa211)

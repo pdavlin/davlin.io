@@ -1,18 +1,18 @@
 ---
 type: film
-title: "Deadpool & Wolverine"
+title: 'Deadpool & Wolverine'
 filmYear: 2024
 rating: 1.5
 added: 2024-10-18 00:00
 updated: 2024-10-18 00:00
 watchedDate: 2024-10-17 00:00
 tags: [film]
-excerpt: "I’ve been on record for a long time as a Ryan Reynolds hater. I don’t like him as Deadpool, I don’t like Mint Mobile, and I demand sell his stake i..."
+excerpt: 'I’ve been on record for a long time as a Ryan Reynolds hater. I don’t like him as Deadpool, I don’t like Mint Mobile, and I demand sell his stake i...'
 letterboxdUrl: https://letterboxd.com/pdav/film/deadpool-wolverine/
 letterboxdGuid: https://boxd.it/7A2roX
 source: letterboxd
 isRewatch: false
-tmdbId: "533535"
+tmdbId: '533535'
 ---
 
 ![Deadpool & Wolverine poster](https://a.ltrbxd.com/resized/film-poster/4/6/2/8/7/0/462870-deadpool-wolverine-0-600-0-900-crop.jpg?v=1aa778d2c6)
