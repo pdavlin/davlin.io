@@ -1,18 +1,18 @@
 ---
 type: film
-title: "Shattered Glass"
+title: 'Shattered Glass'
 filmYear: 2003
 rating: 4
 added: 2026-02-20 11:10
 updated: 2026-02-20 11:10
 watchedDate: 2026-02-18 00:00
 tags: [film]
-excerpt: "The Know Your Enemy podcast guys did an episode on this so I decided to watch it. Great movie, shocked me in a number of ways:"
+excerpt: 'The Know Your Enemy podcast guys did an episode on this so I decided to watch it. Great movie, shocked me in a number of ways:'
 letterboxdUrl: https://letterboxd.com/pdav/film/shattered-glass/
 letterboxdGuid: letterboxd-review-1211409484
 source: letterboxd
 isRewatch: false
-tmdbId: "13537"
+tmdbId: '13537'
 ---
 
 ![Shattered Glass poster](https://a.ltrbxd.com/resized/film-poster/4/3/8/0/4/43804-shattered-glass-0-600-0-900-crop.jpg?v=048022f684)
