@@ -25,10 +25,10 @@ The fact that Glass frames the plot of the film by talking to a high school clas
 
 Obviously, A Lot Has Changed™ in journalism in the past 23 years but the idea of a news publication rejecting and firing a Big Personality news writer feels conceptually impossible now; this sort of exists in my mind as the intersection point between when print news still mattered and when personality-driven news coverage took over. That Stephen Glass, in real life, was close friends with Tucker Carlson is certainly notable. You can draw sort of a direct throughline to people like Carlson or Olivia Nuzzi, ostensible newspeople whose own scandal and fame far outpace the things they're actually covering.
 
-It's also fairly notable that there was a time where publishing fake information online really was a punishable offense, when now it's basically totally normalized [0]. The film feels in context like somewhat of a swan song for print media--The New Republic is laid low by a landmark of internet journalism, able to fact check and discredit Glass using a few resources and a lot of spunk--but watched now it's basically a time capsule of a bygone era of journalism that cared about workmanlike process, details, and society in a way that our content-driven, zero-marginal-cost economy no longer supports.
+It's also fairly notable that there was a time where publishing fake information online really was a punishable offense, when now it's basically totally normalized \[0\]. The film feels in context like somewhat of a swan song for print media--The New Republic is laid low by a landmark of internet journalism, able to fact check and discredit Glass using a few resources and a lot of spunk--but watched now it's basically a time capsule of a bygone era of journalism that cared about workmanlike process, details, and society in a way that our content-driven, zero-marginal-cost economy no longer supports.
 
 Plus (to my own shame) I watched this on the video platform owned by the guy who recently fired ⅓ of the Washington Post newsroom. Screw that guy!
 
 ---
 
-[0]: [arstechnica.com/staff/2026/02/editors-note-retraction-of-article-containing-fabricated-quotations/](https://arstechnica.com/staff/2026/02/editors-note-retraction-of-article-containing-fabricated-quotations/)
+\[0\]: [arstechnica.com/staff/2026/02/editors-note-retraction-of-article-containing-fabricated-quotations/](https://arstechnica.com/staff/2026/02/editors-note-retraction-of-article-containing-fabricated-quotations/)

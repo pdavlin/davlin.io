@@ -127,7 +127,14 @@ function convertHtmlToMarkdown(html, filmTitle) {
   }
   markdown += paragraphs.join('\n\n');
 
-  return markdown;
+  return normalizeNumericCitations(markdown);
+}
+
+export function normalizeNumericCitations(markdown) {
+  if (!markdown) return markdown;
+  return markdown
+    .replace(/(^|\n)([ \t]*)\[(\d+)\]:(?=\s)/g, '$1$2\\[$3\\]:')
+    .replace(/(?<!\\)\[(\d+)\](?!\s*(?:\(|\[|:))/g, '\\[$1\\]');
 }
 
 function formatDate(dateInput, dateOnly = false) {
@@ -370,4 +377,8 @@ async function main() {
   }
 }
 
-main();
+const isDirectRun = process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+
+if (isDirectRun) {
+  main();
+}
