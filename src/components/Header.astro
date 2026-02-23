@@ -19,7 +19,7 @@
         <li>
           <a href="/projects/">Projects</a>
         </li>
-        <li>
+        <li class="rss-link">
           <a href="/feed.xml/">RSS</a>
         </li>
       </ul>
@@ -29,6 +29,7 @@
 
 <style>
   .site-header {
+    container-type: inline-size;
     position: relative;
     display: flex;
     justify-content: flex-end;
@@ -61,5 +62,11 @@
 
   ul > li {
     list-style: none;
+  }
+
+  @container (width < 28rem) {
+    .rss-link {
+      display: none;
+    }
   }
 </style>
