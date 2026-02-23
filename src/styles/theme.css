@@ -44,13 +44,16 @@
   --accent-color: var(--base_0b);
 
   /* Semantic accent variables - derived from accent-color */
-  --color-bg-accent: color-mix(in srgb, var(--accent-color) 15%, var(--color-bg));
+  --color-bg-accent: color-mix(in oklch, var(--accent-color) 15%, var(--color-bg));
   --color-text-accent: var(--accent-color);
-  --color-theme-offset: color-mix(in srgb, var(--accent-color) 80%, var(--color-text));
-  --color-theme-muted: color-mix(in srgb, var(--accent-color) 20%, var(--color-bg));
+  --color-theme-offset: color-mix(in oklch, var(--accent-color) 80%, var(--color-text));
+  --color-theme-muted: color-mix(in oklch, var(--accent-color) 20%, var(--color-bg));
+
+  /* Text selection highlight */
+  --color-highlight: color-mix(in oklch, var(--accent-color) 30%, var(--color-bg));
 
   /* Date shadow for list items - muted for legibility */
-  --color-date-shadow: color-mix(in srgb, var(--accent-color) 40%, transparent);
+  --color-date-shadow: oklch(from var(--accent-color) l c h / 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,6 +72,11 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: 'BerkeleyMono';
+}
+
+::selection {
+  background: var(--color-highlight);
+  color: var(--color-text);
 }
 
 a {
