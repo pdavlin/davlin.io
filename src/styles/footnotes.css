@@ -1,0 +1,46 @@
+.footnote-ref {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.footnote-ref a {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+.footnote-ref a:hover {
+  text-decoration: underline;
+}
+
+.footnotes {
+  margin-block-start: var(--space_l);
+  padding-block-start: var(--space_m);
+  border-block-start: 1px solid var(--base_03);
+  font-size: 0.9em;
+}
+
+.footnotes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footnotes-list li {
+  margin-block-end: var(--space_xs);
+}
+
+.footnote-label {
+  color: var(--base_03);
+  font-size: 0.85em;
+}
+
+.footnote-backref {
+  margin-inline-start: var(--space_2xs);
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+.footnote-backref:hover {
+  text-decoration: underline;
+}

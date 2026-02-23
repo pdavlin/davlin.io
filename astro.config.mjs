@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import rehypeFootnotes from './src/plugins/rehype-footnotes.ts';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -33,6 +34,7 @@ export default defineConfig({
   integrations: [sitemap()],
   site: 'https://davlin.io',
   markdown: {
+    rehypePlugins: [rehypeFootnotes],
     shikiConfig: {
       themes: {
         dark: 'github-light',

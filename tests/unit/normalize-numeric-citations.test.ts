@@ -93,7 +93,7 @@ describe('normalizeNumericCitations - edge cases', () => {
   });
 
   it('returns undefined input as-is', () => {
-    expect(normalizeNumericCitations(undefined)).toBeUndefined();
+    expect(normalizeNumericCitations()).toBeUndefined();
   });
 
   it('returns empty string as-is', () => {
