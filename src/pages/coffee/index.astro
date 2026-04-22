@@ -9,7 +9,7 @@ import { Temporal } from '@js-temporal/polyfill';
 type AirtableRecord = Record<string, unknown>;
 
 const title = 'Coffee | davlin.io';
-const description = 'Tracking my espresso shots with data visualizations';
+const description = 'Tracking my coffee with data visualizations';
 const permalink = 'https://davlin.io/coffee';
 const page = 'coffee';
 
@@ -38,11 +38,19 @@ function filterRecords(recs: AirtableRecord[]): AirtableRecord[] {
   });
 }
 
+function isPourover(record: AirtableRecord): boolean {
+  return record['Profile title'] === 'NextLevel Pulsar';
+}
+
 function processMonthlyData(recs: AirtableRecord[]) {
   const filtered = filterRecords(recs);
 
   if (filtered.length === 0) {
-    return { labels: [] as string[], data: [] as number[] };
+    return {
+      labels: [] as string[],
+      data: { regular: [] as number[], pourover: [] as number[] },
+      totals: [] as number[],
+    };
   }
 
   let dateField = 'Start time';
@@ -55,11 +63,16 @@ function processMonthlyData(recs: AirtableRecord[]) {
     if (possibleFields.length > 0) {
       dateField = possibleFields[0];
     } else {
-      return { labels: [] as string[], data: [] as number[] };
+      return {
+        labels: [] as string[],
+        data: { regular: [] as number[], pourover: [] as number[] },
+        totals: [] as number[],
+      };
     }
   }
 
-  const monthlyCounts: Record<string, number> = {};
+  const espressoCounts: Record<string, number> = {};
+  const pouroverCounts: Record<string, number> = {};
   const monthNames = [
     'Jan',
     'Feb',
@@ -86,14 +99,19 @@ function processMonthlyData(recs: AirtableRecord[]) {
         const yearPart = parts[0];
         const monthPart = parseInt(parts[1]);
         const monthYear = `${monthNames[monthPart - 1]} ${yearPart}`;
-        monthlyCounts[monthYear] = (monthlyCounts[monthYear] ?? 0) + 1;
+        if (isPourover(record)) {
+          pouroverCounts[monthYear] = (pouroverCounts[monthYear] ?? 0) + 1;
+        } else {
+          espressoCounts[monthYear] = (espressoCounts[monthYear] ?? 0) + 1;
+        }
       }
     } catch {
       // Skip invalid dates
     }
   }
 
-  const sortedMonths = Object.keys(monthlyCounts).sort((a, b) => {
+  const allMonths = new Set([...Object.keys(espressoCounts), ...Object.keys(pouroverCounts)]);
+  const sortedMonths = [...allMonths].sort((a, b) => {
     const [monthA, yearA] = a.split(' ');
     const [monthB, yearB] = b.split(' ');
 
@@ -104,18 +122,25 @@ function processMonthlyData(recs: AirtableRecord[]) {
     return monthNames.indexOf(monthA) - monthNames.indexOf(monthB);
   });
 
+  const regular = sortedMonths.map((m) => espressoCounts[m] ?? 0);
+  const pourover = sortedMonths.map((m) => pouroverCounts[m] ?? 0);
+
   return {
     labels: sortedMonths,
-    data: sortedMonths.map((m) => monthlyCounts[m]),
+    data: { regular, pourover },
+    totals: sortedMonths.map((_, i) => regular[i] + pourover[i]),
   };
 }
 
 function processDailyData(recs: AirtableRecord[]) {
   const filtered = filterRecords(recs);
 
-  if (filtered.length === 0) {
-    return { labels: [] as string[], data: { regular: [] as number[], decaf: [] as number[] } };
-  }
+  const emptyResult = {
+    labels: [] as string[],
+    data: { regular: [] as number[], decaf: [] as number[], pourover: [] as number[] },
+  };
+
+  if (filtered.length === 0) return emptyResult;
 
   let dateField = 'Start time';
   const firstRecord = filtered[0];
@@ -127,12 +152,13 @@ function processDailyData(recs: AirtableRecord[]) {
     if (possibleFields.length > 0) {
       dateField = possibleFields[0];
     } else {
-      return { labels: [] as string[], data: { regular: [] as number[], decaf: [] as number[] } };
+      return emptyResult;
     }
   }
 
   const regularCounts: Record<string, number> = {};
   const decafCounts: Record<string, number> = {};
+  const pouroverCounts: Record<string, number> = {};
 
   const allDates: string[] = [];
   const today = Temporal.Now.plainDateISO();
@@ -142,6 +168,7 @@ function processDailyData(recs: AirtableRecord[]) {
     allDates.push(dateStr);
     regularCounts[dateStr] = 0;
     decafCounts[dateStr] = 0;
+    pouroverCounts[dateStr] = 0;
   }
 
   for (const record of filtered) {
@@ -156,6 +183,11 @@ function processDailyData(recs: AirtableRecord[]) {
       const dateStr = `${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`;
 
       if (!allDates.includes(dateStr)) continue;
+
+      if (isPourover(record)) {
+        pouroverCounts[dateStr] = (pouroverCounts[dateStr] ?? 0) + 1;
+        continue;
+      }
 
       const coffeeBagField =
         record['Coffee Bag'] ?? record['Coffee Type'] ?? record.Bean ?? record.Beans;
@@ -194,6 +226,7 @@ function processDailyData(recs: AirtableRecord[]) {
     data: {
       regular: allDates.map((date) => regularCounts[date]),
       decaf: allDates.map((date) => decafCounts[date]),
+      pourover: allDates.map((date) => pouroverCounts[date]),
     },
   };
 }
@@ -273,7 +306,7 @@ function getTopMonths(monthLabels: string[], monthData: number[]) {
   return { topThree };
 }
 
-const { labels, data } = processMonthlyData(records);
+const { labels, data, totals } = processMonthlyData(records);
 const { labels: dailyLabels, data: dailyData } = processDailyData(records);
 const {
   labels: timeLabels,
@@ -283,7 +316,7 @@ const {
 const hasData = labels.length > 0;
 const hasDailyData = dailyLabels.length > 0;
 const hasTimeData = timeLabels.length > 0;
-const { topThree } = getTopMonths(labels, data);
+const { topThree } = getTopMonths(labels, totals);
 ---
 
 <html lang="en">
@@ -294,13 +327,13 @@ const { topThree } = getTopMonths(labels, data);
       <p class="build-time">Last updated: {buildTime}</p>
 
       <fieldset class="chart-fieldset">
-        <legend>monthly shots</legend>
+        <legend>monthly drinks</legend>
         {
           hasData ? (
             <>
               <CoffeeChart
                 id="monthly-shots-chart"
-                title="Monthly Espresso Shots"
+                title="Monthly Coffee"
                 data={data}
                 labels={labels}
                 chartType="bar"
@@ -313,7 +346,7 @@ const { topThree } = getTopMonths(labels, data);
                       <li>
                         <span class="rank">#{index + 1}</span>
                         <span class="month">{item.month}</span>
-                        <span class="count">{item.count} shots</span>
+                        <span class="count">{item.count} drinks</span>
                       </li>
                     ))}
                   </ul>
@@ -322,7 +355,7 @@ const { topThree } = getTopMonths(labels, data);
             </>
           ) : (
             <div class="no-data">
-              <p>No monthly shot data available</p>
+              <p>No monthly data available</p>
             </div>
           )
         }
@@ -334,7 +367,7 @@ const { topThree } = getTopMonths(labels, data);
           hasTimeData ? (
             <CoffeeChart
               id="time-of-day-chart"
-              title="Espresso Shots by Time of Day"
+              title="Coffee by Time of Day"
               data={timeData}
               labels={timeLabels}
               fullLabels={timeFullLabels}
@@ -350,19 +383,19 @@ const { topThree } = getTopMonths(labels, data);
       </fieldset>
 
       <fieldset class="chart-fieldset">
-        <legend>daily shots (last 60 days)</legend>
+        <legend>daily drinks (last 60 days)</legend>
         {
           hasDailyData ? (
             <CoffeeChart
               id="daily-shots-chart"
-              title="Daily Espresso Shots by Type"
+              title="Daily Coffee by Type"
               data={dailyData}
               labels={dailyLabels}
               chartType="bar"
             />
           ) : (
             <div class="no-data">
-              <p>No daily shot data available</p>
+              <p>No daily data available</p>
             </div>
           )
         }

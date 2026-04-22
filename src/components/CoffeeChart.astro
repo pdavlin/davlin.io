@@ -2,7 +2,7 @@
 export interface Props {
   id: string;
   title: string;
-  data: number[] | { regular: number[]; decaf: number[] };
+  data: number[] | { regular?: number[]; decaf?: number[]; pourover?: number[] };
   labels: string[];
   fullLabels?: string[];
   chartType?: 'line' | 'bar' | 'pie';
@@ -10,7 +10,6 @@ export interface Props {
 }
 
 const { id, title, data, labels, fullLabels, chartType = 'bar', xAxisLabel } = Astro.props;
-const isStackedBar = id === 'daily-shots-chart';
 ---
 
 <div class="chart-container">
@@ -29,7 +28,6 @@ const isStackedBar = id === 'daily-shots-chart';
     labels,
     fullLabels,
     chartType,
-    isStackedBar,
     xAxisLabel,
   }}
 >
@@ -61,8 +59,9 @@ const isStackedBar = id === 'daily-shots-chart';
     const primaryIndex = day % 8;
     const primary = allColors[primaryIndex];
     const secondary = allColors[(primaryIndex + 4) % 8];
+    const tertiary = allColors[(primaryIndex + 2) % 8];
 
-    return { primary, secondary };
+    return { primary, secondary, tertiary };
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -87,6 +86,8 @@ const isStackedBar = id === 'daily-shots-chart';
           const primaryColorAlpha = hexToRgba(primaryColor, 0.8);
           const secondaryColor = accentColors.secondary;
           const secondaryColorAlpha = hexToRgba(secondaryColor, 0.8);
+          const tertiaryColor = accentColors.tertiary;
+          const tertiaryColorAlpha = hexToRgba(tertiaryColor, 0.8);
           const textColor = isDark ? '#f4ecec' : '#292424';
           const backgroundColor = isDark ? 'rgba(41, 36, 36, 0.9)' : 'rgba(244, 236, 236, 0.9)';
 
@@ -94,37 +95,45 @@ const isStackedBar = id === 'daily-shots-chart';
             window[`chart_${id}`].destroy();
           }
 
+          const isStackedData = data && typeof data === 'object' && !Array.isArray(data);
+
           let datasets;
-          if (isStackedBar && data && typeof data === 'object' && !Array.isArray(data)) {
-            const hasRegularData = data.regular && Array.isArray(data.regular);
-            const hasDecafData = data.decaf && Array.isArray(data.decaf);
+          if (isStackedData) {
+            const seriesConfig = [
+              {
+                key: 'regular',
+                label: 'Espresso',
+                color: primaryColor,
+                alpha: primaryColorAlpha,
+              },
+              {
+                key: 'decaf',
+                label: 'Decaf Espresso',
+                color: secondaryColor,
+                alpha: secondaryColorAlpha,
+              },
+              {
+                key: 'pourover',
+                label: 'Pourover',
+                color: tertiaryColor,
+                alpha: tertiaryColorAlpha,
+              },
+            ];
 
-            datasets = [];
-
-            if (hasRegularData) {
-              datasets.push({
-                label: 'Regular Coffee',
-                data: data.regular,
-                backgroundColor: primaryColorAlpha,
-                borderColor: primaryColor,
+            datasets = seriesConfig
+              .filter((s) => Array.isArray(data[s.key]) && data[s.key].some((v) => v > 0))
+              .map((s) => ({
+                label: s.label,
+                data: data[s.key],
+                backgroundColor: s.alpha,
+                borderColor: s.color,
                 borderWidth: 1,
-              });
-            }
-
-            if (hasDecafData) {
-              datasets.push({
-                label: 'Decaf Coffee',
-                data: data.decaf,
-                backgroundColor: secondaryColorAlpha,
-                borderColor: secondaryColor,
-                borderWidth: 1,
-              });
-            }
+              }));
 
             if (datasets.length === 0) {
               datasets = [
                 {
-                  label: 'Total Shots',
+                  label: 'Total',
                   data: Array(labels.length).fill(0),
                   backgroundColor: primaryColorAlpha,
                   borderColor: primaryColor,
@@ -137,7 +146,7 @@ const isStackedBar = id === 'daily-shots-chart';
 
             datasets = [
               {
-                label: 'Total Shots',
+                label: 'Total',
                 data: dataArray,
                 backgroundColor: primaryColorAlpha,
                 borderColor: primaryColor,
@@ -164,10 +173,10 @@ const isStackedBar = id === 'daily-shots-chart';
               scales: {
                 y: {
                   beginAtZero: true,
-                  stacked: isStackedBar,
+                  stacked: isStackedData,
                   title: {
                     display: true,
-                    text: 'Number of Shots',
+                    text: 'Number of Drinks',
                     color: textColor,
                     font: {
                       family: fontFamily,
@@ -185,7 +194,7 @@ const isStackedBar = id === 'daily-shots-chart';
                   },
                 },
                 x: {
-                  stacked: isStackedBar,
+                  stacked: isStackedData,
                   title: {
                     display: true,
                     text:
@@ -245,7 +254,7 @@ const isStackedBar = id === 'daily-shots-chart';
                       return tooltipItems[0].label;
                     },
                     label: function (context) {
-                      return `${context.dataset.label}: ${context.parsed.y} shots`;
+                      return `${context.dataset.label}: ${context.parsed.y}`;
                     },
                   },
                 },
