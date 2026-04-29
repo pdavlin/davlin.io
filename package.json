@@ -31,7 +31,7 @@
     "@astrojs/sitemap": "^3.7.2",
     "@js-temporal/polyfill": "^0.5.1",
     "airtable": "^0.12.2",
-    "astro": "^5.16.7",
+    "astro": "^6.1.10",
     "chart.js": "^4.5.1",
     "fast-xml-parser": "^5.7.2",
     "marked": "^17.0.1",

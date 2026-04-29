@@ -93,7 +93,7 @@ for (const year of years.sort((a, b) => compareDatesDescending(a.date, b.date)))
             <ul class="list">
               {month.notes.map((note) => (
                 <NoteListItem
-                  slug={note.slug.replace(/^films\//, '')}
+                  slug={note.id.replace(/^films\//, '')}
                   title={note.data.title}
                   added={note.data.watchedDate ?? note.data.added}
                   tags={note.data.tags}

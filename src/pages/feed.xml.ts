@@ -9,13 +9,13 @@ export async function GET(context: APIContext) {
 
   const notesWithContent = await Promise.all(
     notes.map(async (note) => {
-      const rawContent = note.body;
+      const rawContent = note.body ?? '';
       const html = await marked.parse(rawContent);
       const basePath = note.data.type === 'film' ? 'films' : 'blog';
 
       const fullHtml = `${html}
         <hr />
-        <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/${basePath}/${note.slug}">original post</a> is available at my website.</p>
+        <p>Thanks for reading this post via RSS. The <a href="https://davlin.io/${basePath}/${note.id}">original post</a> is available at my website.</p>
       `;
 
       return {
@@ -43,7 +43,7 @@ export async function GET(context: APIContext) {
         .join('');
       const basePath = note.data.type === 'film' ? '/films' : '/blog';
       return {
-        link: `${basePath}/${note.slug}`,
+        link: `${basePath}/${note.id}`,
         title: note.data.title,
         pubDate: new Date(note.data.added),
         description: note.htmlContent,

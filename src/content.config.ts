@@ -1,4 +1,6 @@
-import { z, defineCollection } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 import { Temporal } from '@js-temporal/polyfill';
 
 const dateStringSchema = z.union([
@@ -23,9 +25,8 @@ const note = z.object({
   rating: z.number().optional().nullable(),
   noComments: z.boolean().optional().nullable(),
   includeYTResources: z.boolean().optional().nullable(),
-  // Film-specific fields
   filmYear: z.number().optional().nullable(),
-  letterboxdUrl: z.string().url().optional().nullable(),
+  letterboxdUrl: z.url().optional().nullable(),
   watchedDate: dateStringSchema.optional().nullable(),
   isRewatch: z.boolean().optional().nullable(),
   tmdbId: z.string().optional().nullable(),
@@ -34,29 +35,10 @@ const note = z.object({
 });
 
 const notesCollection = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/notes' }),
   schema: note,
 });
 
-const comment = z.object({
-  id: z.string(),
-  parentId: z.string().nullable(),
-  createdAt: z.number(),
-  html: z.string(),
-  createdBy: z.object({
-    fullName: z.string(),
-  }),
-});
-
-const commentsCollection = defineCollection({
-  type: 'data',
-  schema: z.object({
-    comments: z.array(comment),
-  }),
-});
-
-// 3. Export a single `collections` object to register your collection(s)
-//    This key should match your collection directory name in "src/content"
 export const collections = {
   notes: notesCollection,
-  comments: commentsCollection,
 };

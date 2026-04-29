@@ -1,7 +1,7 @@
 ---
 import Layout from '@components/Layout.astro';
 import DocumentHead from '@components/DocumentHead.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import '@styles/global.css';
 import { formatDate } from '../../utils/date-utils';
 
@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   const notes = await getCollection('notes');
   const posts = notes.filter((note) => note.data.type !== 'film');
   return posts.map((note) => ({
-    params: { slug: note.slug },
+    params: { slug: note.id },
     props: { note },
   }));
 }
@@ -19,7 +19,7 @@ const { note } = Astro.props;
 
 if (slug === undefined) return;
 
-const { Content } = await note.render();
+const { Content } = await render(note);
 
 const {
   data: { added, excerpt, title, updated, tags },
