@@ -25,7 +25,7 @@ const timeZone = now.offset === '-06:00' ? 'CST' : 'CDT';
 
 const buildTime = `${year}-${month}-${day} ${hour12}:${minute} ${ampm} ${timeZone}`;
 
-const records: AirtableRecord[] = coffeeData as AirtableRecord[];
+const records: AirtableRecord[] = coffeeData;
 
 function filterRecords(recs: AirtableRecord[]): AirtableRecord[] {
   if (recs.length === 0) return recs;
