@@ -106,8 +106,8 @@ importers:
         specifier: ^4.1.5
         version: 4.1.5(@types/node@24.12.2)(@vitest/coverage-v8@4.1.5)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.2)(yaml@2.8.3))
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.4.1
+        version: 4.4.1
 
 packages:
 
@@ -2877,11 +2877,8 @@ packages:
     resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
     engines: {node: '>=12.20'}
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+  zod@4.4.1:
+    resolution: {integrity: sha512-a6ENMBBGZBsnlSebQ/eKCguSBeGKSf4O7BPnqVPmYGtpBYI7VSqoVqw+QcB7kPRjbqPwhYTpFbVj/RqNz/CT0Q==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -2969,13 +2966,13 @@ snapshots:
     dependencies:
       fast-xml-parser: 5.7.2
       piccolore: 0.1.3
-      zod: 4.3.6
+      zod: 4.4.1
 
   '@astrojs/sitemap@3.7.2':
     dependencies:
       sitemap: 9.0.1
       stream-replace-string: 2.0.0
-      zod: 4.3.6
+      zod: 4.4.1
 
   '@astrojs/telemetry@3.3.1':
     dependencies:
@@ -3859,7 +3856,7 @@ snapshots:
       vitefu: 1.1.3(vite@7.3.2(@types/node@24.12.2)(yaml@2.8.3))
       xxhash-wasm: 1.1.0
       yargs-parser: 22.0.0
-      zod: 4.3.6
+      zod: 4.4.1
     optionalDependencies:
       sharp: 0.34.5
     transitivePeerDependencies:
@@ -5905,8 +5902,6 @@ snapshots:
 
   yocto-queue@1.2.2: {}
 
-  zod@3.25.76: {}
-
-  zod@4.3.6: {}
+  zod@4.4.1: {}
 
   zwitch@2.0.4: {}
