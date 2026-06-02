@@ -15524,6 +15524,24 @@
     "Duration": 46.255
   },
   {
+    "id": "recJ5GNb2Q7oaNlQI",
+    "Roast level": "UNKNOWN",
+    "Drink tds": "0",
+    "Bean type": "Archetype",
+    "Roast date": "2026.04.29",
+    "ID": "b476efd3-d952-46a6-a721-b786406b3add",
+    "Drink weight": "308.7",
+    "URL": "https://visualizer.coffee/shots/b476efd3-d952-46a6-a721-b786406b3add",
+    "Drink ey": "0",
+    "Start time": "2026-06-01T14:05:46.000Z",
+    "Grinder model": "Lagon P64 (HU)",
+    "Profile title": "NextLevel Pulsar",
+    "Coffee Bag": ["rectdPJUjkm3GfuSV"],
+    "Bean weight": "18",
+    "Bean brand": "Archetype",
+    "Duration": 289.528
+  },
+  {
     "id": "recJ5uNAeUYrN3MIZ",
     "Roast level": "Light",
     "Grinder setting": "2.70",
