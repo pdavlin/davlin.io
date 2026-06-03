@@ -34741,6 +34741,23 @@
     "Duration": 21.675
   },
   {
+    "id": "recfcxwGUZwICHaw4",
+    "Roast level": "UNKNOWN",
+    "Drink tds": "0",
+    "Bean type": "Archetype",
+    "Roast date": "2026.04.29",
+    "ID": "43a6736a-1369-4d39-9878-aeb34b93c9d8",
+    "Drink weight": "280.1",
+    "URL": "https://visualizer.coffee/shots/43a6736a-1369-4d39-9878-aeb34b93c9d8",
+    "Drink ey": "0",
+    "Start time": "2026-06-02T14:18:13.000Z",
+    "Grinder model": "Lagon P64 (HU)",
+    "Profile title": "NextLevel Pulsar",
+    "Coffee Bag": ["rectdPJUjkm3GfuSV"],
+    "Bean brand": "Archetype",
+    "Duration": 247.631
+  },
+  {
     "id": "recffKBXmozmNybWp",
     "Roast level": "Light",
     "Grinder setting": "3.0",
@@ -41043,6 +41060,23 @@
     "Espresso enjoyment": 0,
     "Bean brand": "The Mill",
     "Duration": 25.005
+  },
+  {
+    "id": "recmiAu6bqSSPTTSb",
+    "Roast level": "UNKNOWN",
+    "Drink tds": "0",
+    "Bean type": "Archetype",
+    "Roast date": "2026.04.29",
+    "ID": "cd0b0c98-2063-416d-bd2e-247b2d3ebccd",
+    "Drink weight": "280",
+    "URL": "https://visualizer.coffee/shots/cd0b0c98-2063-416d-bd2e-247b2d3ebccd",
+    "Drink ey": "0",
+    "Start time": "2026-06-02T16:16:13.000Z",
+    "Grinder model": "Lagon P64 (HU)",
+    "Profile title": "NextLevel Pulsar",
+    "Coffee Bag": ["rectdPJUjkm3GfuSV"],
+    "Bean brand": "Archetype",
+    "Duration": 260.829
   },
   {
     "id": "recmmMRVLsKq0pA0q",
