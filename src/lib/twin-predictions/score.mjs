@@ -116,16 +116,28 @@ const median = (nums) => {
  * to cap or exclude it by tuning the data or weights.
  *
  * @param {string} dimension - The dimension name, e.g. `"boyWt"`.
- * @param {number[]} distances - Raw absolute distances for that dimension.
+ * @param {{ b: Ballot }[]} raw - The per-guest raw entries (each carries `b.name` and the
+ *   dimension's absolute distance under `[dimension]`), so the warning can name the guess.
  * @returns {void}
  */
-function warnOnOutlier(dimension, distances) {
-  const med = median(distances);
-  const max = Math.max(...distances);
-  if (med > 0 && max > 3 * med) {
+function warnOnOutlier(dimension, raw) {
+  const ranked = raw
+    .map((r) => ({ name: r.b.name, dist: r[dimension] }))
+    .sort((x, y) => y.dist - x.dist);
+  const max = ranked[0]?.dist ?? 0;
+  const second = ranked[1]?.dist ?? 0;
+  const med = median(ranked.map((e) => e.dist));
+
+  // Flag only when a SINGLE guess both dwarfs the median AND stands clearly apart from the
+  // next-largest — the case that actually stretches the min-max denominator and compresses
+  // everyone else. A plain `max > 3*median` test fired on any naturally wide spread (all
+  // five dimensions on this 32-row set), which was noise; the added `max > 1.5*second` gap
+  // condition makes the signal specific to a true outlier and names the guess driving it.
+  if (med > 0 && max > 3 * med && max > 1.5 * second) {
     globalThis.console.warn(
-      `[score] outlier in "${dimension}": max distance ${max} is >3x the median ${med}. ` +
-        'It is compressing the normalized range for this dimension (NFR-2.4); accepted by default.'
+      `[score] outlier in "${dimension}": ${ranked[0].name}'s guess is ${max} off — ` +
+        `${(max / med).toFixed(1)}x the median (${med}) and ${(max / (second || 1)).toFixed(1)}x the next (${second}). ` +
+        "It compresses this dimension's normalized range (NFR-2.4); accepted by default."
     );
   }
 }
@@ -170,9 +182,8 @@ export function score(ballots, actuals, cfg = SCORING) {
   /** @type {Record<string, number>} */
   const maxes = {};
   for (const d of DIMENSIONS) {
-    const distances = raw.map((r) => r[d]);
-    warnOnOutlier(d, distances);
-    maxes[d] = Math.max(...distances) || 1;
+    warnOnOutlier(d, raw);
+    maxes[d] = Math.max(...raw.map((r) => r[d])) || 1;
   }
 
   // Step 3: weighted sum of normalized distances + tie-breaker bonus, then rank.

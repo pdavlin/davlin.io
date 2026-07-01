@@ -21,11 +21,11 @@ const page = 'projects';
 //     degrading cleanly — the robust counterpart to a try/catch import, which would
 //     instead fail `astro check` and the Vite build on a missing module.
 //
-// When reveal is off, `leaderboard` is null, so the island is never rendered: the page's
-// HTML contains zero leaderboard markup and the browser never loads the island script.
-// (Astro statically emits every client island's JS chunk into `dist/_astro` regardless
-// of conditional rendering — that orphan chunk holds only generic presentation labels,
-// never the actuals or babies' names, which are gated at the fetch.)
+// When reveal is off, `leaderboard` is null, so the leaderboard is never rendered: the
+// page's HTML contains zero leaderboard markup. The Leaderboard is a static (non-hydrated)
+// component — rendered WITHOUT a `client:*` directive — so Astro ships no JS chunk for it
+// in either reveal state. There is no island to leak from; expand/collapse is native
+// <details>/<summary>.
 const revealed = import.meta.env.TWIN_REVEAL as unknown as boolean;
 const leaderboardModules = import.meta.glob('../../data/twin-predictions-leaderboard.json', {
   eager: true,
@@ -39,7 +39,7 @@ const leaderboard = revealed ? (leaderboardEntry?.default ?? null) : null;
   <body>
     <Layout page={page}>
       <Dashboard ballots={ballots} client:load />
-      {leaderboard && <Leaderboard data={leaderboard} client:visible />}
+      {leaderboard && <Leaderboard data={leaderboard} />}
     </Layout>
   </body>
 </html>

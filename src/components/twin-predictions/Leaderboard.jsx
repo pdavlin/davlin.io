@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 /*
- * Twin-predictions leaderboard — React island (reveal-on only).
+ * Twin-predictions leaderboard — static, server-rendered (reveal-on only).
  *
- * SECURITY: this is a CLIENT island. `astro.config.mjs` inlines AIRTABLE_API_KEY into
- * client JS via `vite.define`, so this file MUST NEVER reference AIRTABLE_API_KEY (or any
- * secret). It receives the already-scored, static leaderboard rows as a prop. The rows
- * contain public ballot data and derived scores only — never the babies' names or the raw
- * actuals — so there is nothing secret to leak here even post-reveal.
+ * Rendered by `twin-predictions.astro` WITHOUT a `client:*` directive, so Astro emits it as
+ * plain HTML and ships ZERO client JavaScript for it — there is no island chunk in the
+ * bundle at all, reveal-on or reveal-off. Expand/collapse uses native <details>/<summary>,
+ * which needs no hydration. Because it ships no logic, it cannot leak a secret by
+ * construction, and it never references AIRTABLE_API_KEY.
  *
- * It is only mounted by `twin-predictions.astro` when `twin-predictions-leaderboard.json`
- * exists (i.e. the reveal-on build wrote it). Reveal-off builds never import this island.
+ * It is only rendered when `twin-predictions-leaderboard.json` exists (the reveal-on build
+ * wrote it). It receives the already-scored, PUBLIC leaderboard rows as a prop — never the
+ * babies' names or the raw actuals.
  *
  * Theme: reuses the Dashboard's tokens and helper classes (pd-style-content-box, mono,
  * serif, kick, tnum) so the two views render as one cohesive page. The `.pdroot` variable
- * block is duplicated here (identical values) so the island is self-contained when it
- * mounts independently of the Dashboard.
+ * block is duplicated here (identical values) so the leaderboard is self-contained.
  *
  * Props:
  *   data — LeaderboardRow[] (see src/lib/twin-predictions/score.mjs for the shape).
@@ -61,7 +61,6 @@ const fmtDistance = (value) => String(Math.round(value * 10) / 10);
 
 export default function Leaderboard({ data }) {
   const rows = data ?? [];
-  const [openRow, setOpenRow] = useState(null);
 
   if (rows.length === 0) return null;
 
@@ -106,11 +105,15 @@ export default function Leaderboard({ data }) {
           position: relative;
         }
         .pd-style-content-box:hover { border-color: var(--accent-border-color); }
-        button.pd-style-content-box { background: transparent; color: var(--foreground-color); cursor: pointer; }
         .mono { font-family: ${MONO}; }
         .serif { font-family: ${SERIF}; }
         .tnum { font-variant-numeric: tabular-nums; }
         .kick { font-family: ${MONO}; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--faint); }
+        /* native <details> expand/collapse — no JS. Hide the default disclosure marker. */
+        .tp-rank > summary { list-style: none; cursor: pointer; }
+        .tp-rank > summary::-webkit-details-marker { display: none; }
+        .tp-caret { display: inline-block; transition: transform var(--transition-timing); color: var(--faint); }
+        .tp-rank[open] .tp-caret { transform: rotate(90deg); }
       `}</style>
 
       <div style={{ maxWidth: 880, margin: '0 auto' }}>
@@ -136,48 +139,39 @@ export default function Leaderboard({ data }) {
             </h2>
           </div>
           <span className="mono" style={{ fontSize: 12, color: 'var(--faint)' }}>
-            lower distance = closer
+            lower distance = closer · tap a row for detail
           </span>
         </div>
 
-        {/* ranked rows */}
+        {/* ranked rows — each a native <details> so expand/collapse needs no JS */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {rows.map((row) => {
             const isWinner = row.rank === 1;
-            const isOpen = openRow === row.rank;
             return (
-              <div
+              <details
                 key={row.id}
-                className="pd-style-content-box"
+                className="pd-style-content-box tp-rank"
                 style={
                   isWinner
                     ? { borderColor: ACCENT, borderWidth: 'var(--border-thickness)' }
                     : undefined
                 }
               >
-                {/* summary row — click to expand the per-dimension breakdown */}
-                <button
-                  type="button"
+                {/* summary row — the whole thing is the click/keyboard target */}
+                <summary
                   className="mono"
-                  onClick={() => setOpenRow((current) => (current === row.rank ? null : row.rank))}
-                  aria-expanded={isOpen}
-                  aria-label={`Rank ${row.rank}, ${row.name}, distance ${fmtDistance(
-                    row.distance
-                  )}. Activate to ${isOpen ? 'hide' : 'show'} the per-dimension breakdown.`}
                   style={{
-                    width: '100%',
-                    background: 'transparent',
-                    color: 'var(--foreground-color)',
-                    border: 'none',
-                    cursor: 'pointer',
                     display: 'grid',
-                    gridTemplateColumns: 'auto 1fr auto',
+                    gridTemplateColumns: 'auto auto 1fr auto',
                     alignItems: 'center',
                     gap: 14,
                     padding: '14px 16px',
-                    textAlign: 'left',
                   }}
                 >
+                  <span className="tp-caret" aria-hidden="true">
+                    ▸
+                  </span>
+
                   {/* rank */}
                   <span
                     className="serif tnum"
@@ -230,43 +224,41 @@ export default function Leaderboard({ data }) {
                       {row.bonus} bonus{row.bonus === 1 ? '' : 'es'}
                     </span>
                   </span>
-                </button>
+                </summary>
 
-                {/* expandable per-dimension breakdown (raw absolute distances) */}
-                {isOpen && (
-                  <div
-                    style={{
-                      borderTop: '1px solid var(--border-color)',
-                      padding: '12px 16px',
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                      gap: 10,
-                      background: 'var(--subtle)',
-                    }}
-                  >
-                    {DIMENSION_META.map((dim) => (
-                      <div key={dim.key}>
-                        <div className="kick" style={{ marginBottom: 2 }}>
-                          {dim.label}
-                        </div>
-                        <div
-                          className="mono tnum"
-                          style={{ fontSize: 14, fontWeight: 700, color: dim.color }}
-                        >
-                          {fmtDistance(row.breakdown[dim.key])} {dim.unit}
-                          <span
-                            className="mono"
-                            style={{ fontSize: 11, color: 'var(--faint)', fontWeight: 400 }}
-                          >
-                            {' '}
-                            off
-                          </span>
-                        </div>
+                {/* per-dimension breakdown (raw absolute distances) */}
+                <div
+                  style={{
+                    borderTop: '1px solid var(--border-color)',
+                    padding: '12px 16px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                    gap: 10,
+                    background: 'var(--subtle)',
+                  }}
+                >
+                  {DIMENSION_META.map((dim) => (
+                    <div key={dim.key}>
+                      <div className="kick" style={{ marginBottom: 2 }}>
+                        {dim.label}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      <div
+                        className="mono tnum"
+                        style={{ fontSize: 14, fontWeight: 700, color: dim.color }}
+                      >
+                        {fmtDistance(row.breakdown[dim.key])} {dim.unit}
+                        <span
+                          className="mono"
+                          style={{ fontSize: 11, color: 'var(--faint)', fontWeight: 400 }}
+                        >
+                          {' '}
+                          off
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </details>
             );
           })}
         </div>
