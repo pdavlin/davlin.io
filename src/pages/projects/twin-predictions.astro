@@ -38,8 +38,28 @@ const leaderboard = revealed ? (leaderboardEntry?.default ?? null) : null;
   <DocumentHead title={title} description={description} permalink={permalink} />
   <body>
     <Layout page={page}>
-      <Dashboard ballots={ballots} client:load />
-      {leaderboard && <Leaderboard data={leaderboard} />}
+      <div class="tp-embed">
+        <Dashboard ballots={ballots} client:load />
+      </div>
+      {
+        leaderboard && (
+          <div class="tp-embed">
+            <Leaderboard data={leaderboard} />
+          </div>
+        )
+      }
     </Layout>
   </body>
 </html>
+
+<style>
+  /*
+   * The Dashboard is a `client:load` island; its generated <astro-island> wrapper is an
+   * inline custom element and, as a direct grid item of `main.breakout`, shrink-wraps to
+   * its content instead of filling the content column. Wrapping it in a block `.tp-embed`
+   * div (the grid item) that stretches full-width fixes the desktop collapse.
+   */
+  .tp-embed {
+    width: 100%;
+  }
+</style>
