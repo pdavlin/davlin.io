@@ -1,0 +1,33 @@
+ballot_id,guest_name,birth_date,girl_wt_lb,girl_wt_oz,boy_wt_lb,boy_wt_oz,girl_len_in,boy_len_in,born_first,dad_faints,mom_yells
+1,Sean Doyle,9/11/26,5,9,7,4,19,20.5,G,Y,Y
+2,Rachel Schmitz,9/20/26,6,12,7,5,20,21,B,N,N
+3,Sarah Doyle,9/7/26,6,4,7,3,18,19,B,N,N
+4,Gaby Martinez-Garro,9/5/26,6,1,8,1,15,20,B,Y,Y
+5,Courtni Kopietz,9/3/26,6,10,8,3,16,18,G,N,Y
+6,Peter Setter,9/11/26,6,8,10,2,17,19,G,Y,Y
+7,Mitch Ursick,9/9/26,5,8,6,2,16,17.5,B,N,Y
+8,Biz Steinauer,9/6/26,6,0,7,6,18,20,G,N,Y
+9,Meg Ursick,9/8/26,5,4,6,6,19,20,B,Y,Y
+10,Edith Carlisle,9/10/26,5,10,6,8,20,21,B,N,Y
+11,Hannah Pastwa,9/1/26,5,5,6,0,19,21,B,N,Y
+12,Dan Pastwa,8/15/26,5,5,6,0,19,21,B,N,Y
+13,Lura Holst,9/15/26,5,4,5,6,19.5,20,G,N,N
+14,Zander Vinton,9/17/26,6,0,6,0,17,17,G,N,N
+15,Alissa Christensen,9/9/26,5,10,5,12,19,18,G,N,N
+16,Katie Drey,9/15/26,7,2,7,4,20,21,G,N,N
+17,Katie Sassen,9/14/26,5,1,5,8,19,21,B,N,N
+18,Diana Fuller,8/22/26,8,0,9,0,21,23,B,N,N
+19,Julie Masters,9/15/26,4,0,4,8,17,20,G,N,Y
+20,Colleen Ashburn,9/9/26,5,1,4,14,19,18,G,N,Y
+21,Allie Doberpuhl,9/5/26,6,6,6,2,21,22,G,N,N
+22,Kalee,9/18/26,5,8,5,2,21,21,G,N,Y
+23,Suzie Davlin,8/15/26,5,5,5,7,20,20,G,N,Y
+24,Kathleen Hodgen,8/15/26,4,9,7,5,18,21,B,N,Y
+25,Shamala Nadasan,9/15/26,7,0,8,0,24,26,G,N,Y
+26,Carol Kosmicki,9/12/26,4,0,6,0,21,22,B,N,Y
+27,Kathleen Quinn,9/12/26,6,2,7,4,19,21,B,N,Y
+28,Price Comstock,8/19/26,6,12,6,11,14,16,G,Y,Y
+29,Ty Stuart,9/21/26,7,4,7,8,16,17,,N,Y
+30,Mark Irvine,8/29/26,5,9,5,8,17,17,G,Y,Y
+31,Seth Redwine,9/15/26,8,3,12,5,18,22,,Y,Y
+32,Grace Redwine,9/11/26,4,6,7,4,17,21,B,Y,Y

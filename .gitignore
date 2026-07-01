@@ -2,6 +2,9 @@
 dist/
 # generated types
 .astro/
+# reveal-gated build artifact — only written when REVEAL=true; never committed so a
+# reveal-off checkout cannot ship a stale leaderboard or actuals-derived data
+src/data/twin-predictions-leaderboard.json
 
 # dependencies
 node_modules/
