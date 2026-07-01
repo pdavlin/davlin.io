@@ -1,0 +1,45 @@
+---
+import '@styles/global.css';
+import DocumentHead from 'src/components/DocumentHead.astro';
+import Layout from '@components/Layout.astro';
+import Dashboard from '@components/twin-predictions/Dashboard.jsx';
+import Leaderboard from '@components/twin-predictions/Leaderboard.jsx';
+import ballots from '../../data/twin-predictions-ballots.json';
+
+const title = 'twin predictions | davlin.io';
+const description = 'Baby shower twin prediction guesses, visualized';
+const permalink = 'https://davlin.io/projects/twin-predictions/';
+const page = 'projects';
+
+// Reveal gate (render side). Two independent build-time gates decide whether the
+// leaderboard mounts; the real security guarantee is upstream — scripts/fetch-actuals.mjs
+// never FETCHES the actuals or names when reveal is off, so no secret exists to ship.
+//
+//  1. `TWIN_REVEAL` is a build-inlined literal (`true`/`false`, see astro.config.mjs).
+//  2. `import.meta.glob` loads `twin-predictions-leaderboard.json` only if the build
+//     actually wrote it (reveal on). It resolves to an empty set when the file is absent,
+//     degrading cleanly — the robust counterpart to a try/catch import, which would
+//     instead fail `astro check` and the Vite build on a missing module.
+//
+// When reveal is off, `leaderboard` is null, so the leaderboard is never rendered: the
+// page's HTML contains zero leaderboard markup. The Leaderboard is a static (non-hydrated)
+// component — rendered WITHOUT a `client:*` directive — so Astro ships no JS chunk for it
+// in either reveal state. There is no island to leak from; expand/collapse is native
+// <details>/<summary>.
+const revealed = import.meta.env.TWIN_REVEAL as unknown as boolean;
+const leaderboardModules = import.meta.glob('../../data/twin-predictions-leaderboard.json', {
+  eager: true,
+});
+const leaderboardEntry = Object.values(leaderboardModules)[0] as { default: unknown } | undefined;
+const leaderboard = revealed ? (leaderboardEntry?.default ?? null) : null;
+---
+
+<html lang="en">
+  <DocumentHead title={title} description={description} permalink={permalink} />
+  <body>
+    <Layout page={page}>
+      <Dashboard ballots={ballots} client:load />
+      {leaderboard && <Leaderboard data={leaderboard} />}
+    </Layout>
+  </body>
+</html>

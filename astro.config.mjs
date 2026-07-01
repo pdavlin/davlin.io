@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
 import rehypeFootnotes from './src/plugins/rehype-footnotes.ts';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +32,7 @@ const envVars = loadEnvFromFile();
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [sitemap()],
+  integrations: [react(), sitemap()],
   site: 'https://davlin.io',
   markdown: {
     rehypePlugins: [rehypeFootnotes],
@@ -51,6 +52,14 @@ export default defineConfig({
       ),
       'import.meta.env.AIRTABLE_BASE_ID': JSON.stringify(
         envVars.AIRTABLE_BASE_ID || process.env.AIRTABLE_BASE_ID
+      ),
+      // Non-secret build flag (only ever the literal `true`/`false`). Inlining it lets the
+      // twin-predictions page dead-code-eliminate the leaderboard island entirely when
+      // reveal is off, so a reveal-off bundle ships zero leaderboard code — not just an
+      // unrendered shell. The actuals/names gate remains the build-time FETCH in
+      // scripts/fetch-actuals.mjs; this only controls client inclusion.
+      'import.meta.env.TWIN_REVEAL': JSON.stringify(
+        (envVars.REVEAL || process.env.REVEAL) === 'true'
       ),
     },
   },
