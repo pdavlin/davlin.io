@@ -167,7 +167,7 @@ export default function Dashboard({ ballots }) {
       style={{
         background: 'var(--background-color)',
         color: 'var(--foreground-color)',
-        padding: '40px 22px 56px',
+        padding: '40px 0 56px',
         minHeight: '100%',
         fontFamily: MONO,
       }}
@@ -212,6 +212,13 @@ export default function Dashboard({ ballots }) {
         .serif { font-family: ${SERIF}; }
         .tnum { font-variant-numeric: tabular-nums; }
         .kick { font-family: ${MONO}; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--faint); }
+        /* card grids collapse to a single column on narrow screens */
+        .pd-grid-consensus { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .pd-grid-verdicts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 34px; }
+        @media (max-width: 640px) {
+          .pd-grid-consensus { grid-template-columns: 1fr; }
+          .pd-grid-verdicts { grid-template-columns: 1fr; }
+        }
       `}</style>
 
       <div style={{ maxWidth: 880, margin: '0 auto' }}>
@@ -259,7 +266,7 @@ export default function Dashboard({ ballots }) {
         </header>
 
         {/* consensus cards — tap/click to toggle median ⇄ mean */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+        <div className="pd-grid-consensus">
           {[
             {
               who: 'girl',
@@ -294,6 +301,8 @@ export default function Dashboard({ ballots }) {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'baseline',
+                  gap: 8,
+                  flexWrap: 'wrap',
                   marginBottom: 2,
                 }}
               >
@@ -315,7 +324,12 @@ export default function Dashboard({ ballots }) {
               </div>
               <div
                 className="mono tnum"
-                style={{ fontSize: 25, fontWeight: 700, color: 'var(--foreground-color)' }}
+                style={{
+                  fontSize: 25,
+                  fontWeight: 700,
+                  color: 'var(--foreground-color)',
+                  whiteSpace: 'nowrap',
+                }}
               >
                 {fmtOz(b.wt)}
               </div>
@@ -331,14 +345,7 @@ export default function Dashboard({ ballots }) {
         </div>
 
         {/* verdict strip */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3,1fr)',
-            gap: 16,
-            marginBottom: 34,
-          }}
-        >
+        <div className="pd-grid-verdicts">
           <Verdict
             label="most-guessed birthday"
             big={dateMode.value}
@@ -381,17 +388,17 @@ export default function Dashboard({ ballots }) {
         {/* birthday distribution */}
         <Section kicker="timeline" title="when will they arrive?" note="aug 15 → sep 20">
           <ResponsiveContainer width="100%" height={244}>
-            <BarChart data={dateDist} margin={{ top: 12, right: 6, left: -18, bottom: 0 }}>
+            <BarChart data={dateDist} margin={{ top: 12, right: 14, left: -18, bottom: 0 }}>
               <XAxis
                 dataKey="md"
                 tick={{ fontSize: 9.5, fill: HEX.faint, fontFamily: MONO }}
                 axisLine={{ stroke: HEX.line }}
                 tickLine={false}
-                interval={1}
+                interval="equidistantPreserveStart"
                 angle={-45}
                 textAnchor="end"
                 height={50}
-                minTickGap={0}
+                minTickGap={4}
               />
               <YAxis
                 allowDecimals={false}
@@ -623,7 +630,7 @@ function DualHist({ data, tip }) {
         </span>
       </div>
       <ResponsiveContainer width="100%" height={224}>
-        <AreaChart data={data} margin={{ top: 12, right: 6, left: -18, bottom: 0 }}>
+        <AreaChart data={data} margin={{ top: 12, right: 18, left: -18, bottom: 0 }}>
           <defs>
             <linearGradient id="fillGirl" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={GIRL} stopOpacity={0.4} />
@@ -639,7 +646,8 @@ function DualHist({ data, tip }) {
             tick={{ fontSize: 12, fill: HEX.faint, fontFamily: MONO }}
             axisLine={{ stroke: HEX.line }}
             tickLine={false}
-            interval={0}
+            interval="equidistantPreserveStart"
+            minTickGap={8}
           />
           <YAxis
             allowDecimals={false}

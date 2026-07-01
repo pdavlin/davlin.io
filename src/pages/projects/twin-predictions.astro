@@ -61,5 +61,7 @@ const leaderboard = revealed ? (leaderboardEntry?.default ?? null) : null;
    */
   .tp-embed {
     width: 100%;
+    /* Data-dense charts get the slightly wider popout track, like blockquotes do. */
+    grid-column: popout;
   }
 </style>

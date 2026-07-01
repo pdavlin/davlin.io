@@ -70,7 +70,7 @@ export default function Leaderboard({ data }) {
       style={{
         background: 'var(--background-color)',
         color: 'var(--foreground-color)',
-        padding: '0 22px 56px',
+        padding: '0 0 56px',
         fontFamily: MONO,
       }}
     >
