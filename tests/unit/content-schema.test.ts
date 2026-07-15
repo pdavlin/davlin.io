@@ -1,31 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod';
-import { Temporal } from '@js-temporal/polyfill';
-
-// Recreate the schema for testing (can't import Astro runtime in unit tests)
-const dateStringSchema = z.union([
-  z.string(),
-  z.date().transform((date: Date): string => {
-    const instant = Temporal.Instant.fromEpochMilliseconds(date.getTime());
-    const utcDate = instant.toZonedDateTimeISO('UTC');
-    const year = String(utcDate.year);
-    const month = String(utcDate.month).padStart(2, '0');
-    const day = String(utcDate.day).padStart(2, '0');
-    return `${year}-${month}-${day} 00:00`;
-  }),
-]);
-
-const noteSchema = z.object({
-  type: z.enum(['note', 'book', 'film']).optional(),
-  title: z.string(),
-  tags: z.array(z.string()),
-  added: dateStringSchema,
-  updated: dateStringSchema,
-  excerpt: z.string().optional().nullable(),
-  rating: z.number().optional().nullable(),
-  noComments: z.boolean().optional().nullable(),
-  includeYTResources: z.boolean().optional().nullable(),
-});
+import { dateStringSchema, noteSchema } from '../../src/lib/content-schema';
 
 describe('dateStringSchema', () => {
   it('accepts valid date string', () => {
@@ -129,5 +103,59 @@ describe('noteSchema', () => {
 
     const result = noteSchema.safeParse(filmNote);
     expect(result.success).toBe(true);
+  });
+
+  // The fields below are what the letterboxd importer actually writes. They were absent
+  // from this file's previous hand-copied schema, so nothing checked them.
+  it('validates a full letterboxd-imported film', () => {
+    const result = noteSchema.safeParse({
+      type: 'film' as const,
+      title: 'Shattered Glass',
+      tags: ['film'],
+      added: '2026-01-08 00:00',
+      updated: '2026-01-08 00:00',
+      filmYear: 2003,
+      letterboxdUrl: 'https://letterboxd.com/pdav/film/shattered-glass/',
+      watchedDate: '2026-01-07 00:00',
+      isRewatch: false,
+      tmdbId: '12345',
+      letterboxdGuid: 'letterboxd-review-123',
+      source: 'letterboxd' as const,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a malformed letterboxdUrl', () => {
+    const result = noteSchema.safeParse({
+      title: 'Test',
+      tags: [],
+      added: '2026-01-08 00:00',
+      updated: '2026-01-08 00:00',
+      letterboxdUrl: 'not-a-url',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects an unknown source', () => {
+    const result = noteSchema.safeParse({
+      title: 'Test',
+      tags: [],
+      added: '2026-01-08 00:00',
+      updated: '2026-01-08 00:00',
+      source: 'imdb',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('coerces a Date in watchedDate to a UTC date string', () => {
+    const result = noteSchema.safeParse({
+      title: 'Test',
+      tags: [],
+      added: '2026-01-08 00:00',
+      updated: '2026-01-08 00:00',
+      watchedDate: new Date('2026-01-07T23:30:00Z'),
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.watchedDate).toBe('2026-01-07 00:00');
   });
 });
