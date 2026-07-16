@@ -5,6 +5,7 @@ import Layout from '@components/Layout.astro';
 import Dashboard from '@components/twin-predictions/Dashboard.jsx';
 import Leaderboard from '@components/twin-predictions/Leaderboard.jsx';
 import ballots from '../../data/twin-predictions-ballots.json';
+import { REVEAL } from 'astro:env/server';
 
 const title = 'twin predictions | davlin.io';
 const description = 'Baby shower twin prediction guesses, visualized';
@@ -15,7 +16,8 @@ const page = 'projects';
 // leaderboard mounts; the real security guarantee is upstream — scripts/fetch-actuals.mjs
 // never FETCHES the actuals or names when reveal is off, so no secret exists to ship.
 //
-//  1. `TWIN_REVEAL` is a build-inlined literal (`true`/`false`, see astro.config.mjs).
+//  1. `REVEAL` is a server-context `astro:env` flag (see astro.config.mjs), validated and
+//     coerced to a boolean at build time, and never exposed to client bundles.
 //  2. `import.meta.glob` loads `twin-predictions-leaderboard.json` only if the build
 //     actually wrote it (reveal on). It resolves to an empty set when the file is absent,
 //     degrading cleanly — the robust counterpart to a try/catch import, which would
@@ -26,7 +28,7 @@ const page = 'projects';
 // component — rendered WITHOUT a `client:*` directive — so Astro ships no JS chunk for it
 // in either reveal state. There is no island to leak from; expand/collapse is native
 // <details>/<summary>.
-const revealed = import.meta.env.TWIN_REVEAL as unknown as boolean;
+const revealed = REVEAL;
 const leaderboardModules = import.meta.glob('../../data/twin-predictions-leaderboard.json', {
   eager: true,
 });

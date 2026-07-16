@@ -84,8 +84,7 @@ function formatDate(dateStr: string): string {
                     target={project.external ? '_blank' : undefined}
                     rel={project.external ? 'noopener noreferrer' : undefined}
                   >
-                    {project.title}
-                    {project.external && <span class="external">↗</span>}
+                    {project.title} {project.external && <span class="external">↗</span>}
                   </a>
                 </li>
               ))}
