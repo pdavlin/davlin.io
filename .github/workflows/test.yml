@@ -3,8 +3,9 @@ name: Test
 on:
   push:
     branches: [main]
+  # No branch filter: this filters on the *base*, so `[main]` silently gave zero CI to
+  # any PR stacked on another branch. Every PR gets tested, whatever it targets.
   pull_request:
-    branches: [main]
 
 jobs:
   test:
@@ -14,11 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      # Version comes from `packageManager` in package.json -- setting it here too makes
+      # action-setup error on a mismatch, and keeps CI from drifting off the local pnpm.
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 10
 
+      # Latest 22.x, which clears both floors: astro 7 needs >=22.12.0, pnpm 11 needs
+      # >=22.13. Pinning the exact astro minimum lands below pnpm's and breaks setup.
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:

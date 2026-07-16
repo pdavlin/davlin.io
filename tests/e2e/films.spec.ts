@@ -32,6 +32,19 @@ test.describe('Films', () => {
     }
   });
 
+  // Regression guard: Astro 7's `compressHTML: 'jsx'` drops whitespace between elements,
+  // which silently collapsed "Title ★★★★" to "Title★★★★". innerText (not textContent)
+  // is what catches this -- it reflects the space the browser actually renders.
+  test('film title and rating stay visually separated', async ({ page }) => {
+    await page.goto('/films/');
+
+    const rated = page.locator('li.note a:has(.rating)');
+    expect(await rated.count()).toBeGreaterThan(0);
+
+    const text = await rated.first().innerText();
+    expect(text).toMatch(/\s★/);
+  });
+
   test('film pages should have film metadata', async ({ page }) => {
     await page.goto('/films/');
 
