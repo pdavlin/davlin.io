@@ -30,7 +30,7 @@ export default [
       'unicorn/prefer-node-protocol': 'error',
 
       // Prefer for...of over forEach
-      'unicorn/no-array-for-each': 'error',
+      'unicorn/no-for-each': 'error',
 
       // Prefer .at() for array access
       'unicorn/prefer-at': 'error',
