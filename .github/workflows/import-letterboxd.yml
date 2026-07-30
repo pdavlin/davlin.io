@@ -12,10 +12,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # Version comes from `packageManager` in package.json -- setting it here too makes
+      # action-setup error on a mismatch, and keeps CI from drifting off the local pnpm.
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
