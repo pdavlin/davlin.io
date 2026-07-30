@@ -9,8 +9,12 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # The deploy key is the only actor that can push straight to main: the branch
+      # ruleset requires the Run Tests check but grants deploy keys a bypass.
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ssh-key: ${{ secrets.SYNC_DEPLOY_KEY }}
 
       # Version comes from `packageManager` in package.json -- setting it here too makes
       # action-setup error on a mismatch, and keeps CI from drifting off the local pnpm.
@@ -61,5 +65,3 @@ jobs:
           git add src/content/notes/films/ src/data/
           git commit -m "chore: sync content (films + coffee)"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
