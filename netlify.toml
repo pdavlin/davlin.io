@@ -1,0 +1,8 @@
+# Build settings live here, not in the Netlify UI, so they version with the repo.
+# `pnpm build` = pnpm check && node scripts/fetch-ballots.mjs && astro build —
+# the fetch step is what pulls twin-predictions ballots (and, when REVEAL=true,
+# the actuals/leaderboard) from Airtable. A bare `astro build` silently ships
+# the committed seed data instead.
+[build]
+  command = "pnpm build"
+  publish = "dist"
