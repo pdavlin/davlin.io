@@ -3,8 +3,7 @@ import '@styles/global.css';
 import DocumentHead from 'src/components/DocumentHead.astro';
 import Layout from '@components/Layout.astro';
 import CoffeeChart from '@components/CoffeeChart.astro';
-import coffeeData from '../../data/coffee.json';
-import type { CoffeeShotsPayload } from '../../lib/coffee/types';
+import { loadCoffeePayload } from '../../lib/coffee/load';
 import {
   formatLocalStamp,
   getTopMonths,
@@ -18,9 +17,8 @@ const description = 'Tracking my coffee with data visualizations';
 const permalink = 'https://davlin.io/coffee';
 const page = 'coffee';
 
-// `src/data/coffee.json` is written by `scripts/fetch-coffee-data.mjs` at build time
-// (live from the coffee service, or the committed seed as fallback).
-const payload: CoffeeShotsPayload = coffeeData;
+// Live payload from `scripts/fetch-coffee-data.mjs` when present, else the committed seed.
+const payload = loadCoffeePayload();
 const shots = payload.shots;
 
 const lastShot = formatLocalStamp(payload.latestShotAt);
