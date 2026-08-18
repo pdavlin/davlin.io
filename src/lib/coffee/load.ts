@@ -7,11 +7,13 @@
  * to the committed `src/data/coffee.seed.json` otherwise.
  */
 import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import seed from '../../data/coffee.seed.json';
 import type { CoffeeShotsPayload } from './types';
 import { isCoffeeShotsPayload } from './validate.mjs';
 
-const ARTIFACT = new URL('../../data/coffee.json', import.meta.url);
+// Resolved from the project root: `import.meta.url` moves once Vite bundles this module.
+const ARTIFACT = resolve(process.cwd(), 'src/data/coffee.json');
 
 export function loadCoffeePayload(): CoffeeShotsPayload {
   if (existsSync(ARTIFACT)) {
