@@ -4,319 +4,38 @@ import DocumentHead from 'src/components/DocumentHead.astro';
 import Layout from '@components/Layout.astro';
 import CoffeeChart from '@components/CoffeeChart.astro';
 import coffeeData from '../../data/coffee.json';
-import { Temporal } from '@js-temporal/polyfill';
-
-type AirtableRecord = Record<string, unknown>;
+import type { CoffeeShotsPayload } from '../../lib/coffee/types';
+import {
+  formatLocalStamp,
+  getTopMonths,
+  processDailyData,
+  processMonthlyData,
+  processTimeOfDayData,
+} from '../../lib/coffee/aggregate';
 
 const title = 'Coffee | davlin.io';
 const description = 'Tracking my coffee with data visualizations';
 const permalink = 'https://davlin.io/coffee';
 const page = 'coffee';
 
-const now = Temporal.Now.zonedDateTimeISO('America/Chicago');
-const year = String(now.year);
-const month = String(now.month).padStart(2, '0');
-const day = String(now.day).padStart(2, '0');
-const hour = now.hour;
-const minute = String(now.minute).padStart(2, '0');
-const ampm = hour >= 12 ? 'PM' : 'AM';
-const hour12 = hour % 12 || 12;
-const timeZone = now.offset === '-06:00' ? 'CST' : 'CDT';
+// `src/data/coffee.json` is written by `scripts/fetch-coffee-data.mjs` at build time
+// (live from the coffee service, or the committed seed as fallback).
+const payload: CoffeeShotsPayload = coffeeData;
+const shots = payload.shots;
 
-const buildTime = `${year}-${month}-${day} ${hour12}:${minute} ${ampm} ${timeZone}`;
+const lastShot = formatLocalStamp(payload.latestShotAt);
 
-const records: AirtableRecord[] = coffeeData;
-
-function filterRecords(recs: AirtableRecord[]): AirtableRecord[] {
-  if (recs.length === 0) return recs;
-
-  return recs.filter((record) => {
-    const barista = (record.Barista ?? record.barista ?? '') as string;
-    const baristaStr = barista.toLowerCase();
-    const shouldExclude = baristaStr.includes('matt mccrary') || baristaStr.includes('mccrary');
-    return !shouldExclude;
-  });
-}
-
-function isPourover(record: AirtableRecord): boolean {
-  return record['Profile title'] === 'NextLevel Pulsar';
-}
-
-function processMonthlyData(recs: AirtableRecord[]) {
-  const filtered = filterRecords(recs);
-
-  if (filtered.length === 0) {
-    return {
-      labels: [] as string[],
-      data: { regular: [] as number[], pourover: [] as number[] },
-      totals: [] as number[],
-    };
-  }
-
-  let dateField = 'Start time';
-  const firstRecord = filtered[0];
-  if (!firstRecord[dateField]) {
-    const possibleFields = Object.keys(firstRecord).filter(
-      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
-    );
-
-    if (possibleFields.length > 0) {
-      dateField = possibleFields[0];
-    } else {
-      return {
-        labels: [] as string[],
-        data: { regular: [] as number[], pourover: [] as number[] },
-        totals: [] as number[],
-      };
-    }
-  }
-
-  const espressoCounts: Record<string, number> = {};
-  const pouroverCounts: Record<string, number> = {};
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  for (const record of filtered) {
-    const dateValue = record[dateField];
-    if (!dateValue || typeof dateValue !== 'string') continue;
-
-    try {
-      const dateStr = dateValue;
-      const parts = dateStr.split(/[-T\s]/);
-      if (parts.length >= 2) {
-        const yearPart = parts[0];
-        const monthPart = parseInt(parts[1]);
-        const monthYear = `${monthNames[monthPart - 1]} ${yearPart}`;
-        if (isPourover(record)) {
-          pouroverCounts[monthYear] = (pouroverCounts[monthYear] ?? 0) + 1;
-        } else {
-          espressoCounts[monthYear] = (espressoCounts[monthYear] ?? 0) + 1;
-        }
-      }
-    } catch {
-      // Skip invalid dates
-    }
-  }
-
-  const allMonths = new Set([...Object.keys(espressoCounts), ...Object.keys(pouroverCounts)]);
-  const sortedMonths = [...allMonths].sort((a, b) => {
-    const [monthA, yearA] = a.split(' ');
-    const [monthB, yearB] = b.split(' ');
-
-    if (yearA !== yearB) {
-      return parseInt(yearA) - parseInt(yearB);
-    }
-
-    return monthNames.indexOf(monthA) - monthNames.indexOf(monthB);
-  });
-
-  const regular = sortedMonths.map((m) => espressoCounts[m] ?? 0);
-  const pourover = sortedMonths.map((m) => pouroverCounts[m] ?? 0);
-
-  return {
-    labels: sortedMonths,
-    data: { regular, pourover },
-    totals: sortedMonths.map((_, i) => regular[i] + pourover[i]),
-  };
-}
-
-function processDailyData(recs: AirtableRecord[]) {
-  const filtered = filterRecords(recs);
-
-  const emptyResult = {
-    labels: [] as string[],
-    data: { regular: [] as number[], decaf: [] as number[], pourover: [] as number[] },
-  };
-
-  if (filtered.length === 0) return emptyResult;
-
-  let dateField = 'Start time';
-  const firstRecord = filtered[0];
-  if (!firstRecord[dateField]) {
-    const possibleFields = Object.keys(firstRecord).filter(
-      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
-    );
-
-    if (possibleFields.length > 0) {
-      dateField = possibleFields[0];
-    } else {
-      return emptyResult;
-    }
-  }
-
-  const regularCounts: Record<string, number> = {};
-  const decafCounts: Record<string, number> = {};
-  const pouroverCounts: Record<string, number> = {};
-
-  const allDates: string[] = [];
-  const today = Temporal.Now.plainDateISO();
-  for (let i = 59; i >= 0; i--) {
-    const date = today.subtract({ days: i });
-    const dateStr = date.toString();
-    allDates.push(dateStr);
-    regularCounts[dateStr] = 0;
-    decafCounts[dateStr] = 0;
-    pouroverCounts[dateStr] = 0;
-  }
-
-  for (const record of filtered) {
-    const dateValue = record[dateField];
-    if (!dateValue || typeof dateValue !== 'string') continue;
-
-    try {
-      const rawDateStr = dateValue;
-      const dateParts = rawDateStr.split(/[-T\s]/);
-      if (dateParts.length < 3) continue;
-
-      const dateStr = `${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`;
-
-      if (!allDates.includes(dateStr)) continue;
-
-      if (isPourover(record)) {
-        pouroverCounts[dateStr] = (pouroverCounts[dateStr] ?? 0) + 1;
-        continue;
-      }
-
-      const coffeeBagField =
-        record['Coffee Bag'] ?? record['Coffee Type'] ?? record.Bean ?? record.Beans;
-      let coffeeBagValue = '';
-
-      if (typeof coffeeBagField === 'string') {
-        coffeeBagValue = coffeeBagField;
-      } else if (Array.isArray(coffeeBagField)) {
-        coffeeBagValue = coffeeBagField.join(' ');
-      }
-
-      coffeeBagValue = coffeeBagValue.toLowerCase();
-
-      const isDecaf =
-        coffeeBagValue.includes('decaf') ||
-        coffeeBagValue.includes('de-caf') ||
-        coffeeBagValue.includes('de caf');
-
-      if (isDecaf) {
-        decafCounts[dateStr] = (decafCounts[dateStr] ?? 0) + 1;
-      } else {
-        regularCounts[dateStr] = (regularCounts[dateStr] ?? 0) + 1;
-      }
-    } catch {
-      // Skip invalid records
-    }
-  }
-
-  const formattedDates = allDates.map((date) => {
-    const [, m, d] = date.split('-');
-    return `${m}/${d}`;
-  });
-
-  return {
-    labels: formattedDates,
-    data: {
-      regular: allDates.map((date) => regularCounts[date]),
-      decaf: allDates.map((date) => decafCounts[date]),
-      pourover: allDates.map((date) => pouroverCounts[date]),
-    },
-  };
-}
-
-function processTimeOfDayData(recs: AirtableRecord[]) {
-  const filtered = filterRecords(recs);
-
-  if (filtered.length === 0) {
-    return { labels: [] as string[], fullLabels: [] as string[], data: [] as number[] };
-  }
-
-  let dateField = 'Start time';
-  const firstRecord = filtered[0];
-  if (!firstRecord[dateField]) {
-    const possibleFields = Object.keys(firstRecord).filter(
-      (field) => field.toLowerCase().includes('date') || field.toLowerCase().includes('time')
-    );
-
-    if (possibleFields.length > 0) {
-      dateField = possibleFields[0];
-    } else {
-      return { labels: [] as string[], fullLabels: [] as string[], data: [] as number[] };
-    }
-  }
-
-  const hourlyBuckets = new Array<number>(24).fill(0);
-
-  for (const record of filtered) {
-    const dateValue = record[dateField];
-    if (!dateValue || typeof dateValue !== 'string') continue;
-
-    try {
-      const dateStr = dateValue;
-      const instant = Temporal.Instant.from(dateStr.endsWith('Z') ? dateStr : dateStr + 'Z');
-      const chicagoTime = instant.toZonedDateTimeISO('America/Chicago');
-      const centralTimeHour = chicagoTime.hour;
-
-      if (centralTimeHour >= 0 && centralTimeHour < 24) {
-        hourlyBuckets[centralTimeHour]++;
-      }
-    } catch {
-      // Skip invalid records
-    }
-  }
-
-  const labels: string[] = [];
-  const fullLabels: string[] = [];
-  const data: number[] = [];
-
-  for (let h = 0; h < 24; h++) {
-    const startHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
-    const endHour = h + 1 === 12 ? 12 : h + 1 > 12 ? h + 1 - 12 : h + 1 === 0 ? 12 : h + 1;
-    const startPeriod = h < 12 ? 'am' : 'pm';
-    const endPeriod = h + 1 < 12 || h + 1 === 24 ? 'am' : 'pm';
-
-    labels.push(`${startHour}${startPeriod}`);
-    fullLabels.push(`${startHour}${startPeriod}-${endHour}${endPeriod}`);
-    data.push(hourlyBuckets[h]);
-  }
-
-  return { labels, fullLabels, data };
-}
-
-function getTopMonths(monthLabels: string[], monthData: number[]) {
-  if (monthLabels.length === 0 || monthData.length === 0) {
-    return { topThree: [] as { month: string; count: number }[] };
-  }
-
-  const monthList = monthLabels.map((label, index) => ({
-    month: label,
-    count: monthData[index],
-  }));
-
-  const sortedByCount = [...monthList].sort((a, b) => b.count - a.count);
-  const topThree = sortedByCount.slice(0, 3);
-
-  return { topThree };
-}
-
-const { labels, data, totals } = processMonthlyData(records);
-const { labels: dailyLabels, data: dailyData } = processDailyData(records);
+const { labels, data, totals } = processMonthlyData(shots);
+const { labels: dailyLabels, data: dailyData } = processDailyData(shots);
 const {
   labels: timeLabels,
   fullLabels: timeFullLabels,
   data: timeData,
-} = processTimeOfDayData(records);
+} = processTimeOfDayData(shots);
 const hasData = labels.length > 0;
 const hasDailyData = dailyLabels.length > 0;
 const hasTimeData = timeLabels.length > 0;
-const { topThree } = getTopMonths(labels, totals);
+const topThree = getTopMonths(labels, totals);
 ---
 
 <html lang="en">
@@ -324,7 +43,7 @@ const { topThree } = getTopMonths(labels, totals);
   <body>
     <Layout page={page}>
       <h1 class="title">coffee</h1>
-      <p class="build-time">Last updated: {buildTime}</p>
+      {lastShot && <p class="build-time">Last shot: {lastShot}</p>}
 
       <fieldset class="chart-fieldset">
         <legend>monthly drinks</legend>

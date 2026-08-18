@@ -37,21 +37,14 @@ jobs:
       - name: Format imported films
         run: pnpm exec prettier --write "src/content/notes/films/*.md"
 
-      # Coffee data import
-      - name: Fetch coffee data from Airtable
-        run: node scripts/fetch-coffee-data.js
-        env:
-          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
-
-      - name: Format coffee data
-        run: pnpm exec prettier --write "src/data/coffee.json"
+      # Coffee data no longer syncs here: the coffee service on exe.dev fetches shots from
+      # visualizer.coffee and fires a Netlify build hook; `pnpm build` pulls the payload.
 
       # Check for any changes
       - name: Check for changes
         id: changes
         run: |
-          if [[ -n $(git status --porcelain src/content/notes/films/ src/data/) ]]; then
+          if [[ -n $(git status --porcelain src/content/notes/films/) ]]; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -62,6 +55,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/notes/films/ src/data/
-          git commit -m "chore: sync content (films + coffee)"
+          git add src/content/notes/films/
+          git commit -m "chore: sync content (films)"
           git push

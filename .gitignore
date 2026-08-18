@@ -5,6 +5,9 @@ dist/
 # reveal-gated build artifact — only written when REVEAL=true; never committed so a
 # reveal-off checkout cannot ship a stale leaderboard or actuals-derived data
 src/data/twin-predictions-leaderboard.json
+# build-time coffee artifact written by scripts/fetch-coffee-data.mjs (live service or
+# the committed src/data/coffee.seed.json fallback); never committed
+src/data/coffee.json
 
 # dependencies
 node_modules/

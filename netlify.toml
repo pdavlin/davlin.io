@@ -1,8 +1,10 @@
 # Build settings live here, not in the Netlify UI, so they version with the repo.
-# `pnpm build` = pnpm check && node scripts/fetch-ballots.mjs && astro build —
-# the fetch step is what pulls twin-predictions ballots (and, when REVEAL=true,
-# the actuals/leaderboard) from Airtable. A bare `astro build` silently ships
-# the committed seed data instead.
+# `pnpm build` = pnpm check && node scripts/fetch-ballots.mjs
+#   && node scripts/fetch-coffee-data.mjs && astro build —
+# fetch-ballots pulls twin-predictions ballots (and, when REVEAL=true, the
+# actuals/leaderboard) from Airtable; fetch-coffee-data pulls shots from the
+# coffee service on exe.dev (falls back to src/data/coffee.seed.json). A bare
+# `astro build` fails, because src/data/coffee.json is a build artifact.
 [build]
   command = "pnpm build"
   publish = "dist"
