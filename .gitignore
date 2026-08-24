@@ -27,6 +27,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Plane board coordinates (local only)
+.plane.local.md
+
 # macOS-specific files
 .DS_Store
 
