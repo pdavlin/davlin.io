@@ -1,0 +1,70 @@
+{
+  "lexicon": 1,
+  "id": "io.davlin.coffee.shot",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "A single espresso shot pulled on Patrick's machine, sourced from visualizer.coffee via the pd-coffee service. One record per shot; the record key is the visualizer.coffee shot UUID, so re-writing the same shot overwrites rather than duplicates.",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": ["shotId", "startTime", "decaf"],
+        "properties": {
+          "shotId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "visualizer.coffee shot UUID. Always equals the record key."
+          },
+          "startTime": {
+            "type": "string",
+            "format": "datetime",
+            "description": "When the shot was pulled (ISO 8601 UTC)."
+          },
+          "profileTitle": {
+            "type": "string",
+            "maxLength": 1024,
+            "maxGraphemes": 256,
+            "description": "Machine profile used for the shot."
+          },
+          "barista": {
+            "type": "string",
+            "maxLength": 256,
+            "maxGraphemes": 64
+          },
+          "beanBrand": {
+            "type": "string",
+            "maxLength": 512,
+            "maxGraphemes": 128,
+            "description": "Roaster name."
+          },
+          "beanType": {
+            "type": "string",
+            "maxLength": 512,
+            "maxGraphemes": 128,
+            "description": "Bean or blend name."
+          },
+          "roastLevel": {
+            "type": "string",
+            "maxLength": 256,
+            "maxGraphemes": 64
+          },
+          "coffeeBag": {
+            "type": "string",
+            "maxLength": 512,
+            "maxGraphemes": 128,
+            "description": "Coffee bag name when the service resolved one."
+          },
+          "decaf": {
+            "type": "boolean",
+            "description": "True when the shot was pulled with decaf beans."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "When this record was written (not when the shot was pulled)."
+          }
+        }
+      }
+    }
+  }
+}
