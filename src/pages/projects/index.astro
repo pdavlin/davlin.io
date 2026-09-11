@@ -7,6 +7,8 @@ const title = 'Projects | davlin.io';
 const description = 'Side projects and experiments';
 const permalink = 'https://davlin.io/projects/';
 const page = 'projects';
+// Card text mirrors src/lib/og/projects.ts (PROJECTS_LISTING).
+const ogImageAlt = 'Projects — project index on davlin.io';
 
 const projects = [
   {
@@ -73,7 +75,13 @@ function formatDate(dateStr: string): string {
 ---
 
 <html lang="en">
-  <DocumentHead title={title} description={description} permalink={permalink} />
+  <DocumentHead
+    title={title}
+    description={description}
+    permalink={permalink}
+    canonicalUrl={permalink}
+    ogImageAlt={ogImageAlt}
+  />
   <body>
     <Layout page={page}>
       <h1 class="title">projects</h1>
