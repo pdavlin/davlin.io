@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+"""Generate index.html for the OG spike gallery from out/*.png."""
+import os
+import re
+
+DIR = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(DIR, "out")
+
+VARIANTS = {
+    "a": ("light editorial", "Site's light theme. Warm off-white ground, accent rule on top (hashed per-film), oversized title, star rating + year, canonical URL footer. The safest default for sharing."),
+    "b": ("dark terminal", "Site's dark theme with a shell conceit: traffic-light dots, ~/films/ path, `$ review --title`, big output. Mono-first identity; the dot colors rotate through the accent set."),
+    "c": ("accent poster", "Whole card in the film's hashed accent color - a per-film identity without any artwork. Highest visual variety across the 246-film grid; loudest in a feed."),
+}
+
+cards = {}
+for f in sorted(os.listdir(OUT)):
+    m = re.match(r"^([abc])-(.+)\.png$", f)
+    if m:
+        cards.setdefault(m.group(1), []).append((m.group(2), f))
+
+# one-per-rating mode: out/ contains only variant-a cards named by rating films
+ONE_PER_RATING = {
+    "fantastic-four-2015": "0.5", "ant-man-and-the-wasp-quantumania-2023": "1",
+    "a-house-of-dynamite-2025": "1.5", "28-weeks-later-2007": "2",
+    "a-minecraft-movie-2025": "2.5", "13-going-on-30-2004": "3",
+    "a-real-pain-2024": "3.5", "28-years-later-2025": "4",
+    "2001-a-space-odyssey-1968": "4.5", "best-in-show-2000": "5",
+}
+
+sections = []
+if set(cards) == {"a"} and all(s in ONE_PER_RATING for s, _ in cards["a"]):
+    # rating review mode
+    figs = "\n".join(
+        f'    <figure><img src="out/{f}" alt=""><figcaption>{ONE_PER_RATING[slug]} / 5 — {slug}</figcaption></figure>'
+        for slug, f in cards["a"]
+    )
+    sections.append(f"""<section>
+  <h2>VARIANT A <span class="tag">— CHOSEN design, one card per rating</span></h2>
+  <p class="desc">Light editorial + filepath footer (design locked 2026-09-10). Each card is a real film from the collection representing one of the 10 possible ratings (0.5 → 5.0). Half stars render as left-solid / right-dim; empty slots dim.</p>
+  <div class="grid">
+{figs}
+  </div>
+</section>""")
+    meta = f"{sum(len(v) for v in cards.values())} cards · one per rating (0.5–5.0) · day-rotation accent"
+else:
+    meta = "9 cards from real film frontmatter in 2.4s (~270ms/card) · spike 001-og-satori"
+    for v in "abc":
+        name, desc = VARIANTS[v]
+        figs = "\n".join(
+            f'    <figure><img src="out/{f}" alt=""><figcaption>{v} — {slug}</figcaption></figure>'
+            for slug, f in cards.get(v, [])
+        )
+        sections.append(f"""<section>
+  <h2>VARIANT {v.upper()} <span class="tag">— {name}</span></h2>
+  <p class="desc">{desc}</p>
+  <div class="grid">
+{figs}
+  </div>
+</section>""")
+
+html = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>davlin.io — OG card spike (Satori)</title>
+<style>
+  :root { color-scheme: dark; }
+  body { background: #1b1818; color: #e7dfdf; font-family: ui-monospace, 'BerkeleyMono', 'SF Mono', Menlo, monospace; margin: 0; padding: 48px 24px 96px; }
+  header { max-width: 1280px; margin: 0 auto 40px; }
+  h1 { font-size: 22px; letter-spacing: 4px; margin: 0 0 8px; }
+  h1 .accent { color: #4b8b8b; }
+  p.meta { color: #8a8585; font-size: 13px; margin: 0; line-height: 1.6; }
+  section { max-width: 1280px; margin: 0 auto 56px; }
+  h2 { font-size: 14px; letter-spacing: 3px; color: #f4ecec; border-bottom: 1px solid #585050; padding-bottom: 8px; margin: 0 0 6px; }
+  h2 .tag { color: #4b8b8b; }
+  .desc { color: #8a8585; font-size: 13px; margin: 0 0 16px; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+  figure { margin: 0; }
+  img { width: 100%; height: auto; display: block; border: 1px solid #292424; border-radius: 6px; }
+  figcaption { color: #655d5d; font-size: 12px; padding-top: 6px; }
+  footer { max-width: 1280px; margin: 0 auto; color: #655d5d; font-size: 12px; line-height: 1.7; border-top: 1px solid #292424; padding-top: 16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>davlin.io <span class="accent">//</span> OG CARD SPIKE</h1>
+  <p class="meta">Satori + resvg, build-time render · 1200×630 · Berkeley Mono (site WOFF) · palette from theme.css<br>
+  {meta}</p>
+</header>
+
+""" + "\n\n".join(sections) + """
+
+<footer>
+  spike/001-og-satori · throwaway code, verdict recorded in README · next step: pick variant(s), then productionize as Astro static endpoints (DAVLIN-1/2/3)
+</footer>
+</body>
+</html>
+"""
+
+with open(os.path.join(DIR, "index.html"), "w") as f:
+    f.write(html)
+print(f"wrote index.html with {sum(len(v) for v in cards.values())} cards across {len(cards)} variants")
