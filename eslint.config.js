@@ -194,6 +194,9 @@ export default [
       'test-results/',
       'scripts/',
       'test-output/',
+      // Throwaway spike: scratch code with its own package.json; the repo's
+      // type-aware lint config can't parse it and shouldn't try.
+      'spikes/',
       // React island: JSX/recharts chart code ported wholesale. The repo's lint config
       // targets Astro/TS, not React; type-checking + unicorn over this third-party-style
       // chart code adds churn without value. Its logic (normalize/validate) is covered by
