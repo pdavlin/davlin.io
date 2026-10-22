@@ -10,6 +10,11 @@
  * spike: React-shaped element trees, per-glyph spans to dodge the
  * letterSpacing overlap quirk, explicit display on every div incl. absolute
  * overlays, geometric half-stars because Berkeley Mono has no ★/½).
+ *
+ * DAVLIN-3 adds project cards on the same locked layout, minus the rating
+ * row: masthead section reads PROJECTS, the tagline replaces the year+stars
+ * row, and the footer is the page path (~/projects for the listing, which
+ * has no slug).
  */
 import satori from 'satori';
 import type { ReactNode } from 'react';
@@ -121,10 +126,10 @@ function starsRow(rating: number, size: number, color: string, bgColor: string):
 
 const titleSize = (t: string) => (t.length > 42 ? 60 : t.length > 24 ? 84 : 104);
 
-function masthead(accent: string): OgElement {
+function masthead(accent: string, section = 'FILM REVIEWS'): OgElement {
   return el('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'center' }, [
     span({ fontSize: 24, color: T.base02, letterSpacing: 6 }, 'PATRICK DAVLIN'),
-    span({ fontSize: 24, color: accent, letterSpacing: 6 }, 'FILM REVIEWS'),
+    span({ fontSize: 24, color: accent, letterSpacing: 6 }, section),
   ]);
 }
 
@@ -164,6 +169,56 @@ function filmCard(film: FilmCardData, accent: string): OgElement {
 export async function renderFilmCard(film: FilmCardData, fontData: Buffer): Promise<Buffer> {
   const accent = dayAccent(film.reviewDate);
   const tree = filmCard(film, accent) as unknown as ReactNode;
+  const svg = await satori(tree, {
+    width: OG_WIDTH,
+    height: OG_HEIGHT,
+    fonts: [{ name: 'BerkeleyMono', data: fontData, weight: 400, style: 'normal' }],
+  });
+  return new Resvg(svg, { fitTo: { mode: 'width', value: OG_WIDTH } }).render().asPng();
+}
+
+// --- project cards (DAVLIN-3) ---
+
+export interface ProjectCardData {
+  /** Page slug under /projects — '' means the /projects listing itself. */
+  slug: string;
+  /** Card title (the page's display title, sans the " | davlin.io" suffix). */
+  name: string;
+  /** Tagline — mirrors the page's `description` passed to DocumentHead. */
+  tagline: string;
+}
+
+/** Filepath footer: ~/projects/<slug>, or bare ~/projects for the listing. */
+export function projectFooterPath(slug: string): string {
+  return slug ? `~/projects/${slug}` : '~/projects';
+}
+
+function projectCard(project: ProjectCardData, accent: string): OgElement {
+  return el('div', { ...pad, backgroundColor: T.base07, borderTop: `16px solid ${accent}` }, [
+    masthead(accent, 'PROJECTS'),
+    el('div', { display: 'flex', flexDirection: 'column', gap: 18 }, [
+      span({ fontSize: titleSize(project.name), color: T.base01, lineHeight: 1.15 }, project.name),
+      span({ fontSize: 34, color: T.base03, lineHeight: 1.3 }, project.tagline),
+    ]),
+    span({ fontSize: 24, color: T.base04 }, projectFooterPath(project.slug)),
+  ]);
+}
+
+/**
+ * Render a project OG card to PNG bytes (1200×630).
+ *
+ * Projects have no review date to key the day-rotation accent to, so the
+ * accent freezes at BUILD day (new Date() at prerender time) — the same
+ * freeze-on-a-day semantic as film cards, which freeze on the watch day:
+ * deterministic per build, stable in social-share caches.
+ */
+export async function renderProjectCard(
+  project: ProjectCardData,
+  fontData: Buffer,
+  date: Date = new Date()
+): Promise<Buffer> {
+  const accent = dayAccent(date);
+  const tree = projectCard(project, accent) as unknown as ReactNode;
   const svg = await satori(tree, {
     width: OG_WIDTH,
     height: OG_HEIGHT,

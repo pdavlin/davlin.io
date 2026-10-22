@@ -5,9 +5,10 @@ interface Props {
   permalink: string;
   imageId?: number;
   canonicalUrl?: string;
+  ogImageAlt?: string;
 }
 
-let { title, description, permalink, canonicalUrl } = Astro.props;
+let { title, description, permalink, canonicalUrl, ogImageAlt } = Astro.props;
 ---
 
 <head>
@@ -51,7 +52,12 @@ let { title, description, permalink, canonicalUrl } = Astro.props;
         <meta property="og:image" content={`${permalink.replace(/\/$/, '')}/og.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={`${title} — film review on davlin.io`} />
+        {/* ogImageAlt overrides the film-review default for non-film sections
+            (projects, …); omitting it keeps film pages byte-identical. */}
+        <meta
+          property="og:image:alt"
+          content={ogImageAlt ?? `${title} — film review on davlin.io`}
+        />
         <meta name="twitter:image" content={`${permalink.replace(/\/$/, '')}/og.png`} />
         <meta name="author" content="Patrick Davlin" />
         <meta name="twitter:label1" content="Written by" />
