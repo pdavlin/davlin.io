@@ -1,6 +1,7 @@
 /**
- * Slim shot shape served by the coffee service (`/api/coffee/shots.json`) and
- * mirrored in `src/data/coffee.seed.json`. The page needs nothing more than this.
+ * Slim shot shape the page renders, built from `io.davlin.coffee.shot` records
+ * (`records.mjs`) and mirrored in `src/data/coffee.seed.json`. Same shape the coffee
+ * service serves at `/api/coffee/shots.json`. The page needs nothing more than this.
  */
 export interface CoffeeShot {
   /** visualizer.coffee shot UUID. */

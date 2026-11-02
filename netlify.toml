@@ -2,8 +2,8 @@
 # `pnpm build` = pnpm check && node scripts/fetch-ballots.mjs
 #   && node scripts/fetch-coffee-data.mjs && astro build —
 # fetch-ballots pulls twin-predictions ballots (and, when REVEAL=true, the
-# actuals/leaderboard) from Airtable; fetch-coffee-data pulls shots from the
-# coffee service on exe.dev (falls back to src/data/coffee.seed.json). A bare
+# actuals/leaderboard) from Airtable; fetch-coffee-data reads io.davlin.coffee.shot
+# records from the site's AT Protocol repo (falls back to src/data/coffee.seed.json). A bare
 # `astro build` fails, because src/data/coffee.json is a build artifact.
 [build]
   command = "pnpm build"

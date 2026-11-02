@@ -9,6 +9,7 @@
     "import:letterboxd": "node scripts/import-letterboxd.js",
     "import:coffee": "node scripts/fetch-coffee-data.mjs",
     "import:ballots": "node scripts/fetch-ballots.mjs",
+    "smoke:atproto": "node scripts/atproto-smoke.mjs",
     "build": "pnpm check && node scripts/fetch-ballots.mjs && node scripts/fetch-coffee-data.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
