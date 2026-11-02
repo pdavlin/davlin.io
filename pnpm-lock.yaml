@@ -115,8 +115,8 @@ importers:
         specifier: ^11.1.2
         version: 11.1.2
       satori:
-        specifier: ^0.33.4
-        version: 0.33.4
+        specifier: ^0.33.5
+        version: 0.33.5
       typescript-eslint:
         specifier: ^8.65.0
         version: 8.65.0(eslint@10.8.0)(typescript@5.9.3)
@@ -2141,6 +2141,9 @@ packages:
   fflate@0.7.3:
     resolution: {integrity: sha512-0Zz1jOzJWERhyhsimS54VTqOteCNwRtIlh8isdL0AXLo0g7xNTfTL7oWrkmCnPhZGocKIkWHBistBrrpoNH3aw==}
 
+  fflate@0.7.5:
+    resolution: {integrity: sha512-QieYf//cis6ywHNi5qW1+PXPQ4bC+XVJAtS4AXIML8P76GroEiOxm/oQtn1f02UkJY1+KsXMJcC+R2v/Eg4G3g==}
+
   fflate@0.8.3:
     resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
@@ -3055,8 +3058,8 @@ packages:
   sass-formatter@0.7.9:
     resolution: {integrity: sha512-CWZ8XiSim+fJVG0cFLStwDvft1VI7uvXdCNJYXhDvowiv+DsbD1nXLiQ4zrE5UBvj5DWZJ93cwN0NX5PMsr1Pw==}
 
-  satori@0.33.4:
-    resolution: {integrity: sha512-dCnaW6D/tkCJxG5UvpZPWnnvfTdGTVVSAq1tzH6xC5MeOhAeeswRcSq5zT7C6lRCdTGow9PRGus7PCzdp5JJYw==}
+  satori@0.33.5:
+    resolution: {integrity: sha512-PNW6ktrQ8SM6kk7u4aOuTkkUewkzyTOrj+QeEzXSsnNMAdff4ire9CAqIz8+4C3rCiBtK8QTELv52AZEd1PbRw==}
     engines: {node: '>=16'}
 
   satteri@0.9.5:
@@ -4660,7 +4663,7 @@ snapshots:
 
   '@shuding/opentype.js@1.4.0-beta.0':
     dependencies:
-      fflate: 0.7.3
+      fflate: 0.7.5
       string.prototype.codepointat: 0.2.1
 
   '@standard-schema/spec@1.1.0': {}
@@ -5713,6 +5716,8 @@ snapshots:
       picomatch: 4.0.5
 
   fflate@0.7.3: {}
+
+  fflate@0.7.5: {}
 
   fflate@0.8.3: {}
 
@@ -6850,7 +6855,7 @@ snapshots:
     dependencies:
       suf-log: 2.5.3
 
-  satori@0.33.4:
+  satori@0.33.5:
     dependencies:
       '@shuding/opentype.js': 1.4.0-beta.0
       css-background-parser: 0.1.0
