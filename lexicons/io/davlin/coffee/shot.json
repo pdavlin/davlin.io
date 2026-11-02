@@ -4,7 +4,7 @@
   "defs": {
     "main": {
       "type": "record",
-      "description": "A single espresso shot pulled on Patrick's machine, sourced from visualizer.coffee via the pd-coffee service. One record per shot; the record key is the visualizer.coffee shot UUID, so re-writing the same shot overwrites rather than duplicates.",
+      "description": "A single espresso shot pulled on Patrick's machine, sourced from visualizer.coffee via the pd-coffee service. One record per shot. The record key is the shot start time (ISO 8601 basic, UTC, whole seconds) plus the first 8 characters of the visualizer.coffee shot UUID, e.g. 20210227T022634Z-669eae76, so records list in time order and re-writing the same shot overwrites rather than duplicates.",
       "key": "any",
       "record": {
         "type": "object",
@@ -13,7 +13,7 @@
           "shotId": {
             "type": "string",
             "maxLength": 64,
-            "description": "visualizer.coffee shot UUID. Always equals the record key."
+            "description": "visualizer.coffee shot UUID. Its first 8 characters end the record key."
           },
           "startTime": {
             "type": "string",
