@@ -5,20 +5,22 @@
  * JSON artifact into `src/data/` that the Astro page imports. The page never fetches
  * at runtime, so the site stays fully static.
  *
- * Source: the coffee service on exe.dev (`COFFEE_DATA_URL`, default
- * `https://pd-coffee.exe.xyz/api/coffee/shots.json`). That service syncs shots from the
- * visualizer.coffee API and POSTs a Netlify build hook when new shots land, which is
- * what re-runs this script.
+ * Source: the `io.davlin.coffee.shot` records in the site's AT Protocol repo
+ * (`COFFEE_DID`, default `SITE_DID`), read through the S-03 resolver, which finds the PDS
+ * from the DID. The coffee service on exe.dev writes those records from visualizer.coffee
+ * and POSTs a Netlify build hook after it publishes, which is what re-runs this script.
+ * This script does not call the coffee service.
  *
  * Two outcomes:
- *  - LIVE: the endpoint answered with a valid payload -> `src/data/coffee.json`.
- *  - FALLBACK: network error, timeout, non-2xx, or invalid shape -> copy the committed
- *    `src/data/coffee.seed.json` and print a warning. Coffee data never fails a build.
+ *  - LIVE: the PDS returned at least one valid shot record -> `src/data/coffee.json`.
+ *  - FALLBACK: network error, timeout, no valid records, or invalid shape -> copy the
+ *    committed `src/data/coffee.seed.json` and print a warning. Coffee data never fails
+ *    a build, so check the log line, not the build status, to see which one ran.
  *
  * Usage:
  *   node scripts/fetch-coffee-data.mjs
- *   COFFEE_DATA_URL=http://localhost:8080/api/coffee/shots.json node scripts/fetch-coffee-data.mjs
- *   COFFEE_DATA_URL= node scripts/fetch-coffee-data.mjs   # empty string forces the seed
+ *   COFFEE_DID=did:plc:... node scripts/fetch-coffee-data.mjs
+ *   COFFEE_DID= node scripts/fetch-coffee-data.mjs   # empty string forces the seed
  *
  * @module scripts/fetch-coffee-data
  */
@@ -26,58 +28,52 @@
 import { copyFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { listRecords, resolvePds } from '../src/lib/atproto/resolve.mjs';
+import { SITE_DID } from '../src/lib/atproto/site.mjs';
+import { SHOT_COLLECTION, payloadFromRecords } from '../src/lib/coffee/records.mjs';
 import { isCoffeeShotsPayload } from '../src/lib/coffee/validate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const DEFAULT_URL = 'https://pd-coffee.exe.xyz/api/coffee/shots.json';
-const TIMEOUT_MS = 10_000;
 
 const dataDir = join(__dirname, '..', 'src', 'data');
 const outputPath = join(dataDir, 'coffee.json');
 const seedPath = join(dataDir, 'coffee.seed.json');
 
 /**
- * Fetches and validates the shots payload from the coffee service.
+ * Reads every shot record for the DID and builds the payload.
  *
- * @param {string} url - Endpoint returning `CoffeeShotsPayload` JSON.
- * @returns {Promise<import('../src/lib/coffee/types.ts').CoffeeShotsPayload>}
+ * @param {string} did
+ * @returns {Promise<{ payload: import('../src/lib/coffee/types.ts').CoffeeShotsPayload, skipped: number }>}
  */
-async function fetchPayload(url) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { accept: 'application/json' },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status} ${response.statusText}`);
-    }
-    const body = await response.json();
-    if (!isCoffeeShotsPayload(body)) {
-      throw new Error('response did not match CoffeeShotsPayload');
-    }
-    return body;
-  } finally {
-    clearTimeout(timer);
+async function fetchPayload(did) {
+  const records = await listRecords(did, SHOT_COLLECTION);
+  const result = payloadFromRecords(
+    records.map((r) => r.value),
+    new Date().toISOString()
+  );
+  if (result.payload.shots.length === 0) {
+    throw new Error(`no valid ${SHOT_COLLECTION} records (${records.length} listed)`);
   }
+  if (!isCoffeeShotsPayload(result.payload)) {
+    throw new Error('records did not map to a CoffeeShotsPayload');
+  }
+  return result;
 }
 
 async function main() {
-  const url = process.env.COFFEE_DATA_URL ?? DEFAULT_URL;
+  const did = process.env.COFFEE_DID ?? SITE_DID;
 
-  if (url === '') {
+  if (did === '') {
     copyFileSync(seedPath, outputPath);
-    console.log('COFFEE_DATA_URL is empty; wrote src/data/coffee.json from the seed snapshot');
+    console.log('COFFEE_DID is empty; wrote src/data/coffee.json from the seed snapshot');
     return;
   }
 
   try {
-    const payload = await fetchPayload(url);
+    const { payload, skipped } = await fetchPayload(did);
     writeFileSync(outputPath, JSON.stringify(payload, null, 2) + '\n');
     console.log(
-      `Fetched ${payload.shots.length} coffee shots from ${url} (latest ${payload.latestShotAt ?? 'none'})`
+      `Fetched ${payload.shots.length} coffee shots from ${SHOT_COLLECTION} records on ${await resolvePds(did)} (latest ${payload.latestShotAt ?? 'none'}${skipped > 0 ? `, ${skipped} invalid records skipped` : ''})`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
