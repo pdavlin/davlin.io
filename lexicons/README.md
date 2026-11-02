@@ -23,7 +23,10 @@ their story starts.
 
 - Prefer a **natural key** when the source system has a stable unique id:
   writes become idempotent (re-running a backfill overwrites instead of
-  duplicating). `io.davlin.coffee.shot` uses the visualizer.coffee shot UUID.
+  duplicating). `io.davlin.coffee.shot` uses the start second plus the first 8
+  characters of the visualizer.coffee shot UUID (`20210227T022634Z-669eae76`):
+  time-ordered for `listRecords`, unique across duplicate uploads that share a
+  start second. Changed 2026-11-02 from the bare UUID (ATPROTO S-04).
 - Use the literal key `self` for singleton records (profile-style, one per
   repo).
 - Use a TID only for records with no natural identity (open-ended streams
